@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" fill="none" stroke="#00d8ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <!-- Central Hub -->
+  <circle cx="50" cy="50" r="10" stroke="#00d8ff" fill="#e6f7ff" opacity="0.8"/>
+  <circle cx="50" cy="50" r="4" fill="#00d8ff" />
+
+  <!-- Orbiting Nodes -->
+  <circle cx="50" cy="20" r="6" stroke="#00d8ff" fill="none"/>
+  <circle cx="80" cy="65" r="6" stroke="#00d8ff" fill="none"/>
+  <circle cx="20" cy="65" r="6" stroke="#00d8ff" fill="none"/>
+
+  <!-- Connections -->
+  <path d="M50 40 L50 26" stroke-dasharray="4 2"/>
+  <path d="M60 55 L75 62" stroke-dasharray="4 2"/>
+  <path d="M40 55 L25 62" stroke-dasharray="4 2"/>
+
+  <!-- Neural stylistic dots -->
+  <circle cx="50" cy="33" r="1" fill="#00d8ff"/>
+  <circle cx="67" cy="58" r="1" fill="#00d8ff"/>
+  <circle cx="33" cy="58" r="1" fill="#00d8ff"/>
+</svg>

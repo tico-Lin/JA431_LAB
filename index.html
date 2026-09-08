@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/logo.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      RoboSkills | Interactive Robotic Skill Visualization & Analysis
+    </title>
+    <meta
+      name="description"
+      content="A D3.js visualization that displays the skills available in the laboratory and helps identify potential research opportunities."
+    />
+    <meta
+      name="keywords"
+      content="robotics, skills matrix, visualization, gap analysis, d3.js, react, engineering management, skill tree, competency mapping, whats2000"
+    />
+    <meta name="author" content="whats2000" />
+    <meta name="robots" content="index, follow" />
+    <meta name="theme-color" content="#0f172a" />
+    <link rel="canonical" href="https://whats2000.github.io/RoboSkills/" />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://whats2000.github.io/RoboSkills/" />
+    <meta
+      property="og:title"
+      content="RoboSkills | Interactive Robotic Skill Visualization & Analysis"
+    />
+    <meta
+      property="og:description"
+      content="A D3.js visualization that displays the skills available in the laboratory and helps identify potential research opportunities."
+    />
+    <meta
+      property="og:image"
+      content="https://whats2000.github.io/RoboSkills/og-image.png"
+    />
+    <meta property="og:image:width" content="1387" />
+    <meta property="og:image:height" content="780" />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta
+      property="twitter:url"
+      content="https://whats2000.github.io/RoboSkills/"
+    />
+    <meta
+      property="twitter:title"
+      content="RoboSkills | Interactive Robotic Skill Visualization & Analysis"
+    />
+    <meta
+      property="twitter:description"
+      content="A D3.js visualization that displays the skills available in the laboratory and helps identify potential research opportunities."
+    />
+    <meta
+      property="twitter:image"
+      content="https://whats2000.github.io/RoboSkills/og-image.png"
+    />
+    <script type="text/javascript">
+      // Single Page Apps for GitHub Pages
+      // MIT License
+      // https://github.com/rafgraph/spa-github-pages
+      // This script checks to see if a redirect is present in the query string,
+      // converts it back into the correct url and adds it to the
+      // browser's history using window.history.replaceState(...),
+      // which won't cause the browser to attempt to load the new url.
+      // When the single page app is loaded further down in this file,
+      // the correct url will be waiting in the browser's history for
+      // the single page app to route accordingly.
+      (function (l) {
+        if (l.search[1] === '/') {
+          var decoded = l.search
+            .slice(1)
+            .split('&')
+            .map(function (s) {
+              return s.replace(/~and~/g, '&');
+            })
+            .join('?');
+          window.history.replaceState(
+            null,
+            null,
+            l.pathname.slice(0, -1) + decoded + l.hash,
+          );
+        }
+      })(window.location);
+    </script>
+  </head>
+
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
