@@ -84,7 +84,7 @@ export const PRPreviewModal: React.FC<PRPreviewModalProps> = ({
             </div>
             <p>
               <a
-                href='https://github.com/settings/tokens/new?scopes=repo&description=RoboSkills%20PR%20Bot'
+                href='https://github.com/settings/tokens/new?scopes=repo&description=JA431_LAB%20PR%20Bot'
                 target='_blank'
                 rel='noopener noreferrer'
                 className='text-blue-400 hover:text-blue-300 underline'

@@ -1,36 +1,36 @@
 {
   "hero": {
-    "title": "RoboSkills",
-    "subtitle": "團隊技能視覺化與管理平台",
-    "description": "追蹤、分析並強化你的團隊能力。透過視覺化技能分布、找出缺口，並有效管理團隊專長。"
+    "title": "能源及高分子研究室",
+    "subtitle": "高熵參雜 × 農廢綠色化學",
+    "description": "本研究室專注能源材料、綠色化學與電化學分析，提供材料合成、改質、表徵與合作委託的對外入口。"
   },
   "lab": {
-    "name": "你的實驗室",
-    "fullName": "你的實驗室完整名稱",
-    "institution": "你的學校或機構",
-    "description": "請替換為你的實驗室研究主題與使命，描述團隊專長、研究領域與目標。這是範本內容，可依需求客製化。",
-    "website": "https://yourlab.example.com",
+    "name": "能源及高分子研究室",
+    "fullName": "靜宜大學化學系 能源及高分子研究室",
+    "institution": "靜宜大學化學系",
+    "description": "研究主軸聚焦高熵參雜與農廢綠色化學，整合水熱法、電鍍法、共沉澱法、高溫鍛燒退火、XRD、SEM(EDS)、FT-IR、Raman，以及北極光 SP-50e 平台之 CV、LSV、GCD、EIS 分析。",
+    "website": "https://chem.pu.edu.tw/p/403-1108-30.php?Lang=zh-tw",
     "director": {
-      "name": "王教授",
-      "title": "計畫主持人",
-      "email": "contact@yourlab.example.com"
+      "name": "許峰豪",
+      "title": "助理教授 / PI",
+      "email": "hsu0625@pu.edu.tw"
     }
   },
   "features": [
     {
-      "icon": "TeamOutlined",
-      "title": "團隊總覽",
-      "description": "視覺化呈現團隊在各分類的技能分布，快速辨識專長領域。"
+      "icon": "ExperimentOutlined",
+      "title": "合成與改質",
+      "description": "水熱法、電鍍法、共沉澱法與高溫鍛燒退火，對應不同材料路徑。"
     },
     {
       "icon": "SearchOutlined",
-      "title": "缺口分析",
-      "description": "找出技能缺口並協助排序發展與招募優先順序。"
+      "title": "表徵分析",
+      "description": "XRD、SEM(EDS)、FT-IR 與 Raman 協助建立結構與成分證據鏈。"
     },
     {
       "icon": "PullRequestOutlined",
-      "title": "快速更新",
-      "description": "透過直覺介面更新成員技能，並自動生成 GitHub PR 內容。"
+      "title": "電化學平台",
+      "description": "以北極光 SP-50e 執行 CV、LSV、GCD、EIS，快速評估儲能表現。"
     }
   ],
   "statistics": {
@@ -39,21 +39,21 @@
   },
   "quickLinks": [
     {
-      "title": "查看團隊總覽",
-      "description": "探索技能視覺化細節",
-      "link": "/overview",
-      "icon": "TeamOutlined"
+      "title": "前往 PI 介紹頁",
+      "description": "快速認識主持人與研究主軸",
+      "link": "/pi",
+      "icon": "ReadOutlined"
     },
     {
-      "title": "分析技能缺口",
-      "description": "辨識成長重點",
-      "link": "/gaps",
+      "title": "研究能力總覽",
+      "description": "瀏覽研究面向與可提供能力",
+      "link": "/overview",
       "icon": "SearchOutlined"
     },
     {
-      "title": "更新技能資料",
-      "description": "管理成員技能資料",
-      "link": "/update",
+      "title": "合作與缺口分析",
+      "description": "查看可委託與合作切入點",
+      "link": "/gaps",
       "icon": "PullRequestOutlined"
     }
   ]

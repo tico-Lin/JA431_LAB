@@ -203,6 +203,15 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
       styles.getPropertyValue('--color-text-primary').trim() || '#ffffff';
     const textSecondary =
       styles.getPropertyValue('--color-text-secondary').trim() || '#a0a0b0';
+    const chartGrid =
+      styles.getPropertyValue('--color-chart-grid').trim() ||
+      'rgba(148, 163, 184, 0.22)';
+    const chartAxis =
+      styles.getPropertyValue('--color-chart-axis').trim() ||
+      'rgba(148, 163, 184, 0.3)';
+    const chartHoverShadow =
+      styles.getPropertyValue('--color-chart-shadow').trim() ||
+      'rgba(0,0,0,0.5)';
     const width = 400;
     const height = 400;
     const centerX = width / 2;
@@ -237,7 +246,7 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
       g.append('circle')
         .attr('r', r)
         .attr('fill', 'none')
-        .attr('stroke', 'rgba(148, 163, 184, 0.22)');
+        .attr('stroke', chartGrid);
 
       g.append('text')
         .attr('x', 0)
@@ -263,10 +272,7 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
         .attr('y1', 0)
         .attr('x2', x)
         .attr('y2', y)
-        .attr(
-          'stroke',
-          isSelected ? d.category.color : 'rgba(148, 163, 184, 0.3)',
-        )
+        .attr('stroke', isSelected ? d.category.color : chartAxis)
         .attr('stroke-width', isSelected ? 2 : 1)
         .attr('stroke-opacity', isSelected ? 0.8 : 1)
         .style('transition', 'all 0.3s ease'); // Smooth transition
@@ -317,12 +323,12 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
           d3.select(this)
             .attr('fill', d.category.color)
             .attr('font-weight', '700')
-            .style('filter', 'drop-shadow(0 0 4px rgba(0,0,0,0.5))');
+            .style('filter', `drop-shadow(0 0 4px ${chartHoverShadow})`);
 
           // Also highlight the box slightly on hover if not selected
           if (!isSelected) {
             d3.select(this.previousSibling as Element)
-              .attr('fill', 'rgba(148, 163, 184, 0.15)')
+              .attr('fill', chartGrid)
               .attr('fill-opacity', 1);
           }
         })
@@ -422,6 +428,12 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
       styles.getPropertyValue('--color-text-primary').trim() || '#ffffff';
     const textSecondary =
       styles.getPropertyValue('--color-text-secondary').trim() || '#a0a0b0';
+    const chartGrid =
+      styles.getPropertyValue('--color-chart-grid').trim() ||
+      'rgba(148, 163, 184, 0.18)';
+    const chartAxis =
+      styles.getPropertyValue('--color-chart-axis').trim() ||
+      'rgba(148, 163, 184, 0.3)';
     const container = barRef.current.parentElement;
     const containerWidth = container?.clientWidth || 600;
 
@@ -472,7 +484,7 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
           .tickFormat(() => ''),
       )
       .selectAll('line')
-      .attr('stroke', 'rgba(148, 163, 184, 0.18)');
+      .attr('stroke', chartGrid);
     g.select('.domain').remove();
 
     // Draw bars with HOVER EFFECT using D3 direct manipulation
@@ -540,7 +552,7 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
       .append('g')
       .attr('transform', `translate(0,${innerHeight})`)
       .call(d3.axisBottom(xScale).tickSize(0));
-    xAxis.select('.domain').attr('stroke', 'rgba(148, 163, 184, 0.3)');
+    xAxis.select('.domain').attr('stroke', chartAxis);
     xAxis
       .selectAll('text')
       .attr('fill', (d) => (selectedSkill === d ? textPrimary : textSecondary))
@@ -586,7 +598,7 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
       .on('click', (_, d) => setSelectedSkill(d as string));
 
     const yAxis = g.append('g').call(d3.axisLeft(yScale).ticks(5));
-    yAxis.select('.domain').attr('stroke', 'rgba(148, 163, 184, 0.3)');
+    yAxis.select('.domain').attr('stroke', chartAxis);
     yAxis
       .selectAll('text')
       .attr('fill', textSecondary)
@@ -651,7 +663,7 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
                   t('gaps.selectCategory')}
               </h3>
               <span className='text-gray-500 text-xs'>
-                {skillsData.length} skills
+                {skillsData.length} {t('gaps.skillsWord')}
               </span>
             </div>
             <div className='flex-1 overflow-x-auto'>
@@ -679,7 +691,10 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
               </div>
             </div>
             <button
-              className='text-gray-500 hover:text-white text-xl px-2'
+              className='text-xl px-2'
+              style={{
+                color: 'var(--color-text-muted)',
+              }}
               onClick={() => setSelectedSkill(null)}
             >
               ×
@@ -687,7 +702,14 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
           </div>
 
           {totalSelectedMembers === 0 ? (
-            <div className='p-4 text-center text-red-400 bg-red-500/10 rounded-lg border border-red-500/20'>
+            <div
+              className='p-4 text-center rounded-lg'
+              style={{
+                color: 'var(--color-status-error)',
+                background: 'var(--color-status-error-bg)',
+                border: '1px solid var(--color-status-error-border)',
+              }}
+            >
               <p className='font-semibold'>
                 ⚠️ {t('gaps.noTeamMembersWithSkill')}
               </p>

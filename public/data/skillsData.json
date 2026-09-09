@@ -1,347 +1,164 @@
 {
   "categories": [
     {
-      "id": "environment",
-      "name": "Environment/Agent",
-      "color": "#f5d76e",
-      "description": "Task planning, simulation, and environment interaction"
+      "id": "research-focus",
+      "name": "Research Focus",
+      "color": "#7c3aed",
+      "description": "High-entropy doping and agricultural-waste green chemistry"
     },
     {
-      "id": "robots",
-      "name": "Robots",
-      "color": "#95a5a6",
-      "description": "Robot hardware, control, and perception systems"
+      "id": "synthesis",
+      "name": "Synthesis Methods",
+      "color": "#0ea5e9",
+      "description": "Hydrothermal, electrodeposition, and co-precipitation routes"
     },
     {
-      "id": "caregiver",
-      "name": "Caregiver",
-      "color": "#5dade2",
-      "description": "Human-robot interaction for caregiving applications"
+      "id": "thermal-treatment",
+      "name": "Thermal Treatment",
+      "color": "#f59e0b",
+      "description": "Calcination and annealing for phase and surface tuning"
     },
     {
-      "id": "care-recipient",
-      "name": "Care Recipient",
-      "color": "#eb984e",
-      "description": "Understanding and supporting care recipients"
+      "id": "characterization",
+      "name": "Characterization",
+      "color": "#10b981",
+      "description": "X-ray Diffraction (XRD), Scanning Electron Microscopy with Energy Dispersive Spectroscopy (SEM-EDS), Fourier-Transform Infrared Spectroscopy (FT-IR), and Raman Spectroscopy"
+    },
+    {
+      "id": "electrochemistry",
+      "name": "Electrochemistry",
+      "color": "#ef4444",
+      "description": "Cyclic Voltammetry (CV), Linear Sweep Voltammetry (LSV), Galvanostatic Charge-Discharge (GCD), and Electrochemical Impedance Spectroscopy (EIS)"
+    },
+    {
+      "id": "instrument-experience",
+      "name": "Instrument Experience",
+      "color": "#14b8a6",
+      "description": "SP-50e"
     }
   ],
   "skills": [
     {
-      "id": "task-planning",
-      "name": "Task Planning",
-      "description": "High-level task decomposition and planning",
+      "id": "high-entropy-doping",
+      "name": "High-Entropy Doping",
+      "description": "Multi-element substitution for functional and energy materials",
       "belongsTo": [
-        "environment"
+        "research-focus",
+        "synthesis",
+        "thermal-treatment",
+        "characterization"
       ]
     },
     {
-      "id": "simulation",
-      "name": "Simulation",
-      "description": "Robot and environment simulation",
-      "belongsTo": [
-        "environment",
-        "robots"
-      ]
+      "id": "agri-waste-green-chemistry",
+      "name": "Agri-Waste Green Chemistry",
+      "description": "Upcycling agricultural residues into green functional materials",
+      "belongsTo": ["research-focus", "synthesis", "characterization"]
     },
     {
-      "id": "env-modeling",
-      "name": "Environment Modeling",
-      "description": "Spatial and semantic environment understanding",
-      "belongsTo": [
-        "environment",
-        "robots"
-      ]
+      "id": "hydrothermal",
+      "name": "Hydrothermal Synthesis",
+      "description": "Solution-based growth of nanostructured materials under sealed conditions",
+      "belongsTo": ["synthesis", "characterization"]
     },
     {
-      "id": "multi-agent",
-      "name": "Multi-Agent Systems",
-      "description": "Coordination and communication between agents",
-      "belongsTo": [
-        "environment",
-        "robots",
-        "caregiver"
-      ]
+      "id": "electrodeposition",
+      "name": "Electrodeposition",
+      "description": "Electrochemical deposition of films and composite electrodes",
+      "belongsTo": ["synthesis", "electrochemistry"]
     },
     {
-      "id": "robot-control",
-      "name": "Robot Control",
-      "description": "Motion control and trajectory planning",
-      "belongsTo": [
-        "robots"
-      ]
+      "id": "coprecipitation",
+      "name": "Co-precipitation",
+      "description": "Uniform precursor preparation with controlled composition",
+      "belongsTo": ["synthesis", "characterization"]
     },
     {
-      "id": "robot-slam",
-      "name": "Robot SLAM",
-      "description": "Simultaneous localization and mapping",
-      "belongsTo": [
-        "robots",
-        "environment"
-      ]
+      "id": "calcination-annealing",
+      "name": "Calcination & Annealing",
+      "description": "Thermal treatment to tune phase, defects, and crystallinity",
+      "belongsTo": ["thermal-treatment", "characterization"]
     },
     {
-      "id": "perception",
-      "name": "Perception",
-      "description": "Computer vision and sensor fusion",
-      "belongsTo": [
-        "robots",
-        "caregiver",
-        "care-recipient"
-      ]
+      "id": "xrd",
+      "name": "X-ray Diffraction (XRD)",
+      "description": "Phase identification, crystallinity, and lattice analysis",
+      "belongsTo": ["characterization"]
     },
     {
-      "id": "hardware",
-      "name": "Hardware Integration",
-      "description": "Mechanical and electrical systems",
-      "belongsTo": [
-        "robots"
-      ]
+      "id": "sem-eds",
+      "name": "Scanning Electron Microscopy with Energy Dispersive Spectroscopy (SEM-EDS)",
+      "description": "Morphology, particle distribution, and elemental mapping",
+      "belongsTo": ["characterization"]
     },
     {
-      "id": "manipulation",
-      "name": "Manipulation",
-      "description": "Grasping and object manipulation",
-      "belongsTo": [
-        "robots",
-        "caregiver"
-      ]
+      "id": "ftir",
+      "name": "Fourier-Transform Infrared Spectroscopy (FT-IR)",
+      "description": "Functional-group and chemical-bond analysis",
+      "belongsTo": ["characterization", "research-focus"]
     },
     {
-      "id": "hri",
-      "name": "Human-Robot Interaction",
-      "description": "Natural interaction with humans",
-      "belongsTo": [
-        "caregiver",
-        "care-recipient"
-      ]
+      "id": "raman",
+      "name": "Raman Spectroscopy",
+      "description": "Vibrational modes and defect-sensitive structural analysis",
+      "belongsTo": ["characterization"]
     },
     {
-      "id": "care-protocols",
-      "name": "Care Protocols",
-      "description": "Standard care procedures and workflows",
-      "belongsTo": [
-        "caregiver",
-        "care-recipient"
-      ]
+      "id": "cv",
+      "name": "Cyclic Voltammetry (CV)",
+      "description": "Electrochemical redox behavior and reversibility",
+      "belongsTo": ["electrochemistry"]
     },
     {
-      "id": "monitoring",
-      "name": "Health Monitoring",
-      "description": "Vital signs and activity monitoring",
-      "belongsTo": [
-        "caregiver",
-        "care-recipient",
-        "robots"
-      ]
+      "id": "lsv",
+      "name": "Linear Sweep Voltammetry (LSV)",
+      "description": "Current response under a linear potential sweep",
+      "belongsTo": ["electrochemistry"]
     },
     {
-      "id": "communication",
-      "name": "Communication",
-      "description": "Speech and gesture recognition",
-      "belongsTo": [
-        "caregiver",
-        "robots"
-      ]
+      "id": "gcd",
+      "name": "Galvanostatic Charge-Discharge (GCD)",
+      "description": "Capacity, Coulombic efficiency, and cycling stability",
+      "belongsTo": ["electrochemistry"]
     },
     {
-      "id": "user-modeling",
-      "name": "User Modeling",
-      "description": "Understanding user preferences and needs",
-      "belongsTo": [
-        "care-recipient",
-        "caregiver"
-      ]
+      "id": "eis",
+      "name": "Electrochemical Impedance Spectroscopy (EIS)",
+      "description": "Charge-transfer and interfacial resistance analysis",
+      "belongsTo": ["electrochemistry"]
     },
     {
-      "id": "needs-assessment",
-      "name": "Needs Assessment",
-      "description": "Evaluating care requirements",
-      "belongsTo": [
-        "care-recipient"
-      ]
-    },
-    {
-      "id": "personalization",
-      "name": "Personalization",
-      "description": "Adapting robot behavior to individuals",
-      "belongsTo": [
-        "care-recipient",
-        "environment"
-      ]
-    },
-    {
-      "id": "safety",
-      "name": "Safety Systems",
-      "description": "Ensuring user safety and comfort",
-      "belongsTo": [
-        "care-recipient",
-        "robots",
-        "caregiver"
-      ]
-    },
-    {
-      "id": "test-skill",
-      "name": "Test Skill",
-      "description": "A skill for testing PR",
-      "belongsTo": [
-        "environment",
-        "robots",
-        "caregiver",
-        "care-recipient"
-      ]
+      "id": "sp-50e",
+      "name": "SP-50e",
+      "description": "Core electrochemical workstation for the lab",
+      "belongsTo": ["instrument-experience"]
     }
   ],
   "members": [
     {
-      "id": "member-1",
-      "name": "Alice Chen",
-      "role": "PhD Student",
-      "email": "alice@lab.edu",
-      "github": "alicechen",
+      "id": "pi-hsu",
+      "name": "Feng-Hao Hsu",
+      "nameZh": "許峰豪",
+      "nameEn": "Feng-Hao Hsu",
+      "role": "Assistant Professor",
+      "email": "hsu0625@pu.edu.tw",
+      "landline": "+886-4-2632-8001 ext. 15205",
       "skills": [
-        {
-          "skillId": "robot-slam",
-          "proficiency": "expert"
-        },
-        {
-          "skillId": "perception",
-          "proficiency": "advanced"
-        },
-        {
-          "skillId": "simulation",
-          "proficiency": "intermediate"
-        },
-        {
-          "skillId": "env-modeling",
-          "proficiency": "advanced"
-        },
-        {
-          "skillId": "manipulation",
-          "proficiency": "intermediate"
-        }
-      ]
-    },
-    {
-      "id": "member-2",
-      "name": "Bob Wang",
-      "role": "Postdoc",
-      "email": "bob@lab.edu",
-      "github": "bobwang",
-      "skills": [
-        {
-          "skillId": "hri",
-          "proficiency": "expert"
-        },
-        {
-          "skillId": "communication",
-          "proficiency": "advanced"
-        },
-        {
-          "skillId": "user-modeling",
-          "proficiency": "advanced"
-        },
-        {
-          "skillId": "care-protocols",
-          "proficiency": "intermediate"
-        }
-      ]
-    },
-    {
-      "id": "member-3",
-      "name": "Carol Liu",
-      "role": "Master Student",
-      "email": "carol@lab.edu",
-      "skills": [
-        {
-          "skillId": "robot-control",
-          "proficiency": "intermediate"
-        },
-        {
-          "skillId": "manipulation",
-          "proficiency": "beginner"
-        },
-        {
-          "skillId": "task-planning",
-          "proficiency": "intermediate"
-        },
-        {
-          "skillId": "multi-agent",
-          "proficiency": "beginner"
-        }
-      ]
-    },
-    {
-      "id": "member-4",
-      "name": "David Kim",
-      "role": "PhD Student",
-      "email": "david@lab.edu",
-      "github": "davidkim",
-      "skills": [
-        {
-          "skillId": "multi-agent",
-          "proficiency": "advanced"
-        },
-        {
-          "skillId": "env-modeling",
-          "proficiency": "expert"
-        },
-        {
-          "skillId": "perception",
-          "proficiency": "intermediate"
-        },
-        {
-          "skillId": "simulation",
-          "proficiency": "advanced"
-        }
-      ]
-    },
-    {
-      "id": "member-5",
-      "name": "Eva Martinez",
-      "role": "Research Assistant",
-      "email": "eva@lab.edu",
-      "skills": [
-        {
-          "skillId": "needs-assessment",
-          "proficiency": "advanced"
-        },
-        {
-          "skillId": "safety",
-          "proficiency": "intermediate"
-        },
-        {
-          "skillId": "care-protocols",
-          "proficiency": "beginner"
-        },
-        {
-          "skillId": "monitoring",
-          "proficiency": "intermediate"
-        }
-      ]
-    },
-    {
-      "id": "member-6",
-      "name": "Frank Lee",
-      "role": "PhD Student",
-      "email": "frank@lab.edu",
-      "github": "franklee",
-      "skills": [
-        {
-          "skillId": "hardware",
-          "proficiency": "expert"
-        },
-        {
-          "skillId": "robot-control",
-          "proficiency": "advanced"
-        },
-        {
-          "skillId": "safety",
-          "proficiency": "advanced"
-        },
-        {
-          "skillId": "manipulation",
-          "proficiency": "intermediate"
-        }
+        { "skillId": "high-entropy-doping", "proficiency": "expert" },
+        { "skillId": "agri-waste-green-chemistry", "proficiency": "expert" },
+        { "skillId": "hydrothermal", "proficiency": "expert" },
+        { "skillId": "electrodeposition", "proficiency": "advanced" },
+        { "skillId": "coprecipitation", "proficiency": "advanced" },
+        { "skillId": "calcination-annealing", "proficiency": "expert" },
+        { "skillId": "xrd", "proficiency": "expert" },
+        { "skillId": "sem-eds", "proficiency": "advanced" },
+        { "skillId": "ftir", "proficiency": "advanced" },
+        { "skillId": "raman", "proficiency": "advanced" },
+        { "skillId": "cv", "proficiency": "expert" },
+        { "skillId": "lsv", "proficiency": "expert" },
+        { "skillId": "gcd", "proficiency": "expert" },
+        { "skillId": "eis", "proficiency": "expert" },
+        { "skillId": "sp-50e", "proficiency": "advanced" }
       ]
     }
   ]

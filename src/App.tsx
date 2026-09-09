@@ -15,9 +15,11 @@ import {
   HomeOutlined,
   GlobalOutlined,
   BulbOutlined,
+  ReadOutlined,
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import HomePage from './pages/HomePage';
+import PiPage from './pages/PiPage';
 import OverviewPage from './pages/OverviewPage';
 import GapAnalysisPage from './pages/GapAnalysisPage';
 import PRGeneratorPage from './pages/PRGeneratorPage';
@@ -101,6 +103,11 @@ const Navigation: React.FC<{
       key: '/',
       icon: <HomeOutlined />,
       label: <Link to='/'>{t('nav.home')}</Link>,
+    },
+    {
+      key: '/pi',
+      icon: <ReadOutlined />,
+      label: <Link to='/pi'>{t('nav.pi')}</Link>,
     },
     {
       key: '/overview',
@@ -238,6 +245,7 @@ const AppContent: React.FC = () => {
           <div className='max-w-7xl mx-auto'>
             <Routes>
               <Route path='/' element={<HomePage />} />
+              <Route path='/pi' element={<PiPage />} />
               <Route path='/overview' element={<OverviewPage />} />
               <Route path='/gaps' element={<GapAnalysisPage />} />
               <Route path='/update' element={<PRGeneratorPage />} />
@@ -258,44 +266,39 @@ const App: React.FC = () => {
   const { resolvedTheme } = useThemeMode();
 
   const themeConfig = useMemo(() => {
-    const isDark = resolvedTheme === 'dark';
-
     return {
-      algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
+      algorithm:
+        resolvedTheme === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm,
       token: {
-        colorPrimary: '#6366f1',
-        colorBgContainer: isDark ? 'rgba(255, 255, 255, 0.05)' : '#ffffff',
-        colorBgElevated: isDark ? 'rgba(26, 26, 46, 0.95)' : '#ffffff',
-        colorBorder: isDark ? 'rgba(255, 255, 255, 0.12)' : '#d9d9d9',
-        colorText: isDark ? '#ffffff' : '#1f2937',
-        colorTextSecondary: isDark ? '#a0a0b0' : '#6b7280',
+        colorPrimary: 'var(--color-accent)',
+        colorBgContainer: 'var(--color-surface-1)',
+        colorBgElevated: 'var(--color-bg-card)',
+        colorBorder: 'var(--shell-border)',
+        colorText: 'var(--color-text-primary)',
+        colorTextSecondary: 'var(--color-text-secondary)',
         borderRadius: 12,
       },
       components: {
         Menu: {
           itemBg: 'transparent',
-          itemSelectedBg: isDark
-            ? 'rgba(99, 102, 241, 0.2)'
-            : 'rgba(99, 102, 241, 0.12)',
-          itemHoverBg: isDark
-            ? 'rgba(255, 255, 255, 0.05)'
-            : 'rgba(99, 102, 241, 0.06)',
-          itemSelectedColor: '#6366f1',
+          itemSelectedBg: 'var(--color-surface-3)',
+          itemHoverBg: 'var(--color-surface-2)',
+          itemSelectedColor: 'var(--color-accent)',
         },
         Card: {
-          colorBgContainer: isDark ? 'rgba(255, 255, 255, 0.05)' : '#ffffff',
+          colorBgContainer: 'var(--color-surface-1)',
         },
         Table: {
           colorBgContainer: 'transparent',
-          headerBg: isDark ? 'rgba(255, 255, 255, 0.05)' : '#f5f7fb',
-          rowHoverBg: isDark ? 'rgba(255, 255, 255, 0.05)' : '#f3f5ff',
+          headerBg: 'var(--color-surface-1)',
+          rowHoverBg: 'var(--color-surface-2)',
         },
         Input: {
-          colorBgContainer: isDark ? 'rgba(255, 255, 255, 0.05)' : '#ffffff',
+          colorBgContainer: 'var(--color-surface-1)',
         },
         Select: {
-          colorBgContainer: isDark ? 'rgba(255, 255, 255, 0.05)' : '#ffffff',
-          colorBgElevated: isDark ? 'rgba(26, 26, 46, 0.95)' : '#ffffff',
+          colorBgContainer: 'var(--color-surface-1)',
+          colorBgElevated: 'var(--color-bg-card)',
         },
       },
     };

@@ -317,6 +317,15 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
         styles.getPropertyValue('--color-text-primary').trim() || '#ffffff';
       const textSecondary =
         styles.getPropertyValue('--color-text-secondary').trim() || '#a0a0b0';
+      const chartTextShadow =
+        styles.getPropertyValue('--color-chart-text-shadow').trim() ||
+        'rgba(0,0,0,0.8)';
+      const chartTitleShadow =
+        styles.getPropertyValue('--color-chart-title-shadow').trim() ||
+        'rgba(0,0,0,1)';
+      const chartTitleGlow =
+        styles.getPropertyValue('--color-chart-title-glow').trim() ||
+        'rgba(0,0,0,0.5)';
 
       const svg = d3
         .select(svgRef.current)
@@ -593,7 +602,7 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
           .attr('font-size', '14px') // Smaller category text (was 16px)
           .style('text-transform', 'uppercase')
           .style('letter-spacing', '1px')
-          .style('text-shadow', '0 2px 4px rgba(0,0,0,0.8)')
+          .style('text-shadow', `0 2px 4px ${chartTextShadow}`)
           .text(cat.name);
       });
 
@@ -816,7 +825,7 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
           .append('title')
           .text(
             (slice) =>
-              `${slice.data.name} (${slice.data.role})\n${slice.data.proficiency}`,
+              `${slice.data.name} (${slice.data.role})\n${t(PROFICIENCY_LABEL_KEYS[slice.data.proficiency as keyof typeof PROFICIENCY_LABEL_KEYS])}`,
           );
 
         // Label Arc Generator (for positioning outside)
@@ -874,7 +883,7 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
           .style('font-size', '3px')
           .style('font-weight', '600')
           .style('fill', textPrimary)
-          .style('text-shadow', '0 1px 2px rgba(0,0,0,0.8)')
+          .style('text-shadow', `0 1px 2px ${chartTextShadow}`)
           .style('opacity', 0)
           .style('pointer-events', 'none');
 
@@ -897,7 +906,7 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
             .attr('d', (a) => ringArcGen(a as any))
             .attr('fill', (a) => {
               const cat = categoryMap.get(a.data);
-              return cat ? cat.color : '#ccc';
+              return cat ? cat.color : textSecondary;
             })
             .attr('fill-opacity', 0.9)
             .style('cursor', 'pointer')
@@ -922,7 +931,7 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
         .style('cursor', 'pointer') // Make it look clickable
         .style(
           'text-shadow',
-          '0 2px 4px rgba(0,0,0,1), 0 0 10px rgba(0,0,0,0.5)',
+          `0 2px 4px ${chartTitleShadow}, 0 0 10px ${chartTitleGlow}`,
         )
         .on('click', (event, d) => {
           event.stopPropagation();
@@ -1140,7 +1149,7 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
             if (!member) return null;
 
             return (
-              <div className='absolute top-4 right-4 z-10 glass-card p-4 rounded-xl border border-white/10 shadow-xl max-w-sm animate-fade-in-up backdrop-blur-md bg-black/40'>
+              <div className='absolute top-4 right-4 z-10 glass-card p-4 rounded-xl border border-white/10 shadow-xl max-w-sm animate-fade-in-up backdrop-blur-md bg-[var(--color-bg-card)]'>
                 <div className='flex items-start gap-3'>
                   <Avatar
                     size={48}
@@ -1195,7 +1204,10 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
                   <Button
                     type='primary'
                     size='small'
-                    className='bg-purple-600 hover:bg-purple-500 border-none flex items-center gap-1'
+                    className='border-none flex items-center gap-1'
+                    style={{
+                      background: 'var(--color-accent)',
+                    }}
                     onClick={() =>
                       onMemberClick && onMemberClick(member as Member)
                     }
@@ -1208,7 +1220,7 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
           })()}
 
         {/* Legend */}
-        <div className='absolute bottom-4 left-4 bg-black/40 backdrop-blur-md p-3 rounded-lg border border-white/10 shadow-lg select-none'>
+        <div className='absolute bottom-4 left-4 backdrop-blur-md p-3 rounded-lg border border-white/10 shadow-lg select-none bg-[var(--color-bg-card)]'>
           <h4
             className='text-xs font-semibold mb-2 uppercase tracking-wider'
             style={{ color: 'var(--color-text-primary)' }}
@@ -1232,7 +1244,10 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
                       ],
                   }}
                 />
-                <span className='text-white/80 text-xs capitalize'>
+                <span
+                  className='text-xs capitalize'
+                  style={{ color: 'var(--color-text-secondary)' }}
+                >
                   {t(
                     PROFICIENCY_LABEL_KEYS[
                       level as keyof typeof PROFICIENCY_LABEL_KEYS

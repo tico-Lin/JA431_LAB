@@ -1,36 +1,36 @@
 {
   "hero": {
-    "title": "RoboSkills",
-    "subtitle": "Team Skills Visualization & Management Platform",
-    "description": "Track, analyze, and enhance your team's capabilities across research and development. Visualize skill distributions, identify gaps, and manage team expertise effectively."
+    "title": "Energy and Polymer Research Lab",
+    "subtitle": "High-Entropy Doping × Agricultural-Waste Green Chemistry",
+    "description": "A public entry point for materials synthesis, surface tuning, characterization, and electrochemical collaboration in energy research."
   },
   "lab": {
-    "name": "Your Lab",
-    "fullName": "Your Laboratory Full Name",
-    "institution": "Your University or Institution",
-    "description": "Replace this with your lab's research focus and mission. Describe your team's expertise, research areas, and goals. This is a template - customize it to showcase what makes your lab unique.",
-    "website": "https://yourlab.example.com",
+    "name": "Energy and Polymer Research Lab",
+    "fullName": "Department of Chemistry, Providence University",
+    "institution": "Department of Chemistry, Providence University",
+    "description": "Focused on high-entropy doping, agricultural-waste green chemistry, hydrothermal synthesis, electrodeposition, co-precipitation, thermal treatment, XRD, SEM(EDS), FT-IR, Raman, and SP-50e electrochemical analysis (CV, LSV, GCD, EIS).",
+    "website": "https://chem.pu.edu.tw/p/403-1108-30.php?Lang=zh-tw",
     "director": {
-      "name": "Dr. Your Name",
-      "title": "Principal Investigator",
-      "email": "contact@yourlab.example.com"
+      "name": "Feng-Hao Hsu",
+      "title": "Assistant Professor / PI",
+      "email": "hsu0625@pu.edu.tw"
     }
   },
   "features": [
     {
-      "icon": "TeamOutlined",
-      "title": "Team Overview",
-      "description": "Visualize your team's skill distribution across categories and identify expertise areas."
+      "icon": "ExperimentOutlined",
+      "title": "Synthesis & Tuning",
+      "description": "Hydrothermal, electrodeposition, co-precipitation, and calcination/annealing routes for energy materials."
     },
     {
       "icon": "SearchOutlined",
-      "title": "Gap Analysis",
-      "description": "Discover skill gaps and prioritize areas for team development and recruitment."
+      "title": "Characterization",
+      "description": "XRD, SEM(EDS), FT-IR, and Raman to build a strong structure-property evidence chain."
     },
     {
       "icon": "PullRequestOutlined",
-      "title": "Easy Updates",
-      "description": "Update team member skills through an intuitive interface with GitHub PR generation."
+      "title": "Electrochemical Platform",
+      "description": "Use the SP-50e platform for CV, LSV, GCD, and EIS to assess storage performance."
     }
   ],
   "statistics": {
@@ -39,21 +39,21 @@
   },
   "quickLinks": [
     {
-      "title": "View Team Overview",
-      "description": "Explore detailed skill visualization",
-      "link": "/overview",
-      "icon": "TeamOutlined"
+      "title": "PI Profile",
+      "description": "Quickly learn the PI background and research focus",
+      "link": "/pi",
+      "icon": "ReadOutlined"
     },
     {
-      "title": "Analyze Skill Gaps",
-      "description": "Identify areas for growth",
-      "link": "/gaps",
+      "title": "Research Capability Overview",
+      "description": "Review methods and instrumentation coverage",
+      "link": "/overview",
       "icon": "SearchOutlined"
     },
     {
-      "title": "Update Skills",
-      "description": "Manage team member data",
-      "link": "/update",
+      "title": "Collaboration Analysis",
+      "description": "Find potential collaboration and commission points",
+      "link": "/gaps",
       "icon": "PullRequestOutlined"
     }
   ]

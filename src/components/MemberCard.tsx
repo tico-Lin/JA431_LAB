@@ -1,6 +1,12 @@
 import React from 'react';
 import { Card, Tag, Avatar, Tooltip, Flex } from 'antd';
-import { UserOutlined, GithubOutlined, MailOutlined } from '@ant-design/icons';
+import {
+  UserOutlined,
+  GithubOutlined,
+  MailOutlined,
+  PhoneOutlined,
+  HomeOutlined,
+} from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import type { LabMember, SkillsData, MemberSkill } from '../types/types';
 import { PROFICIENCY_COLORS, PROFICIENCY_LABEL_KEYS } from '../types/types';
@@ -42,7 +48,8 @@ const SkillTag: React.FC<{
           </div>
           {isOverlap && (
             <div className='text-xs mt-1'>
-              Spans: {categories.map((c) => c?.name).join(', ')}
+              {t('common.spansPrefix')}:{' '}
+              {categories.map((c) => c?.name).join(', ')}
             </div>
           )}
         </div>
@@ -77,6 +84,7 @@ export const MemberCard: React.FC<MemberCardProps> = ({
   onClick,
   onSkillClick,
 }) => {
+  const { t } = useTranslation();
   const categoryWeights = getMemberCategoryWeights(member, data);
   const blendedColor = getMemberBlendedColor(categoryWeights, data.categories);
 
@@ -116,6 +124,7 @@ export const MemberCard: React.FC<MemberCardProps> = ({
   const hasHiddenSkills = Object.values(skillsByCategory).some(
     (skills) => skills.length > INITIAL_VISIBLE_COUNT,
   );
+  const makeTelHref = (value: string) => `tel:${value.replace(/[^\d+]/g, '')}`;
 
   return (
     <Card
@@ -134,7 +143,7 @@ export const MemberCard: React.FC<MemberCardProps> = ({
           className='flex-shrink-0'
           style={{
             background: blendedColor,
-            border: '2px solid rgba(255, 255, 255, 0.2)',
+            border: '2px solid var(--shell-border)',
           }}
         />
         <div className='flex-1 min-w-0'>
@@ -142,7 +151,7 @@ export const MemberCard: React.FC<MemberCardProps> = ({
             {member.name}
           </h3>
           <p className='text-sm text-gray-400 mb-2'>{member.role}</p>
-          <div className='flex gap-2 mb-3'>
+          <div className='flex flex-wrap gap-2 mb-3'>
             {member.email && (
               <Tooltip title={member.email}>
                 <a
@@ -151,6 +160,28 @@ export const MemberCard: React.FC<MemberCardProps> = ({
                   className='text-gray-400 hover:text-white transition-colors'
                 >
                   <MailOutlined />
+                </a>
+              </Tooltip>
+            )}
+            {member.phone && (
+              <Tooltip title={member.phone}>
+                <a
+                  href={makeTelHref(member.phone)}
+                  onClick={(e) => e.stopPropagation()}
+                  className='text-gray-400 hover:text-white transition-colors'
+                >
+                  <PhoneOutlined />
+                </a>
+              </Tooltip>
+            )}
+            {member.landline && (
+              <Tooltip title={member.landline}>
+                <a
+                  href={makeTelHref(member.landline)}
+                  onClick={(e) => e.stopPropagation()}
+                  className='text-gray-400 hover:text-white transition-colors'
+                >
+                  <HomeOutlined />
                 </a>
               </Tooltip>
             )}
@@ -209,7 +240,9 @@ export const MemberCard: React.FC<MemberCardProps> = ({
             <div key={categoryId} className='mb-2'>
               <span
                 className='text-xs font-medium uppercase tracking-wider'
-                style={{ color: category?.color || '#fff' }}
+                style={{
+                  color: category?.color || 'var(--color-text-primary)',
+                }}
               >
                 {category?.name || categoryId}
               </span>
@@ -226,16 +259,16 @@ export const MemberCard: React.FC<MemberCardProps> = ({
                   <Tag
                     className='!mt-2 cursor-pointer hover:opacity-80 transition-opacity'
                     style={{
-                      background: 'rgba(255, 255, 255, 0.1)',
-                      border: '1px dashed rgba(255, 255, 255, 0.3)',
-                      color: 'rgba(255, 255, 255, 0.6)',
+                      background: 'var(--color-surface-2)',
+                      border: '1px dashed var(--shell-border)',
+                      color: 'var(--color-text-secondary)',
                     }}
                     onClick={(e) => {
                       e.stopPropagation();
                       setExpanded(true);
                     }}
                   >
-                    +{hiddenCount} more
+                    {t('common.moreCount', { count: hiddenCount })}
                   </Tag>
                 )}
               </Flex>
@@ -250,7 +283,7 @@ export const MemberCard: React.FC<MemberCardProps> = ({
               setExpanded(false);
             }}
           >
-            Show Less
+            {t('common.showLess')}
           </div>
         )}
       </div>

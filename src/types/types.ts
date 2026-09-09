@@ -45,9 +45,13 @@ export interface MemberSkill {
 export interface LabMember {
   id: string;
   name: string;
+  nameZh?: string;
+  nameEn?: string;
   avatar?: string;
   role: string;
   email?: string;
+  phone?: string;
+  landline?: string;
   github?: string;
   skills: MemberSkill[];
 }

@@ -157,7 +157,8 @@ const HomePage: React.FC = () => {
               level={1}
               className='!text-5xl md:!text-7xl !mb-6 !font-bold'
               style={{
-                background: 'linear-gradient(to right, #818cf8, #c084fc)',
+                background:
+                  'linear-gradient(to right, var(--color-stat-primary), var(--color-stat-secondary))',
                 WebkitBackgroundClip: 'text',
                 WebkitTextFillColor: 'transparent',
                 backgroundClip: 'text',
@@ -179,33 +180,27 @@ const HomePage: React.FC = () => {
               {config.hero.description}
             </Paragraph>
             <Space size='large' wrap>
-              <Link to='/overview'>
+              <Link to='/pi'>
                 <Button
                   type='primary'
                   size='large'
                   icon={<RocketOutlined />}
                   className='shadow-lg hover:shadow-xl'
                 >
-                  {t('home.getStarted')}
+                  {t('home.visitPiProfile')}
                 </Button>
               </Link>
-              {config.lab.website && (
-                <a
-                  href={config.lab.website}
-                  target='_blank'
-                  rel='noopener noreferrer'
+              <Link to='/overview'>
+                <Button
+                  size='large'
+                  icon={<GlobalOutlined />}
+                  ghost
+                  className='!border-[var(--shell-border)] hover:!bg-[var(--color-surface-1)]'
+                  style={{ color: 'var(--color-text-primary)' }}
                 >
-                  <Button
-                    size='large'
-                    icon={<GlobalOutlined />}
-                    ghost
-                    className='!border-[var(--shell-border)] hover:!bg-[var(--color-surface-1)]'
-                    style={{ color: 'var(--color-text-primary)' }}
-                  >
-                    {t('home.visitLabWebsite')}
-                  </Button>
-                </a>
-              )}
+                  {t('home.viewResearchCapabilities')}
+                </Button>
+              </Link>
             </Space>
           </div>
         </div>
@@ -230,7 +225,10 @@ const HomePage: React.FC = () => {
                     </span>
                   }
                   value={stats.members}
-                  valueStyle={{ color: '#818cf8', fontSize: '2.5rem' }}
+                  valueStyle={{
+                    color: 'var(--color-stat-primary)',
+                    fontSize: '2.5rem',
+                  }}
                   prefix={<TeamOutlined />}
                 />
               </Col>
@@ -242,7 +240,10 @@ const HomePage: React.FC = () => {
                     </span>
                   }
                   value={stats.skills}
-                  valueStyle={{ color: '#c084fc', fontSize: '2.5rem' }}
+                  valueStyle={{
+                    color: 'var(--color-stat-secondary)',
+                    fontSize: '2.5rem',
+                  }}
                   prefix={<RocketOutlined />}
                 />
               </Col>
@@ -254,7 +255,10 @@ const HomePage: React.FC = () => {
                     </span>
                   }
                   value={stats.categories}
-                  valueStyle={{ color: '#a78bfa', fontSize: '2.5rem' }}
+                  valueStyle={{
+                    color: 'var(--color-stat-tertiary)',
+                    fontSize: '2.5rem',
+                  }}
                   prefix={<SearchOutlined />}
                 />
               </Col>
@@ -268,7 +272,10 @@ const HomePage: React.FC = () => {
                     }
                     value={stat.value}
                     suffix={stat.suffix}
-                    valueStyle={{ color: '#818cf8', fontSize: '2.5rem' }}
+                    valueStyle={{
+                      color: 'var(--color-stat-primary)',
+                      fontSize: '2.5rem',
+                    }}
                   />
                 </Col>
               ))}
@@ -435,45 +442,40 @@ const HomePage: React.FC = () => {
       </div>
 
       {/* Footer */}
-      <div className='bg-black/20 border-t border-white/10'>
-        <div className='container mx-auto px-4 py-8'>
-          <div
-            className='text-center'
-            style={{ color: 'var(--color-text-muted)' }}
-          >
-            <Space size='middle'>
-              <a
-                href='https://github.com/whats2000/RoboSkills'
-                target='_blank'
-                rel='noopener noreferrer'
-                className='transition-colors'
-                style={{ color: 'var(--color-text-muted)' }}
-              >
-                {t('home.templateProvided')}
-              </a>
-              {config.lab.website && (
-                <>
-                  <span>|</span>
-                  <a
-                    href={config.lab.website}
-                    target='_blank'
-                    rel='noopener noreferrer'
-                    className='transition-colors'
-                    style={{ color: 'var(--color-text-muted)' }}
-                  >
-                    <GlobalOutlined /> {t('home.labWebsite')}
-                  </a>
-                </>
-              )}
-            </Space>
-            <Paragraph
-              className='!mt-4 !mb-0'
+      <div className='container mx-auto px-4 py-10 bg-transparent'>
+        <div className='glass-card px-6 py-6 text-center'>
+          <Space size='middle' wrap>
+            <a
+              href='https://github.com/tico-Lin/JA431_LAB'
+              target='_blank'
+              rel='noopener noreferrer'
+              className='transition-colors'
               style={{ color: 'var(--color-text-muted)' }}
             >
-              © {new Date().getFullYear()} {config.lab.name}. All rights{' '}
-              {t('home.rightsReserved')}
-            </Paragraph>
-          </div>
+              {t('home.templateProvided')}
+            </a>
+            {config.lab.website && (
+              <>
+                <span style={{ color: 'var(--color-text-muted)' }}>|</span>
+                <a
+                  href={config.lab.website}
+                  target='_blank'
+                  rel='noopener noreferrer'
+                  className='transition-colors'
+                  style={{ color: 'var(--color-text-muted)' }}
+                >
+                  <GlobalOutlined /> {t('home.labWebsite')}
+                </a>
+              </>
+            )}
+          </Space>
+          <Paragraph
+            className='!mt-4 !mb-0'
+            style={{ color: 'var(--color-text-muted)' }}
+          >
+            © {new Date().getFullYear()} {config.lab.name}. All rights{' '}
+            {t('home.rightsReserved')}
+          </Paragraph>
         </div>
       </div>
     </div>

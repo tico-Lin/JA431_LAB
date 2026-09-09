@@ -499,7 +499,7 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
         content: (
           <ul className='list-disc pl-4'>
             {validation.errors.map((err, i) => (
-              <li key={i} className='text-red-400'>
+              <li key={i} style={{ color: 'var(--color-status-error)' }}>
                 {err}
               </li>
             ))}
@@ -527,7 +527,7 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
                 {pendingChanges.length > 0 && (
                   <Badge
                     count={pendingChanges.length}
-                    style={{ backgroundColor: '#52c41a' }}
+                    style={{ backgroundColor: 'var(--color-status-success)' }}
                   />
                 )}
               </Space>

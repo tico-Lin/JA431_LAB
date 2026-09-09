@@ -12,63 +12,64 @@ import { useLocale } from './useLocale';
 const DATA_URL = `${import.meta.env.BASE_URL}data/skillsData.json`;
 
 const CATEGORY_NAME_ZH: Record<string, string> = {
-  environment: '環境與代理',
-  robots: '機器人',
-  caregiver: '照護者',
-  'care-recipient': '被照護者',
+  'research-focus': '研究主軸',
+  synthesis: '合成方法',
+  'thermal-treatment': '修飾與熱處理',
+  characterization: '表徵分析',
+  electrochemistry: '電化學分析',
+  'instrument-experience': '儀器經驗',
 };
 
 const CATEGORY_DESC_ZH: Record<string, string> = {
-  environment: '任務規劃、模擬與環境互動',
-  robots: '機器人硬體、控制與感知系統',
-  caregiver: '照護情境中的人機互動',
-  'care-recipient': '理解並支援被照護者需求',
+  'research-focus': '高熵參雜與農廢綠色化學',
+  synthesis: '水熱法、電鍍法與共沉澱法',
+  'thermal-treatment': '高溫鍛燒與退火修飾',
+  characterization:
+    'X 射線繞射（XRD）、掃描式電子顯微鏡與能量散佈光譜（SEM-EDS）、傅立葉轉換紅外光譜（FT-IR）與拉曼光譜（Raman）',
+  electrochemistry:
+    '循環伏安法（CV）、線性掃描伏安法（LSV）、恆電流充放電（GCD）、電化學阻抗頻譜（EIS）',
+  'instrument-experience': 'SP-50e',
 };
 
 const SKILL_NAME_ZH: Record<string, string> = {
-  'task-planning': '任務規劃',
-  simulation: '模擬',
-  'env-modeling': '環境建模',
-  'multi-agent': '多代理系統',
-  'robot-control': '機器人控制',
-  'robot-slam': '機器人 SLAM',
-  perception: '感知',
-  hardware: '硬體整合',
-  manipulation: '操作能力',
-  hri: '人機互動',
-  'care-protocols': '照護流程',
-  monitoring: '健康監測',
-  communication: '溝通能力',
-  'user-modeling': '使用者建模',
-  'needs-assessment': '需求評估',
-  personalization: '個人化',
-  safety: '安全系統',
-  'test-skill': '測試技能',
+  'high-entropy-doping': '高熵參雜',
+  'agri-waste-green-chemistry': '農廢綠色化學',
+  hydrothermal: '水熱法',
+  electrodeposition: '電鍍法',
+  coprecipitation: '共沉澱法',
+  'calcination-annealing': '高溫鍛燒退火',
+  xrd: 'X 射線繞射（XRD）',
+  'sem-eds': '掃描式電子顯微鏡與能量散佈光譜（SEM-EDS）',
+  ftir: '傅立葉轉換紅外光譜（FT-IR）',
+  raman: '拉曼光譜（Raman）',
+  cv: '循環伏安法（CV）',
+  lsv: '線性掃描伏安法（LSV）',
+  gcd: '恆電流充放電（GCD）',
+  eis: '電化學阻抗頻譜（EIS）',
+  'sp-50e': 'SP-50e',
 };
 
 const SKILL_DESC_ZH: Record<string, string> = {
-  'task-planning': '高階任務分解與規劃',
-  simulation: '機器人與環境模擬',
-  'env-modeling': '空間與語意環境理解',
-  'multi-agent': '多代理間協調與通訊',
-  'robot-control': '運動控制與軌跡規劃',
-  'robot-slam': '同步定位與地圖建構',
-  perception: '電腦視覺與感測融合',
-  hardware: '機械與電子系統整合',
-  manipulation: '抓取與物件操作',
-  hri: '與人類自然互動',
-  'care-protocols': '標準照護流程與作業',
-  monitoring: '生命徵象與活動監測',
-  communication: '語音與手勢辨識',
-  'user-modeling': '理解使用者偏好與需求',
-  'needs-assessment': '評估照護需求',
-  personalization: '依個體調整機器人行為',
-  safety: '確保使用者安全與舒適',
-  'test-skill': '用於測試 PR 流程的技能',
+  'high-entropy-doping': '多元素共同調控以提升材料穩定性與性能',
+  'agri-waste-green-chemistry': '農業廢棄物升級再利用與綠色轉化',
+  hydrothermal: '以水熱條件合成奈米／層狀材料',
+  electrodeposition: '以電化學沉積建構功能性薄膜與複材',
+  coprecipitation: '以共沉澱控制成分均勻性與前驅物形貌',
+  'calcination-annealing': '利用高溫鍛燒與退火調控晶相與缺陷',
+  xrd: '相鑑定、結晶性與晶格分析',
+  'sem-eds': '形貌、粒徑與元素分布分析',
+  ftir: '官能基與化學鍵分析',
+  raman: '振動模態與結構缺陷分析',
+  cv: '循環伏安分析',
+  lsv: '線性掃描伏安分析',
+  gcd: '恆電流充放電分析',
+  eis: '電化學阻抗分析',
+  'sp-50e': 'SP-50e 電化學分析平台',
 };
 
 const ROLE_ZH: Record<string, string> = {
   Professor: '教授',
+  'Assistant Professor': '助理教授',
   Postdoc: '博士後研究員',
   'PhD Student': '博士生',
   'Master Student': '碩士生',
@@ -79,8 +80,22 @@ const ROLE_ZH: Record<string, string> = {
 };
 
 function localizeSkillsData(data: SkillsData, language: 'en' | 'zh-TW') {
+  const resolveName = (member: LabMember) => {
+    if (language === 'zh-TW') {
+      return member.nameZh ?? member.nameEn ?? member.name;
+    }
+
+    return member.nameEn ?? member.nameZh ?? member.name;
+  };
+
   if (language !== 'zh-TW') {
-    return data;
+    return {
+      ...data,
+      members: data.members.map((member) => ({
+        ...member,
+        name: resolveName(member),
+      })),
+    };
   }
 
   return {
@@ -97,6 +112,7 @@ function localizeSkillsData(data: SkillsData, language: 'en' | 'zh-TW') {
     })),
     members: data.members.map((member) => ({
       ...member,
+      name: resolveName(member),
       role: ROLE_ZH[member.role] ?? member.role,
     })),
   };

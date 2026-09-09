@@ -142,7 +142,14 @@ export const GapAnalysisPage: React.FC = () => {
       key: 'experts',
       sorter: (a: SkillGap, b: SkillGap) => a.expertCount - b.expertCount,
       render: (count: number) => (
-        <span className={count === 0 ? 'text-orange-400' : 'text-green-400'}>
+        <span
+          style={{
+            color:
+              count === 0
+                ? 'var(--color-status-warning)'
+                : 'var(--color-status-success)',
+          }}
+        >
           {count}{' '}
           {count === 1 ? t('gaps.expertSingle') : t('gaps.expertPlural')}
         </span>
@@ -193,7 +200,10 @@ export const GapAnalysisPage: React.FC = () => {
             {recommendationTextMap[key]}
           </span>
         ) : (
-          <span className='text-green-400 text-sm'>
+          <span
+            className='text-sm'
+            style={{ color: 'var(--color-status-success)' }}
+          >
             ✓ {t('gaps.goodCoverage')}
           </span>
         ),
@@ -232,7 +242,7 @@ export const GapAnalysisPage: React.FC = () => {
                 </span>
               }
               value={stats.noCoverage}
-              styles={{ content: { color: '#ef4444' } }}
+              styles={{ content: { color: 'var(--color-status-error)' } }}
               prefix={<WarningOutlined />}
               suffix={t('gaps.skillsSuffix')}
             />
@@ -247,7 +257,7 @@ export const GapAnalysisPage: React.FC = () => {
                 </span>
               }
               value={stats.noExpert}
-              styles={{ content: { color: '#f59e0b' } }}
+              styles={{ content: { color: 'var(--color-status-warning)' } }}
               prefix={<ExclamationCircleOutlined />}
               suffix={t('gaps.skillsSuffix')}
             />
@@ -262,7 +272,7 @@ export const GapAnalysisPage: React.FC = () => {
                 </span>
               }
               value={stats.healthy}
-              styles={{ content: { color: '#22c55e' } }}
+              styles={{ content: { color: 'var(--color-status-success)' } }}
               prefix={<CheckCircleOutlined />}
               suffix={t('gaps.skillsSuffix')}
             />
@@ -311,7 +321,12 @@ export const GapAnalysisPage: React.FC = () => {
               key={gap.skill.id}
               className='p-4 rounded-lg bg-white/5 border border-white/10'
             >
-              <h3 className='font-medium text-white mb-2'>{gap.skill.name}</h3>
+              <h3
+                className='font-medium mb-2'
+                style={{ color: 'var(--color-text-primary)' }}
+              >
+                {gap.skill.name}
+              </h3>
               <div className='flex flex-wrap gap-1 mb-2'>
                 {gap.categories.map((cat) => (
                   <span
@@ -378,7 +393,12 @@ export const GapAnalysisPage: React.FC = () => {
                   borderLeft: `4px solid ${gap.categories[0]?.color}`,
                 }}
               >
-                <h3 className='font-medium text-white'>{gap.skill.name}</h3>
+                <h3
+                  className='font-medium'
+                  style={{ color: 'var(--color-text-primary)' }}
+                >
+                  {gap.skill.name}
+                </h3>
                 <p
                   className='text-sm mt-1'
                   style={{ color: 'var(--color-text-secondary)' }}

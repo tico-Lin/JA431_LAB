@@ -9,6 +9,7 @@ import {
   Tag,
   Select,
   Tooltip,
+  Space,
 } from 'antd';
 import { GithubOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
@@ -53,6 +54,9 @@ export const MemberForm: React.FC<MemberFormProps> = ({
   onRemoveMember,
 }) => {
   const { t } = useTranslation();
+  const [nameLanguage, setNameLanguage] = React.useState<'zh-TW' | 'en'>(
+    'zh-TW',
+  );
 
   const addSkill = (skillId: string, proficiency: ProficiencyLevel) => {
     const exists = skills.some((s) => s.skillId === skillId);
@@ -89,13 +93,56 @@ export const MemberForm: React.FC<MemberFormProps> = ({
         onValuesChange={onFormValuesChange}
       >
         <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-          <Form.Item
-            name='name'
-            label={<span className='text-gray-300'>{t('pr.name')}</span>}
-            rules={[{ required: true, message: t('pr.pleaseEnterName') }]}
-          >
-            <Input placeholder={t('pr.namePlaceholder')} />
-          </Form.Item>
+          <div className='md:col-span-2'>
+            <Space align='center' size={8} className='mb-2'>
+              <span className='text-gray-300'>{t('pr.name')}</span>
+              <Select
+                size='small'
+                value={nameLanguage}
+                onChange={(value) => setNameLanguage(value)}
+                options={[
+                  { value: 'zh-TW', label: t('controls.traditionalChinese') },
+                  { value: 'en', label: t('controls.english') },
+                ]}
+                className='min-w-[120px]'
+              />
+            </Space>
+            <Form.Item
+              name='name'
+              rules={[{ required: true, message: t('pr.pleaseEnterName') }]}
+              className='mb-2'
+            >
+              <Input
+                placeholder={
+                  nameLanguage === 'zh-TW'
+                    ? t('pr.form.namePlaceholderZh')
+                    : t('pr.form.namePlaceholderEn')
+                }
+              />
+            </Form.Item>
+            <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
+              <Form.Item
+                name='nameZh'
+                label={
+                  <span className='text-gray-300'>
+                    {t('pr.form.nameZhLabel')}
+                  </span>
+                }
+              >
+                <Input placeholder={t('pr.form.namePlaceholderZh')} />
+              </Form.Item>
+              <Form.Item
+                name='nameEn'
+                label={
+                  <span className='text-gray-300'>
+                    {t('pr.form.nameEnLabel')}
+                  </span>
+                }
+              >
+                <Input placeholder={t('pr.form.namePlaceholderEn')} />
+              </Form.Item>
+            </div>
+          </div>
           <Form.Item
             name='role'
             label={<span className='text-gray-300'>{t('pr.role')}</span>}
@@ -130,7 +177,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
           </Form.Item>
         </div>
 
-        <Divider className='border-gray-700' />
+        <Divider style={{ borderColor: 'var(--shell-border)' }} />
 
         {/* Skill Selection */}
         <h3 className='text-white font-medium mb-4'>{t('pr.skillsHint')}</h3>

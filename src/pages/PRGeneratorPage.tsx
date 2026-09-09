@@ -4,35 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { useSkillsData, getSkillById } from '../hooks/useSkillsData';
 import type { LabMember, MemberSkill } from '../types/types';
 import { PROFICIENCY_LABEL_KEYS } from '../types/types';
-import { useLocale } from '../hooks/useLocale';
 import {
   MemberList,
   MemberForm,
   PRPreviewModal,
   SkillCategoryAdmin,
 } from '../components/PRGenerator';
-
-const COMMON_ROLES = [
-  'Professor',
-  'Postdoc',
-  'PhD Student',
-  'Master Student',
-  'Undergraduate Student',
-  'Research Assistant',
-  'Visiting Scholar',
-  'Alumni',
-];
-
-const ROLE_ZH: Record<string, string> = {
-  Professor: '教授',
-  Postdoc: '博士後研究員',
-  'PhD Student': '博士生',
-  'Master Student': '碩士生',
-  'Undergraduate Student': '大學生',
-  'Research Assistant': '研究助理',
-  'Visiting Scholar': '訪問學者',
-  Alumni: '校友',
-};
 
 // Unicode-safe base64 encoding for GitHub API
 // GitHub's API expects base64-encoded content
@@ -70,14 +47,31 @@ const decodeBase64 = (base64: string): string => {
 
 interface MemberFormData {
   name: string;
+  nameZh?: string;
+  nameEn?: string;
   role: string;
   email?: string;
   github?: string;
 }
 
+const resolveLocalizedName = (
+  member: { name: string; nameZh?: string; nameEn?: string },
+  language: 'en' | 'zh-TW',
+) => {
+  if (language === 'zh-TW') {
+    return member.nameZh ?? member.nameEn ?? member.name;
+  }
+
+  return member.nameEn ?? member.nameZh ?? member.name;
+};
+
 export const PRGeneratorPage: React.FC = () => {
-  const { t } = useTranslation();
-  const { resolvedLanguage } = useLocale();
+  const { t, i18n } = useTranslation();
+  const resolvedLanguage: 'en' | 'zh-TW' = i18n.resolvedLanguage?.startsWith(
+    'zh',
+  )
+    ? 'zh-TW'
+    : 'en';
   const { data, loading, error } = useSkillsData();
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
@@ -99,6 +93,15 @@ export const PRGeneratorPage: React.FC = () => {
     repo: '',
   });
 
+  const changeTypeLabelMap: Record<string, string> = {
+    'add-skill': t('pr.changeTypeAddSkill'),
+    'update-skill': t('pr.changeTypeUpdateSkill'),
+    'delete-skill': t('pr.changeTypeDeleteSkill'),
+    'add-category': t('pr.changeTypeAddCategory'),
+    'update-category': t('pr.changeTypeUpdateCategory'),
+    'delete-category': t('pr.changeTypeDeleteCategory'),
+  };
+
   // Auto-detect repository from GitHub Pages URL
   useEffect(() => {
     const detectRepo = () => {
@@ -113,7 +116,7 @@ export const PRGeneratorPage: React.FC = () => {
         setTargetRepo({ owner, repo });
       } else {
         // Fallback for local development or custom domains
-        setTargetRepo({ owner: 'whats2000', repo: 'RoboSkills' });
+        setTargetRepo({ owner: 'tico-Lin', repo: 'JA431_LAB' });
       }
     };
 
@@ -214,6 +217,8 @@ export const PRGeneratorPage: React.FC = () => {
             const newMember = {
               id: memberId,
               name: form.getFieldValue('name'),
+              nameZh: form.getFieldValue('nameZh'),
+              nameEn: form.getFieldValue('nameEn'),
               role: form.getFieldValue('role'),
               email: form.getFieldValue('email'),
               github: form.getFieldValue('github'),
@@ -225,6 +230,8 @@ export const PRGeneratorPage: React.FC = () => {
             const updatedMember = {
               ...selectedMember,
               name: form.getFieldValue('name'),
+              nameZh: form.getFieldValue('nameZh'),
+              nameEn: form.getFieldValue('nameEn'),
               role: form.getFieldValue('role'),
               email: form.getFieldValue('email'),
               github: form.getFieldValue('github'),
@@ -304,11 +311,13 @@ export const PRGeneratorPage: React.FC = () => {
 
         let prTitle = '';
         if (prType === 'batch') {
-          prTitle = `Batch Update: ${batchChanges.length} changes`;
+          prTitle = t('pr.batchTitle', { count: batchChanges.length });
         } else if (prType === 'delete-member' && selectedMember) {
-          prTitle = `Remove Member: ${selectedMember.name}`;
+          prTitle = t('pr.removeMemberTitle', { name: selectedMember.name });
         } else {
-          prTitle = `Update: ${form.getFieldValue('name')}`;
+          prTitle = t('pr.formEditMember', {
+            name: form.getFieldValue('name') || '',
+          });
         }
 
         const { data: prData } = await octokit.request(
@@ -342,8 +351,9 @@ export const PRGeneratorPage: React.FC = () => {
   const roleOptions = React.useMemo(() => {
     if (!data) return [];
 
-    const localizedCommonRoles = COMMON_ROLES.map((role) =>
-      resolvedLanguage === 'zh-TW' ? (ROLE_ZH[role] ?? role) : role,
+    const roleKeys = t('pr.roleKeys', { returnObjects: true }) as string[];
+    const localizedCommonRoles = roleKeys.map((roleKey) =>
+      t(`pr.roles.${roleKey}`),
     );
 
     const existingRoles = new Set(data.members.map((m) => m.role));
@@ -355,7 +365,7 @@ export const PRGeneratorPage: React.FC = () => {
         value: role,
         label: role,
       }));
-  }, [data, resolvedLanguage]);
+  }, [data, t]);
 
   // --- Change Detection Logic ---
   const checkForChanges = (
@@ -370,6 +380,10 @@ export const PRGeneratorPage: React.FC = () => {
     if (!selectedMember) return false;
 
     const nameChanged = currentFormValues.name !== selectedMember.name;
+    const nameZhChanged =
+      (currentFormValues.nameZh || '') !== (selectedMember.nameZh || '');
+    const nameEnChanged =
+      (currentFormValues.nameEn || '') !== (selectedMember.nameEn || '');
     const roleChanged = currentFormValues.role !== selectedMember.role;
     const emailChanged =
       (currentFormValues.email || '') !== (selectedMember.email || '');
@@ -390,6 +404,8 @@ export const PRGeneratorPage: React.FC = () => {
 
     return (
       nameChanged ||
+      nameZhChanged ||
+      nameEnChanged ||
       roleChanged ||
       emailChanged ||
       githubChanged ||
@@ -433,6 +449,8 @@ export const PRGeneratorPage: React.FC = () => {
     const newMember = {
       id: memberId,
       name: formData.name,
+      nameZh: formData.nameZh,
+      nameEn: formData.nameEn,
       role: formData.role,
       email: formData.email,
       github: formData.github,
@@ -440,14 +458,15 @@ export const PRGeneratorPage: React.FC = () => {
     };
 
     const action = editMode === 'new' ? t('pr.addNew') : t('pr.update');
+    const displayName = resolveLocalizedName(formData, resolvedLanguage);
     const description =
       editMode === 'new'
         ? t('pr.templateAddsProfile', {
-            name: formData.name,
+            name: displayName,
             role: formData.role,
           })
         : t('pr.templateUpdatesProfile', {
-            name: formData.name,
+            name: displayName,
             role: formData.role,
           });
     const memberEntryHint =
@@ -455,7 +474,7 @@ export const PRGeneratorPage: React.FC = () => {
         ? t('pr.templateAddMemberEntry')
         : t('pr.templateReplaceMemberEntry');
 
-    const content = `## ${action} ${t('pr.templateMemberTitle')}: ${formData.name}
+    const content = `## ${action} ${t('pr.templateMemberTitle')}: ${displayName}
 
 ### ${t('pr.templateDescriptionHeading')}
 ${description}
@@ -467,6 +486,10 @@ ${memberEntryHint}
 \`\`\`json
 ${JSON.stringify(newMember, null, 2)}
 \`\`\`
+
+### ${t('pr.localizedNamesHeading')}
+- ${t('pr.chineseNameLabel')}：${formData.nameZh || t('common.emptyValue')}
+- ${t('pr.englishNameLabel')}: ${formData.nameEn || t('common.emptyValue')}
 
 ### ${t('pr.templateSkillsSummaryHeading')}
 ${skills
@@ -546,6 +569,8 @@ ${t('pr.templateRemoveEntry', { id: selectedMember.id })}
     setSkills(member.skills);
     form.setFieldsValue({
       name: member.name,
+      nameZh: member.nameZh,
+      nameEn: member.nameEn,
       role: member.role,
       email: member.email,
       github: member.github,
@@ -571,7 +596,7 @@ ${t('pr.templateRemoveEntry', { id: selectedMember.id })}
   ${t('pr.templateBatchDescription', { count: changes.length })}
 
   ### ${t('pr.templateBatchSummaryHeading')}
-${changes.map((c) => `- **${c.type.replace('-', ' ').toUpperCase()}**: ${c.description}`).join('\n')}
+  ${changes.map((c) => `- **${changeTypeLabelMap[c.type] ?? c.type}**: ${c.description}`).join('\n')}
 
   ### ${t('pr.templateBatchDetailsHeading')}
 \`\`\`json
