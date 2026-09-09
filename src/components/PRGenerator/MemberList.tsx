@@ -1,6 +1,7 @@
 import React from 'react';
 import { Button, Card } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 import type { LabMember } from '../../types/types';
 
 interface MemberListProps {
@@ -16,10 +17,12 @@ export const MemberList: React.FC<MemberListProps> = ({
   onSelectMember,
   onNewMember,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <Card className='glass-card lg:col-span-1'>
       <h2 className='text-lg font-semibold text-white mb-4'>
-        Existing Members
+        {t('pr.memberListTitle')}
       </h2>
       <Button
         type='primary'
@@ -27,7 +30,7 @@ export const MemberList: React.FC<MemberListProps> = ({
         onClick={onNewMember}
         className='w-full !mb-4'
       >
-        Add New Member
+        {t('pr.addNewMember')}
       </Button>
       <div className='space-y-2 max-h-96 overflow-y-auto'>
         {members.map((member) => (
@@ -43,7 +46,7 @@ export const MemberList: React.FC<MemberListProps> = ({
             <h3 className='font-medium text-white'>{member.name}</h3>
             <p className='text-sm text-gray-400'>{member.role}</p>
             <p className='text-xs text-gray-500'>
-              {member.skills.length} skills
+              {t('pr.memberCount', { count: member.skills.length })}
             </p>
           </div>
         ))}

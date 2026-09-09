@@ -1,8 +1,9 @@
 import React from 'react';
 import { Card, Tag, Avatar, Tooltip, Flex } from 'antd';
 import { UserOutlined, GithubOutlined, MailOutlined } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 import type { LabMember, SkillsData, MemberSkill } from '../types/types';
-import { PROFICIENCY_COLORS, PROFICIENCY_LABELS } from '../types/types';
+import { PROFICIENCY_COLORS, PROFICIENCY_LABEL_KEYS } from '../types/types';
 import {
   getSkillById,
   getMemberBlendedColor,
@@ -21,6 +22,7 @@ const SkillTag: React.FC<{
   data: SkillsData;
   onSkillClick?: (skillId: string) => void;
 }> = ({ skill, data, onSkillClick }) => {
+  const { t } = useTranslation();
   const skillInfo = getSkillById(data.skills, skill.skillId);
   if (!skillInfo) return null;
 
@@ -36,7 +38,7 @@ const SkillTag: React.FC<{
         <div>
           <div className='font-semibold'>{skillInfo.name}</div>
           <div className='text-xs opacity-80'>
-            {PROFICIENCY_LABELS[skill.proficiency]}
+            {t(PROFICIENCY_LABEL_KEYS[skill.proficiency])}
           </div>
           {isOverlap && (
             <div className='text-xs mt-1'>

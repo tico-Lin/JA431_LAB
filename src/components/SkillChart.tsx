@@ -6,12 +6,12 @@ import {
   CloseOutlined,
 } from '@ant-design/icons';
 import { Button, Avatar } from 'antd';
+import { useTranslation } from 'react-i18next';
 
-import skillsData from '../../public/data/skillsData.json';
 import * as venn from '../utils/d3-venn';
 import type { Area } from '../utils/d3-venn';
 import type { SkillsData } from '../types/types';
-import { PROFICIENCY_COLORS } from '../types/types';
+import { PROFICIENCY_COLORS, PROFICIENCY_LABEL_KEYS } from '../types/types';
 
 // --- Interfaces ---
 
@@ -85,11 +85,13 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
   ({
     width: propWidth,
     height: propHeight,
+    data,
     onMemberClick,
     onSelectionChange,
     focusMemberId,
     focusSkillId,
   }) => {
+    const { t } = useTranslation();
     const svgRef = useRef<SVGSVGElement>(null);
     const [dimensions, setDimensions] = useState({
       width: propWidth || 800,
@@ -136,9 +138,20 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
       // We need to calculate the "size" of each set A, B, C, D and their intersections AB, AC, etc.
       // Size = count of skills in that set/intersection (or weighted).
 
-      const skillListRaw = skillsData.skills as Skill[];
-      const categoryList = skillsData.categories as Category[];
-      const memberList = skillsData.members as Member[];
+      if (!data) {
+        return {
+          nodes: [] as SkillNode[],
+          groups: [] as GroupNode[],
+          vennCircles: {} as Record<
+            string,
+            { x: number; y: number; radius: number }
+          >,
+        };
+      }
+
+      const skillListRaw = data.skills as Skill[];
+      const categoryList = data.categories as Category[];
+      const memberList = data.members as Member[];
 
       // Filter out skills that have no people
       const skillList = skillListRaw.filter((skill) =>
@@ -294,10 +307,16 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
         groups: groupNodes,
         vennCircles: scaledSolution,
       };
-    }, [dimensions]); // Data is static/imported, so only dimensions trigger recalc
+    }, [dimensions, data]);
 
     useEffect(() => {
       if (!svgRef.current) return;
+
+      const styles = getComputedStyle(document.documentElement);
+      const textPrimary =
+        styles.getPropertyValue('--color-text-primary').trim() || '#ffffff';
+      const textSecondary =
+        styles.getPropertyValue('--color-text-secondary').trim() || '#a0a0b0';
 
       const svg = d3
         .select(svgRef.current)
@@ -524,7 +543,7 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
       // --- Draw Category Foci Backgrounds (Venn Circles) ---
       // Using simple circles for background regions
       const catGroup = container.append('g').attr('class', 'categories');
-      const categoryList = skillsData.categories;
+      const categoryList = data?.categories ?? [];
       const categoryMap = new Map(categoryList.map((c) => [c.id, c]));
 
       Object.entries(vennCircles).forEach(([id, circle]) => {
@@ -680,7 +699,7 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
               .attr('y1', (d) => d.source.y!)
               .attr('x2', (d) => d.target.x!)
               .attr('y2', (d) => d.target.y!)
-              .attr('stroke', '#fff')
+              .attr('stroke', textSecondary)
               .attr('stroke-width', 1)
               .attr('stroke-opacity', 0.2)
               .attr('stroke-dasharray', '5 3');
@@ -818,7 +837,7 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
             return [posA, posB] as any;
           })
           .style('fill', 'none')
-          .style('stroke', '#fff')
+          .style('stroke', textSecondary)
           .style('stroke-width', '0.5px')
           .style('opacity', 0) // Hidden by default
           .style('pointer-events', 'none');
@@ -854,7 +873,7 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
           .text((d) => d.data.name.split(' ')[0])
           .style('font-size', '3px')
           .style('font-weight', '600')
-          .style('fill', '#fff')
+          .style('fill', textPrimary)
           .style('text-shadow', '0 1px 2px rgba(0,0,0,0.8)')
           .style('opacity', 0)
           .style('pointer-events', 'none');
@@ -898,7 +917,7 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
         .attr('text-anchor', 'middle')
         .attr('font-size', '11px') // Slightly larger
         .attr('font-weight', '700')
-        .attr('fill', '#fff')
+        .attr('fill', textPrimary)
         .text((d) => d.name)
         .style('cursor', 'pointer') // Make it look clickable
         .style(
@@ -1115,7 +1134,7 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
         {/* Selected Member Overlay */}
         {selectedMemberId &&
           (() => {
-            const member = (skillsData.members as Member[]).find(
+            const member = (data?.members as Member[] | undefined)?.find(
               (m) => m.id === selectedMemberId,
             );
             if (!member) return null;
@@ -1130,19 +1149,34 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
                     className='border border-white/20'
                   />
                   <div>
-                    <h3 className='text-white font-bold text-lg leading-tight m-0'>
+                    <h3
+                      className='font-bold text-lg leading-tight m-0'
+                      style={{ color: 'var(--color-text-primary)' }}
+                    >
                       {member.name}
                     </h3>
-                    <p className='text-gray-400 text-sm m-0'>{member.role}</p>
+                    <p
+                      className='text-sm m-0'
+                      style={{ color: 'var(--color-text-secondary)' }}
+                    >
+                      {member.role}
+                    </p>
                     <div className='flex gap-2 mt-2 text-xs'>
-                      <span className='bg-white/10 px-2 py-0.5 rounded text-white/80'>
-                        {member.skills.length} Skills
+                      <span
+                        className='bg-white/10 px-2 py-0.5 rounded'
+                        style={{ color: 'var(--color-text-primary)' }}
+                      >
+                        {member.skills.length} {t('gaps.skillsWord')}
                       </span>
                     </div>
                   </div>
                   <Button
                     type='text'
-                    icon={<CloseOutlined className='text-white/60' />}
+                    icon={
+                      <CloseOutlined
+                        style={{ color: 'var(--color-text-secondary)' }}
+                      />
+                    }
                     size='small'
                     className='absolute top-2 right-2 hover:bg-white/10'
                     onClick={() => {
@@ -1157,7 +1191,6 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
                     }}
                   />
                 </div>
-
                 <div className='mt-4 flex justify-end'>
                   <Button
                     type='primary'
@@ -1167,7 +1200,7 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
                       onMemberClick && onMemberClick(member as Member)
                     }
                   >
-                    View Details Below <ArrowDownOutlined />
+                    {t('gaps.viewDetailsBelow')} <ArrowDownOutlined />
                   </Button>
                 </div>
               </div>
@@ -1176,8 +1209,11 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
 
         {/* Legend */}
         <div className='absolute bottom-4 left-4 bg-black/40 backdrop-blur-md p-3 rounded-lg border border-white/10 shadow-lg select-none'>
-          <h4 className='text-white/90 text-xs font-semibold mb-2 uppercase tracking-wider'>
-            Proficiency Levels
+          <h4
+            className='text-xs font-semibold mb-2 uppercase tracking-wider'
+            style={{ color: 'var(--color-text-primary)' }}
+          >
+            {t('gaps.proficiencyLevels')}
           </h4>
           <div className='flex flex-col gap-2'>
             {['expert', 'advanced', 'intermediate', 'beginner'].map((level) => (
@@ -1197,7 +1233,11 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
                   }}
                 />
                 <span className='text-white/80 text-xs capitalize'>
-                  {level}
+                  {t(
+                    PROFICIENCY_LABEL_KEYS[
+                      level as keyof typeof PROFICIENCY_LABEL_KEYS
+                    ],
+                  )}
                 </span>
               </div>
             ))}

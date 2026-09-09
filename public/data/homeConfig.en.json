@@ -1,0 +1,60 @@
+{
+  "hero": {
+    "title": "RoboSkills",
+    "subtitle": "Team Skills Visualization & Management Platform",
+    "description": "Track, analyze, and enhance your team's capabilities across research and development. Visualize skill distributions, identify gaps, and manage team expertise effectively."
+  },
+  "lab": {
+    "name": "Your Lab",
+    "fullName": "Your Laboratory Full Name",
+    "institution": "Your University or Institution",
+    "description": "Replace this with your lab's research focus and mission. Describe your team's expertise, research areas, and goals. This is a template - customize it to showcase what makes your lab unique.",
+    "website": "https://yourlab.example.com",
+    "director": {
+      "name": "Dr. Your Name",
+      "title": "Principal Investigator",
+      "email": "contact@yourlab.example.com"
+    }
+  },
+  "features": [
+    {
+      "icon": "TeamOutlined",
+      "title": "Team Overview",
+      "description": "Visualize your team's skill distribution across categories and identify expertise areas."
+    },
+    {
+      "icon": "SearchOutlined",
+      "title": "Gap Analysis",
+      "description": "Discover skill gaps and prioritize areas for team development and recruitment."
+    },
+    {
+      "icon": "PullRequestOutlined",
+      "title": "Easy Updates",
+      "description": "Update team member skills through an intuitive interface with GitHub PR generation."
+    }
+  ],
+  "statistics": {
+    "showStats": true,
+    "customStats": []
+  },
+  "quickLinks": [
+    {
+      "title": "View Team Overview",
+      "description": "Explore detailed skill visualization",
+      "link": "/overview",
+      "icon": "TeamOutlined"
+    },
+    {
+      "title": "Analyze Skill Gaps",
+      "description": "Identify areas for growth",
+      "link": "/gaps",
+      "icon": "SearchOutlined"
+    },
+    {
+      "title": "Update Skills",
+      "description": "Manage team member data",
+      "link": "/update",
+      "icon": "PullRequestOutlined"
+    }
+  ]
+}

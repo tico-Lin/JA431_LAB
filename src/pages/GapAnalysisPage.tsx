@@ -18,8 +18,10 @@ import {
 import { useSkillsData, calculateSkillGaps } from '../hooks/useSkillsData';
 import type { SkillGap } from '../types/types';
 import GapDistributionChart from '../components/GapDistributionChart';
+import { useTranslation } from 'react-i18next';
 
 export const GapAnalysisPage: React.FC = () => {
+  const { t } = useTranslation();
   const { data, loading, error } = useSkillsData();
 
   const gaps = useMemo(() => {
@@ -41,7 +43,7 @@ export const GapAnalysisPage: React.FC = () => {
   if (loading) {
     return (
       <div className='flex items-center justify-center h-96'>
-        <Spin size='large' tip='Analyzing skill gaps...' fullscreen />
+        <Spin size='large' tip={t('gaps.analyzing')} fullscreen />
       </div>
     );
   }
@@ -49,27 +51,40 @@ export const GapAnalysisPage: React.FC = () => {
   if (error || !data) {
     return (
       <div className='flex items-center justify-center h-96'>
-        <Empty description={error || 'No data available'} />
+        <Empty description={error || t('common.noDataAvailable')} />
       </div>
     );
   }
 
+  const recommendationTextMap = {
+    noCoverage: t('gaps.recommendationNoCoverage'),
+    noExpert: t('gaps.recommendationNoExpert'),
+    singlePoint: t('gaps.recommendationSinglePoint'),
+  } as const;
+
   const columns = [
     {
-      title: 'Skill',
+      title: t('gaps.skillColumn'),
       dataIndex: ['skill', 'name'],
       key: 'skill',
       render: (text: string, record: SkillGap) => (
         <div>
-          <span className='font-medium text-white'>{text}</span>
+          <span
+            className='font-medium'
+            style={{ color: 'var(--color-text-primary)' }}
+          >
+            {text}
+          </span>
           {record.categories.length > 1 && (
-            <span className='ml-2 text-xs text-indigo-400'>⟷ overlap</span>
+            <span className='ml-2 text-xs text-indigo-400'>
+              ⟷ {t('gaps.overlap')}
+            </span>
           )}
         </div>
       ),
     },
     {
-      title: 'Categories',
+      title: t('gaps.categoriesColumn'),
       key: 'categories',
       render: (_: unknown, record: SkillGap) => (
         <div className='flex flex-wrap gap-1'>
@@ -92,7 +107,7 @@ export const GapAnalysisPage: React.FC = () => {
         record.categories.some((cat) => cat.id === value),
     },
     {
-      title: 'Coverage',
+      title: t('gaps.coverageColumn'),
       dataIndex: 'currentCoverage',
       key: 'coverage',
       sorter: (a: SkillGap, b: SkillGap) =>
@@ -111,63 +126,76 @@ export const GapAnalysisPage: React.FC = () => {
               status={status}
               showInfo={false}
             />
-            <span className='text-gray-400 text-sm'>{count} members</span>
+            <span
+              className='text-sm'
+              style={{ color: 'var(--color-text-secondary)' }}
+            >
+              {count} {t('gaps.members')}
+            </span>
           </div>
         );
       },
     },
     {
-      title: 'Experts',
+      title: t('gaps.expertsColumn'),
       dataIndex: 'expertCount',
       key: 'experts',
       sorter: (a: SkillGap, b: SkillGap) => a.expertCount - b.expertCount,
       render: (count: number) => (
         <span className={count === 0 ? 'text-orange-400' : 'text-green-400'}>
-          {count} {count === 1 ? 'expert' : 'experts'}
+          {count}{' '}
+          {count === 1 ? t('gaps.expertSingle') : t('gaps.expertPlural')}
         </span>
       ),
     },
     {
-      title: 'Status',
+      title: t('gaps.statusColumn'),
       key: 'status',
       render: (_: unknown, record: SkillGap) => {
         if (record.currentCoverage === 0) {
           return (
             <Tag icon={<WarningOutlined />} color='error'>
-              No Coverage
+              {t('gaps.statusNoCoverage')}
             </Tag>
           );
         }
         if (record.expertCount === 0) {
           return (
             <Tag icon={<ExclamationCircleOutlined />} color='warning'>
-              No Expert
+              {t('gaps.statusNoExpert')}
             </Tag>
           );
         }
         if (record.currentCoverage < 2) {
           return (
             <Tag icon={<ExclamationCircleOutlined />} color='warning'>
-              Limited
+              {t('gaps.statusLimited')}
             </Tag>
           );
         }
         return (
           <Tag icon={<CheckCircleOutlined />} color='success'>
-            Healthy
+            {t('gaps.statusHealthy')}
           </Tag>
         );
       },
     },
     {
-      title: 'Recommendation',
-      dataIndex: 'recommendation',
+      title: t('gaps.recommendationColumn'),
+      dataIndex: 'recommendationKey',
       key: 'recommendation',
-      render: (text: string) =>
-        text ? (
-          <span className='text-gray-400 text-sm italic'>{text}</span>
+      render: (key: SkillGap['recommendationKey']) =>
+        key ? (
+          <span
+            className='text-sm italic'
+            style={{ color: 'var(--color-text-secondary)' }}
+          >
+            {recommendationTextMap[key]}
+          </span>
         ) : (
-          <span className='text-green-400 text-sm'>✓ Good coverage</span>
+          <span className='text-green-400 text-sm'>
+            ✓ {t('gaps.goodCoverage')}
+          </span>
         ),
     },
   ];
@@ -183,11 +211,13 @@ export const GapAnalysisPage: React.FC = () => {
       {/* Header */}
       <div className='text-center'>
         <h1 className='text-4xl font-bold bg-gradient-to-r from-orange-400 via-red-400 to-pink-400 bg-clip-text text-transparent mb-4'>
-          Gap Analysis
+          {t('gaps.title')}
         </h1>
-        <p className='text-gray-400 max-w-2xl mx-auto'>
-          Identify skill gaps and cross-domain opportunities. Skills spanning
-          multiple categories are key collaboration points.
+        <p
+          className='max-w-2xl mx-auto'
+          style={{ color: 'var(--color-text-secondary)' }}
+        >
+          {t('gaps.subtitle')}
         </p>
       </div>
 
@@ -196,33 +226,45 @@ export const GapAnalysisPage: React.FC = () => {
         <Col xs={24} sm={8}>
           <Card className='glass-card'>
             <Statistic
-              title={<span className='text-gray-400'>No Coverage</span>}
+              title={
+                <span style={{ color: 'var(--color-text-secondary)' }}>
+                  {t('gaps.statNoCoverage')}
+                </span>
+              }
               value={stats.noCoverage}
               styles={{ content: { color: '#ef4444' } }}
               prefix={<WarningOutlined />}
-              suffix='skills'
+              suffix={t('gaps.skillsSuffix')}
             />
           </Card>
         </Col>
         <Col xs={24} sm={8}>
           <Card className='glass-card'>
             <Statistic
-              title={<span className='text-gray-400'>No Expert</span>}
+              title={
+                <span style={{ color: 'var(--color-text-secondary)' }}>
+                  {t('gaps.statNoExpert')}
+                </span>
+              }
               value={stats.noExpert}
               styles={{ content: { color: '#f59e0b' } }}
               prefix={<ExclamationCircleOutlined />}
-              suffix='skills'
+              suffix={t('gaps.skillsSuffix')}
             />
           </Card>
         </Col>
         <Col xs={24} sm={8}>
           <Card className='glass-card'>
             <Statistic
-              title={<span className='text-gray-400'>Healthy</span>}
+              title={
+                <span style={{ color: 'var(--color-text-secondary)' }}>
+                  {t('gaps.statHealthy')}
+                </span>
+              }
               value={stats.healthy}
               styles={{ content: { color: '#22c55e' } }}
               prefix={<CheckCircleOutlined />}
-              suffix='skills'
+              suffix={t('gaps.skillsSuffix')}
             />
           </Card>
         </Col>
@@ -230,13 +272,17 @@ export const GapAnalysisPage: React.FC = () => {
 
       {/* Distribution Chart */}
       <Card className='glass-card !mb-10'>
-        <h2 className='text-xl font-semibold text-white mb-4'>
-          Skill Distribution Overview
+        <h2
+          className='text-xl font-semibold mb-4'
+          style={{ color: 'var(--color-text-primary)' }}
+        >
+          {t('gaps.distTitle')}
         </h2>
-        <p className='text-gray-400 text-sm mb-4'>
-          Inner ring shows categories, outer ring shows skills colored by health
-          status. Click a category to filter, click a skill to see team
-          expertise details.
+        <p
+          className='text-sm mb-4'
+          style={{ color: 'var(--color-text-secondary)' }}
+        >
+          {t('gaps.distSubtitle')}
         </p>
         <GapDistributionChart
           gaps={gaps}
@@ -247,12 +293,17 @@ export const GapAnalysisPage: React.FC = () => {
 
       {/* Cross-Domain Skills */}
       <Card className='glass-card !mb-10'>
-        <h2 className='text-xl font-semibold text-white mb-4'>
-          Cross-Domain Skills (Collaboration Opportunities)
+        <h2
+          className='text-xl font-semibold mb-4'
+          style={{ color: 'var(--color-text-primary)' }}
+        >
+          {t('gaps.crossTitle')}
         </h2>
-        <p className='text-gray-400 text-sm mb-4'>
-          These skills span multiple categories - great for interdisciplinary
-          collaboration.
+        <p
+          className='text-sm mb-4'
+          style={{ color: 'var(--color-text-secondary)' }}
+        >
+          {t('gaps.crossSubtitle')}
         </p>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
           {crossDomainSkills.map((gap) => (
@@ -275,8 +326,12 @@ export const GapAnalysisPage: React.FC = () => {
                   </span>
                 ))}
               </div>
-              <div className='text-sm text-gray-400'>
-                {gap.currentCoverage} members • {gap.expertCount} experts
+              <div
+                className='text-sm'
+                style={{ color: 'var(--color-text-secondary)' }}
+              >
+                {gap.currentCoverage} {t('gaps.members')} • {gap.expertCount}{' '}
+                {t('gaps.expertPlural')}
               </div>
             </div>
           ))}
@@ -285,8 +340,11 @@ export const GapAnalysisPage: React.FC = () => {
 
       {/* Gap Table */}
       <Card className='glass-card !mb-10'>
-        <h2 className='text-xl font-semibold text-white mb-4'>
-          All Skills Coverage
+        <h2
+          className='text-xl font-semibold mb-4'
+          style={{ color: 'var(--color-text-primary)' }}
+        >
+          {t('gaps.allCoverageTitle')}
         </h2>
         <Table
           dataSource={gaps}
@@ -301,8 +359,11 @@ export const GapAnalysisPage: React.FC = () => {
 
       {/* Collaboration Suggestions */}
       <Card className='glass-card'>
-        <h2 className='text-xl font-semibold text-white mb-4'>
-          Potential External Collaborations
+        <h2
+          className='text-xl font-semibold mb-4'
+          style={{ color: 'var(--color-text-primary)' }}
+        >
+          {t('gaps.collaborationsTitle')}
         </h2>
         <div className='space-y-4'>
           {gaps
@@ -318,22 +379,19 @@ export const GapAnalysisPage: React.FC = () => {
                 }}
               >
                 <h3 className='font-medium text-white'>{gap.skill.name}</h3>
-                <p className='text-gray-400 text-sm mt-1'>
-                  Consider reaching out to labs specializing in{' '}
-                  {gap.categories.map((c, i) => (
-                    <span key={c.id}>
-                      {i > 0 &&
-                        (i === gap.categories.length - 1 ? ' or ' : ', ')}
-                      <span style={{ color: c.color }}>{c.name}</span>
-                    </span>
-                  ))}{' '}
-                  for potential collaboration.
+                <p
+                  className='text-sm mt-1'
+                  style={{ color: 'var(--color-text-secondary)' }}
+                >
+                  {t('gaps.collaborationHint', {
+                    categories: gap.categories.map((c) => c.name).join(', '),
+                  })}
                 </p>
               </div>
             ))}
           {gaps.filter((g) => g.currentCoverage === 0).length === 0 && (
-            <p className='text-gray-400'>
-              Great news! All skill areas have at least some coverage.
+            <p style={{ color: 'var(--color-text-secondary)' }}>
+              {t('gaps.noCoverageGoodNews')}
             </p>
           )}
         </div>

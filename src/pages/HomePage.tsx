@@ -14,10 +14,11 @@ import {
   TeamOutlined,
   SearchOutlined,
   PullRequestOutlined,
-  GithubOutlined,
   GlobalOutlined,
   RocketOutlined,
 } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
+import { useLocale } from '../hooks/useLocale';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -78,6 +79,8 @@ const iconMap: Record<string, React.ReactNode> = {
 };
 
 const HomePage: React.FC = () => {
+  const { t } = useTranslation();
+  const { resolvedLanguage } = useLocale();
   const [config, setConfig] = useState<HomeConfig | null>(null);
   const [stats, setStats] = useState<{
     members: number;
@@ -89,8 +92,13 @@ const HomePage: React.FC = () => {
   useEffect(() => {
     const loadData = async () => {
       try {
+        const configFile =
+          resolvedLanguage === 'zh-TW'
+            ? 'homeConfig.zh-TW.json'
+            : 'homeConfig.en.json';
+
         const [configRes, skillsRes] = await Promise.all([
-          fetch(`${import.meta.env.BASE_URL}data/homeConfig.json`),
+          fetch(`${import.meta.env.BASE_URL}data/${configFile}`),
           fetch(`${import.meta.env.BASE_URL}data/skillsData.json`),
         ]);
 
@@ -111,7 +119,7 @@ const HomePage: React.FC = () => {
     };
 
     loadData();
-  }, []);
+  }, [resolvedLanguage]);
 
   if (loading) {
     return (
@@ -124,7 +132,7 @@ const HomePage: React.FC = () => {
   if (!config) {
     return (
       <div className='flex items-center justify-center min-h-screen'>
-        <Text type='danger'>Failed to load home page configuration</Text>
+        <Text type='danger'>{t('home.failedConfig')}</Text>
       </div>
     );
   }
@@ -132,7 +140,13 @@ const HomePage: React.FC = () => {
   return (
     <div className='min-h-screen'>
       {/* Hero Section */}
-      <div className='relative overflow-hidden bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900'>
+      <div
+        className='relative overflow-hidden'
+        style={{
+          background:
+            'linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 100%)',
+        }}
+      >
         <div className='absolute inset-0'>
           <div className='orb orb-1' style={{ top: '10%', left: '10%' }} />
           <div className='orb orb-2' style={{ top: '60%', right: '15%' }} />
@@ -151,10 +165,17 @@ const HomePage: React.FC = () => {
             >
               {config.hero.title}
             </Title>
-            <Title level={3} className='!text-white/90 !mb-4 !font-normal'>
+            <Title
+              level={3}
+              className='!mb-4 !font-normal'
+              style={{ color: 'var(--color-text-primary)' }}
+            >
               {config.hero.subtitle}
             </Title>
-            <Paragraph className='!text-white/70 !text-lg !mb-8'>
+            <Paragraph
+              className='!text-lg !mb-8'
+              style={{ color: 'var(--color-text-muted)' }}
+            >
               {config.hero.description}
             </Paragraph>
             <Space size='large' wrap>
@@ -165,7 +186,7 @@ const HomePage: React.FC = () => {
                   icon={<RocketOutlined />}
                   className='shadow-lg hover:shadow-xl'
                 >
-                  Get Started
+                  {t('home.getStarted')}
                 </Button>
               </Link>
               {config.lab.website && (
@@ -178,9 +199,10 @@ const HomePage: React.FC = () => {
                     size='large'
                     icon={<GlobalOutlined />}
                     ghost
-                    className='!text-white !border-white/50 hover:!bg-white/10 hover:!border-white'
+                    className='!border-[var(--shell-border)] hover:!bg-[var(--color-surface-1)]'
+                    style={{ color: 'var(--color-text-primary)' }}
                   >
-                    Visit Lab Website
+                    {t('home.visitLabWebsite')}
                   </Button>
                 </a>
               )}
@@ -195,14 +217,18 @@ const HomePage: React.FC = () => {
           <Card
             className='backdrop-blur-md border-white/10 shadow-2xl'
             style={{
-              background: 'rgba(255, 255, 255, 0.03)',
+              background: 'var(--color-surface-1)',
               borderRadius: '16px',
             }}
           >
             <Row gutter={[24, 24]} justify='center'>
               <Col xs={24} sm={8} md={8}>
                 <Statistic
-                  title={<span className='text-white/70'>Team Members</span>}
+                  title={
+                    <span style={{ color: 'var(--color-text-muted)' }}>
+                      {t('home.teamMembers')}
+                    </span>
+                  }
                   value={stats.members}
                   valueStyle={{ color: '#818cf8', fontSize: '2.5rem' }}
                   prefix={<TeamOutlined />}
@@ -210,7 +236,11 @@ const HomePage: React.FC = () => {
               </Col>
               <Col xs={24} sm={8} md={8}>
                 <Statistic
-                  title={<span className='text-white/70'>Skills Tracked</span>}
+                  title={
+                    <span style={{ color: 'var(--color-text-muted)' }}>
+                      {t('home.skillsTracked')}
+                    </span>
+                  }
                   value={stats.skills}
                   valueStyle={{ color: '#c084fc', fontSize: '2.5rem' }}
                   prefix={<RocketOutlined />}
@@ -218,7 +248,11 @@ const HomePage: React.FC = () => {
               </Col>
               <Col xs={24} sm={8} md={8}>
                 <Statistic
-                  title={<span className='text-white/70'>Categories</span>}
+                  title={
+                    <span style={{ color: 'var(--color-text-muted)' }}>
+                      {t('home.categories')}
+                    </span>
+                  }
                   value={stats.categories}
                   valueStyle={{ color: '#a78bfa', fontSize: '2.5rem' }}
                   prefix={<SearchOutlined />}
@@ -227,7 +261,11 @@ const HomePage: React.FC = () => {
               {config.statistics.customStats.map((stat, index) => (
                 <Col xs={24} sm={8} md={8} key={index}>
                   <Statistic
-                    title={<span className='text-white/70'>{stat.title}</span>}
+                    title={
+                      <span style={{ color: 'var(--color-text-muted)' }}>
+                        {stat.title}
+                      </span>
+                    }
                     value={stat.value}
                     suffix={stat.suffix}
                     valueStyle={{ color: '#818cf8', fontSize: '2.5rem' }}
@@ -244,29 +282,54 @@ const HomePage: React.FC = () => {
         <Card
           className='backdrop-blur-md border-white/10 shadow-2xl'
           style={{
-            background: 'rgba(255, 255, 255, 0.03)',
+            background: 'var(--color-surface-1)',
             borderRadius: '16px',
           }}
         >
-          <Title level={2} className='!text-white !mb-4'>
-            About {config.lab.name}
+          <Title
+            level={2}
+            className='!mb-4'
+            style={{ color: 'var(--color-text-primary)' }}
+          >
+            {t('home.aboutLab', { name: config.lab.name })}
           </Title>
-          <Title level={4} className='!text-white/80 !mb-2 !font-normal'>
+          <Title
+            level={4}
+            className='!mb-2 !font-normal'
+            style={{ color: 'var(--color-text-secondary)' }}
+          >
             {config.lab.fullName}
           </Title>
-          <Paragraph className='!text-white/70 !text-base !mb-4'>
+          <Paragraph
+            className='!text-base !mb-4'
+            style={{ color: 'var(--color-text-muted)' }}
+          >
             {config.lab.institution}
           </Paragraph>
-          <Paragraph className='!text-white/80 !text-lg !mb-6'>
+          <Paragraph
+            className='!text-lg !mb-6'
+            style={{ color: 'var(--color-text-secondary)' }}
+          >
             {config.lab.description}
           </Paragraph>
           {config.lab.director && (
-            <div className='bg-white/5 backdrop-blur-sm p-4 rounded-lg border border-white/10'>
-              <Text className='!text-white/60 block mb-1'>Lab Director</Text>
-              <Text className='!text-white text-lg font-semibold block'>
+            <div className='backdrop-blur-sm p-4 rounded-lg border border-[var(--shell-border)] bg-[var(--color-surface-1)]'>
+              <Text
+                style={{ color: 'var(--color-text-muted)' }}
+                className='block mb-1'
+              >
+                {t('home.labDirector')}
+              </Text>
+              <Text
+                style={{ color: 'var(--color-text-primary)' }}
+                className='text-lg font-semibold block'
+              >
                 {config.lab.director.name}
               </Text>
-              <Text className='!text-white/70 block'>
+              <Text
+                style={{ color: 'var(--color-text-secondary)' }}
+                className='block'
+              >
                 {config.lab.director.title}
               </Text>
               {config.lab.director.email && (
@@ -284,8 +347,12 @@ const HomePage: React.FC = () => {
 
       {/* Features Section */}
       <div className='container mx-auto px-4 py-12 bg-transparent'>
-        <Title level={2} className='!text-white text-center !mb-8'>
-          Key Features
+        <Title
+          level={2}
+          className='text-center !mb-8'
+          style={{ color: 'var(--color-text-primary)' }}
+        >
+          {t('home.keyFeatures')}
         </Title>
         <Row gutter={[24, 24]}>
           {config.features.map((feature, index) => (
@@ -294,7 +361,7 @@ const HomePage: React.FC = () => {
                 className='backdrop-blur-md border-white/10 h-full hover:shadow-xl transition-all duration-300 hover:scale-105'
                 bordered={false}
                 style={{
-                  background: 'rgba(255, 255, 255, 0.03)',
+                  background: 'var(--color-surface-1)',
                   borderRadius: '16px',
                 }}
               >
@@ -302,10 +369,14 @@ const HomePage: React.FC = () => {
                   <div className='text-5xl mb-4 text-indigo-400'>
                     {iconMap[feature.icon] || <RocketOutlined />}
                   </div>
-                  <Title level={4} className='!text-white !mb-3'>
+                  <Title
+                    level={4}
+                    className='!mb-3'
+                    style={{ color: 'var(--color-text-primary)' }}
+                  >
                     {feature.title}
                   </Title>
-                  <Paragraph className='!text-white/70'>
+                  <Paragraph style={{ color: 'var(--color-text-secondary)' }}>
                     {feature.description}
                   </Paragraph>
                 </div>
@@ -317,8 +388,12 @@ const HomePage: React.FC = () => {
 
       {/* Quick Links Section */}
       <div className='container mx-auto px-4 py-12 pb-20 bg-transparent'>
-        <Title level={2} className='!text-white text-center !mb-8'>
-          Quick Links
+        <Title
+          level={2}
+          className='text-center !mb-8'
+          style={{ color: 'var(--color-text-primary)' }}
+        >
+          {t('home.quickLinks')}
         </Title>
         <Row gutter={[24, 24]}>
           {config.quickLinks.map((link, index) => (
@@ -328,7 +403,7 @@ const HomePage: React.FC = () => {
                   className='backdrop-blur-md border-white/10 h-full hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer'
                   bordered={false}
                   style={{
-                    background: 'rgba(255, 255, 255, 0.03)',
+                    background: 'var(--color-surface-1)',
                     borderRadius: '16px',
                   }}
                 >
@@ -337,10 +412,17 @@ const HomePage: React.FC = () => {
                       {iconMap[link.icon] || <RocketOutlined />}
                     </div>
                     <div className='flex-1'>
-                      <Title level={5} className='!text-white !mb-2'>
+                      <Title
+                        level={5}
+                        className='!mb-2'
+                        style={{ color: 'var(--color-text-primary)' }}
+                      >
                         {link.title}
                       </Title>
-                      <Paragraph className='!text-white/70 !mb-0'>
+                      <Paragraph
+                        className='!mb-0'
+                        style={{ color: 'var(--color-text-secondary)' }}
+                      >
                         {link.description}
                       </Paragraph>
                     </div>
@@ -355,15 +437,19 @@ const HomePage: React.FC = () => {
       {/* Footer */}
       <div className='bg-black/20 border-t border-white/10'>
         <div className='container mx-auto px-4 py-8'>
-          <div className='text-center text-white/60'>
+          <div
+            className='text-center'
+            style={{ color: 'var(--color-text-muted)' }}
+          >
             <Space size='middle'>
               <a
                 href='https://github.com/whats2000/RoboSkills'
                 target='_blank'
                 rel='noopener noreferrer'
-                className='!text-white/60 hover:!text-white transition-colors'
+                className='transition-colors'
+                style={{ color: 'var(--color-text-muted)' }}
               >
-                <GithubOutlined className='text-xl' /> GitHub
+                {t('home.templateProvided')}
               </a>
               {config.lab.website && (
                 <>
@@ -372,16 +458,20 @@ const HomePage: React.FC = () => {
                     href={config.lab.website}
                     target='_blank'
                     rel='noopener noreferrer'
-                    className='!text-white/60 hover:!text-white transition-colors'
+                    className='transition-colors'
+                    style={{ color: 'var(--color-text-muted)' }}
                   >
-                    <GlobalOutlined /> Lab Website
+                    <GlobalOutlined /> {t('home.labWebsite')}
                   </a>
                 </>
               )}
             </Space>
-            <Paragraph className='!text-white/50 !mt-4 !mb-0'>
-              © {new Date().getFullYear()} {config.lab.name}. All rights
-              reserved.
+            <Paragraph
+              className='!mt-4 !mb-0'
+              style={{ color: 'var(--color-text-muted)' }}
+            >
+              © {new Date().getFullYear()} {config.lab.name}. All rights{' '}
+              {t('home.rightsReserved')}
             </Paragraph>
           </div>
         </div>

@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Form, message, Spin, Empty } from 'antd';
+import { useTranslation } from 'react-i18next';
 import { useSkillsData, getSkillById } from '../hooks/useSkillsData';
 import type { LabMember, MemberSkill } from '../types/types';
-import { PROFICIENCY_LABELS } from '../types/types';
+import { PROFICIENCY_LABEL_KEYS } from '../types/types';
+import { useLocale } from '../hooks/useLocale';
 import {
   MemberList,
   MemberForm,
@@ -20,6 +22,17 @@ const COMMON_ROLES = [
   'Visiting Scholar',
   'Alumni',
 ];
+
+const ROLE_ZH: Record<string, string> = {
+  Professor: '教授',
+  Postdoc: '博士後研究員',
+  'PhD Student': '博士生',
+  'Master Student': '碩士生',
+  'Undergraduate Student': '大學生',
+  'Research Assistant': '研究助理',
+  'Visiting Scholar': '訪問學者',
+  Alumni: '校友',
+};
 
 // Unicode-safe base64 encoding for GitHub API
 // GitHub's API expects base64-encoded content
@@ -63,6 +76,8 @@ interface MemberFormData {
 }
 
 export const PRGeneratorPage: React.FC = () => {
+  const { t } = useTranslation();
+  const { resolvedLanguage } = useLocale();
   const { data, loading, error } = useSkillsData();
   const [messageApi, contextHolder] = message.useMessage();
   const [form] = Form.useForm();
@@ -91,7 +106,7 @@ export const PRGeneratorPage: React.FC = () => {
       // GitHub Pages patterns:
       // https://username.github.io/repo-name/
       // https://username.github.io/ (user/org page)
-      const match = url.match(/https:\/\/([^.]+)\.github\.io\/([^\/]+)/);
+      const match = url.match(/https:\/\/([^.]+)\.github\.io\/([^/]+)/);
 
       if (match) {
         const [, owner, repo] = match;
@@ -108,9 +123,7 @@ export const PRGeneratorPage: React.FC = () => {
   const createPR = async () => {
     const sanitizedToken = githubToken.trim();
     if (!sanitizedToken) {
-      void messageApi.error(
-        'Please enter a valid GitHub Personal Access Token',
-      );
+      void messageApi.error(t('pr.enterValidToken'));
       return;
     }
 
@@ -134,9 +147,9 @@ export const PRGeneratorPage: React.FC = () => {
           owner: branchOwner,
           repo: branchRepo,
         });
-      } catch (e) {
+      } catch {
         throw new Error(
-          `Could not find repository ${branchOwner}/${branchRepo}. Please ensure the repository exists.`,
+          t('pr.repoNotFound', { owner: branchOwner, repo: branchRepo }),
         );
       }
 
@@ -168,7 +181,10 @@ export const PRGeneratorPage: React.FC = () => {
       } catch (e: any) {
         console.error('Failed to create branch on repository', e);
         throw new Error(
-          `Failed to create branch on ${branchOwner}/${branchRepo}. Ensure your token has "repo" scope.`,
+          t('pr.branchCreateFailedRepo', {
+            owner: branchOwner,
+            repo: branchRepo,
+          }),
         );
       }
 
@@ -263,7 +279,7 @@ export const PRGeneratorPage: React.FC = () => {
         );
 
         if (Array.isArray(branchFileData) || branchFileData.type !== 'file') {
-          throw new Error('Unexpected file type in branch');
+          throw new Error(t('pr.unexpectedFileType'));
         }
 
         await octokit.request('PUT /repos/{owner}/{repo}/contents/{path}', {
@@ -307,16 +323,16 @@ export const PRGeneratorPage: React.FC = () => {
           },
         );
 
-        void messageApi.success('Pull Request created successfully!');
+        void messageApi.success(t('pr.createPrSuccess'));
         window.open(prData.html_url, '_blank');
         setModalOpen(false);
       }
     } catch (error: any) {
       console.error(error);
       const msg = error.message.includes('refs')
-        ? 'Failed to create branch. Check Token Scopes (needs "repo") or Fork status.'
+        ? t('pr.branchCreateFailureHint')
         : error.message;
-      void messageApi.error(`Failed: ${msg}`);
+      void messageApi.error(t('pr.createPrFailed', { message: msg }));
     } finally {
       setCreatingPR(false);
     }
@@ -326,8 +342,12 @@ export const PRGeneratorPage: React.FC = () => {
   const roleOptions = React.useMemo(() => {
     if (!data) return [];
 
+    const localizedCommonRoles = COMMON_ROLES.map((role) =>
+      resolvedLanguage === 'zh-TW' ? (ROLE_ZH[role] ?? role) : role,
+    );
+
     const existingRoles = new Set(data.members.map((m) => m.role));
-    const allRoles = new Set([...COMMON_ROLES, ...existingRoles]);
+    const allRoles = new Set([...localizedCommonRoles, ...existingRoles]);
 
     return Array.from(allRoles)
       .sort()
@@ -335,7 +355,7 @@ export const PRGeneratorPage: React.FC = () => {
         value: role,
         label: role,
       }));
-  }, [data]);
+  }, [data, resolvedLanguage]);
 
   // --- Change Detection Logic ---
   const checkForChanges = (
@@ -391,7 +411,7 @@ export const PRGeneratorPage: React.FC = () => {
   if (loading) {
     return (
       <div className='flex items-center justify-center h-96'>
-        <Spin size='large' tip='Loading data...' fullscreen={true} />
+        <Spin size='large' tip={t('pr.loading')} fullscreen={true} />
       </div>
     );
   }
@@ -399,7 +419,7 @@ export const PRGeneratorPage: React.FC = () => {
   if (error || !data) {
     return (
       <div className='flex items-center justify-center h-96'>
-        <Empty description={error || 'No data available'} />
+        <Empty description={error || t('common.noDataAvailable')} />
       </div>
     );
   }
@@ -419,33 +439,47 @@ export const PRGeneratorPage: React.FC = () => {
       skills: skills,
     };
 
-    const action = editMode === 'new' ? 'Add new' : 'Update';
+    const action = editMode === 'new' ? t('pr.addNew') : t('pr.update');
+    const description =
+      editMode === 'new'
+        ? t('pr.templateAddsProfile', {
+            name: formData.name,
+            role: formData.role,
+          })
+        : t('pr.templateUpdatesProfile', {
+            name: formData.name,
+            role: formData.role,
+          });
+    const memberEntryHint =
+      editMode === 'new'
+        ? t('pr.templateAddMemberEntry')
+        : t('pr.templateReplaceMemberEntry');
 
-    const content = `## ${action} Lab Member: ${formData.name}
+    const content = `## ${action} ${t('pr.templateMemberTitle')}: ${formData.name}
 
-### Description
-This PR ${editMode === 'new' ? 'adds' : 'updates'} the profile for **${formData.name}** (${formData.role}).
+### ${t('pr.templateDescriptionHeading')}
+${description}
 
-### Changes to \`public/data/skillsData.json\`
+### ${t('pr.templateChangesHeading')}
 
-${editMode === 'new' ? 'Add the following member to the `members` array:' : 'Replace the existing member entry with:'}
+${memberEntryHint}
 
 \`\`\`json
 ${JSON.stringify(newMember, null, 2)}
 \`\`\`
 
-### Skills Summary
+### ${t('pr.templateSkillsSummaryHeading')}
 ${skills
   .map((s) => {
     const skill = getSkillById(data.skills, s.skillId);
     const categories = skill?.belongsTo
       .map((id) => data.categories.find((c) => c.id === id)?.name)
       .join(', ');
-    return `- **${skill?.name}** (${PROFICIENCY_LABELS[s.proficiency]}) - spans: ${categories}`;
+    return `- **${skill?.name}** (${t(PROFICIENCY_LABEL_KEYS[s.proficiency])}) - ${t('pr.templateSpans')}: ${categories}`;
   })
   .join('\n')}
 
-### Category Distribution
+### ${t('pr.templateCategoryDistributionHeading')}
 ${(() => {
   const weights: Record<string, number> = {};
   for (const s of skills) {
@@ -458,15 +492,18 @@ ${(() => {
   return Object.entries(weights)
     .map(([catId, count]) => {
       const cat = data.categories.find((c) => c.id === catId);
-      return `- ${cat?.name}: ${count} skills`;
+      return `- ${t('pr.templateCategorySkills', {
+        category: cat?.name ?? catId,
+        count,
+      })}`;
     })
     .join('\n');
 })()}
 
-### Checklist
-- [ ] Member information is accurate
-- [ ] Skills are correctly assigned
-- [ ] Proficiency levels are appropriate
+### ${t('pr.templateChecklistHeading')}
+- [ ] ${t('pr.templateChecklistMemberInfo')}
+- [ ] ${t('pr.templateChecklistSkillsAssigned')}
+- [ ] ${t('pr.templateChecklistProficiency')}
 `;
 
     setPrContent(content);
@@ -477,17 +514,20 @@ ${(() => {
   const generateRemoveMemberPR = () => {
     if (!selectedMember) return;
 
-    const content = `## Remove Lab Member: ${selectedMember.name}
+    const content = `## ${t('pr.templateRemoveMemberTitle', { name: selectedMember.name })}
 
-### Description
-This PR removes the profile for **${selectedMember.name}** (${selectedMember.role}) from the lab members list.
+### ${t('pr.templateDescriptionHeading')}
+${t('pr.templateRemoveDescription', {
+  name: selectedMember.name,
+  role: selectedMember.role,
+})}
 
-### Changes to \`public/data/skillsData.json\`
+### ${t('pr.templateChangesHeading')}
 
-Remove the member entry with ID \`${selectedMember.id}\`.
+${t('pr.templateRemoveEntry', { id: selectedMember.id })}
 
-### Checklist
-- [ ] Confirmed member departure or removal request
+### ${t('pr.templateChecklistHeading')}
+- [ ] ${t('pr.templateChecklistDeparture')}
 `;
 
     setPrContent(content);
@@ -497,7 +537,7 @@ Remove the member entry with ID \`${selectedMember.id}\`.
 
   const copyToClipboard = () => {
     void navigator.clipboard.writeText(prContent);
-    void messageApi.success('PR content copied to clipboard!');
+    void messageApi.success(t('pr.copySuccess'));
   };
 
   const handleEditMember = (member: LabMember) => {
@@ -525,15 +565,15 @@ Remove the member entry with ID \`${selectedMember.id}\`.
     setBatchChanges(changes);
     setPrType('batch');
 
-    const content = `## Batch Update: Skills & Categories
+    const content = `## ${t('pr.templateBatchTitle')}
 
-### Description
-This PR contains ${changes.length} changes to skills and/or categories.
+  ### ${t('pr.templateDescriptionHeading')}
+  ${t('pr.templateBatchDescription', { count: changes.length })}
 
-### Changes Summary
+  ### ${t('pr.templateBatchSummaryHeading')}
 ${changes.map((c) => `- **${c.type.replace('-', ' ').toUpperCase()}**: ${c.description}`).join('\n')}
 
-### Detailed Changes
+  ### ${t('pr.templateBatchDetailsHeading')}
 \`\`\`json
 ${JSON.stringify(
   changes.map((c) => ({ type: c.type, data: c.data })),
@@ -542,9 +582,9 @@ ${JSON.stringify(
 )}
 \`\`\`
 
-### Checklist
-- [ ] All changes are appropriate
-- [ ] No breaking changes to existing data
+### ${t('pr.templateChecklistHeading')}
+- [ ] ${t('pr.templateChecklistAppropriate')}
+- [ ] ${t('pr.templateChecklistNoBreak')}
 `;
 
     setPrContent(content);
@@ -557,11 +597,13 @@ ${JSON.stringify(
       {/* Header */}
       <div className='text-center'>
         <h1 className='text-4xl font-bold bg-gradient-to-r from-green-400 via-emerald-400 to-teal-400 bg-clip-text text-transparent mb-4'>
-          Data Update & PR Generator
+          {t('pr.title')}
         </h1>
-        <p className='text-gray-400 max-w-2xl mx-auto'>
-          Add or update lab member profiles and skills. Generate Pull Request
-          content for data updates.
+        <p
+          className='max-w-2xl mx-auto'
+          style={{ color: 'var(--color-text-secondary)' }}
+        >
+          {t('pr.subtitle')}
         </p>
       </div>
 

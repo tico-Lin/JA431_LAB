@@ -11,6 +11,7 @@ import {
   Tooltip,
 } from 'antd';
 import { GithubOutlined, DeleteOutlined } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 import type {
   LabMember,
   MemberSkill,
@@ -18,7 +19,7 @@ import type {
   Subcategory,
   SkillCategory,
 } from '../../types/types';
-import { PROFICIENCY_LABELS } from '../../types/types';
+import { PROFICIENCY_LABEL_KEYS } from '../../types/types';
 
 const { Option } = Select;
 
@@ -51,6 +52,8 @@ export const MemberForm: React.FC<MemberFormProps> = ({
   onGeneratePR,
   onRemoveMember,
 }) => {
+  const { t } = useTranslation();
+
   const addSkill = (skillId: string, proficiency: ProficiencyLevel) => {
     const exists = skills.some((s) => s.skillId === skillId);
     if (!exists) {
@@ -74,7 +77,9 @@ export const MemberForm: React.FC<MemberFormProps> = ({
   return (
     <Card className='glass-card lg:col-span-2'>
       <h2 className='text-lg font-semibold text-white mb-4'>
-        {editMode === 'new' ? 'New Member' : `Edit: ${selectedMember?.name}`}
+        {editMode === 'new'
+          ? t('pr.formNewMember')
+          : t('pr.formEditMember', { name: selectedMember?.name || '' })}
       </h2>
 
       <Form
@@ -86,19 +91,19 @@ export const MemberForm: React.FC<MemberFormProps> = ({
         <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
           <Form.Item
             name='name'
-            label={<span className='text-gray-300'>Name</span>}
-            rules={[{ required: true, message: 'Please enter name' }]}
+            label={<span className='text-gray-300'>{t('pr.name')}</span>}
+            rules={[{ required: true, message: t('pr.pleaseEnterName') }]}
           >
-            <Input placeholder='John Doe' />
+            <Input placeholder={t('pr.namePlaceholder')} />
           </Form.Item>
           <Form.Item
             name='role'
-            label={<span className='text-gray-300'>Role</span>}
-            rules={[{ required: true, message: 'Please enter role' }]}
+            label={<span className='text-gray-300'>{t('pr.role')}</span>}
+            rules={[{ required: true, message: t('pr.pleaseEnterRole') }]}
           >
             <AutoComplete
               options={roleOptions}
-              placeholder='PhD Student'
+              placeholder={t('pr.rolePlaceholder')}
               filterOption={(inputValue, option) =>
                 option!.value
                   .toUpperCase()
@@ -108,22 +113,27 @@ export const MemberForm: React.FC<MemberFormProps> = ({
           </Form.Item>
           <Form.Item
             name='email'
-            label={<span className='text-gray-300'>Email</span>}
+            label={<span className='text-gray-300'>{t('pr.email')}</span>}
           >
-            <Input placeholder='john@lab.edu' />
+            <Input placeholder={t('pr.emailPlaceholder')} />
           </Form.Item>
           <Form.Item
             name='github'
-            label={<span className='text-gray-300'>GitHub Username</span>}
+            label={
+              <span className='text-gray-300'>{t('pr.githubUsername')}</span>
+            }
           >
-            <Input prefix={<GithubOutlined />} placeholder='johndoe' />
+            <Input
+              prefix={<GithubOutlined />}
+              placeholder={t('pr.githubPlaceholder')}
+            />
           </Form.Item>
         </div>
 
         <Divider className='border-gray-700' />
 
         {/* Skill Selection */}
-        <h3 className='text-white font-medium mb-4'>Skills (click to add)</h3>
+        <h3 className='text-white font-medium mb-4'>{t('pr.skillsHint')}</h3>
 
         {/* Group skills by category */}
         {categories.map((category) => {
@@ -189,10 +199,10 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                           }
                           style={{ width: 100 }}
                         >
-                          {Object.entries(PROFICIENCY_LABELS).map(
-                            ([val, label]) => (
+                          {Object.entries(PROFICIENCY_LABEL_KEYS).map(
+                            ([val, labelKey]) => (
                               <Option key={val} value={val}>
-                                {label}
+                                {t(labelKey)}
                               </Option>
                             ),
                           )}
@@ -210,7 +220,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
         {skills.length > 0 && (
           <div className='mb-4 p-4 rounded-lg bg-white/5'>
             <h4 className='text-gray-300 text-sm mb-2'>
-              Selected: {skills.length} skills
+              {t('pr.selectedSkills', { count: skills.length })}
             </h4>
           </div>
         )}
@@ -223,11 +233,11 @@ export const MemberForm: React.FC<MemberFormProps> = ({
             disabled={!hasChanges}
             className='flex-1'
           >
-            Generate PR Content
+            {t('pr.generatePrContent')}
           </Button>
           {editMode === 'edit' && selectedMember && (
             <Button danger icon={<DeleteOutlined />} onClick={onRemoveMember}>
-              Remove Member
+              {t('pr.removeMember')}
             </Button>
           )}
         </div>

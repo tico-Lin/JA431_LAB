@@ -1,6 +1,7 @@
 import React from 'react';
 import { Modal, Input, Button, Divider } from 'antd';
 import { CopyOutlined, GithubOutlined } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 
 const { TextArea } = Input;
 
@@ -29,9 +30,11 @@ export const PRPreviewModal: React.FC<PRPreviewModalProps> = ({
   targetRepo,
   onTargetRepoChange,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <Modal
-      title='Pull Request'
+      title={t('pr.pullRequest')}
       open={open}
       onCancel={onClose}
       width={800}
@@ -40,17 +43,14 @@ export const PRPreviewModal: React.FC<PRPreviewModalProps> = ({
       <div className='space-y-4'>
         <div className='bg-yellow-500/10 border border-yellow-500/20 p-4 rounded-lg'>
           <h4 className='font-semibold text-yellow-400 mb-2'>
-            Target Repository
+            {t('pr.targetRepository')}
           </h4>
           <div className='text-sm text-gray-400 mb-3'>
-            <p className='mb-2'>
-              Repository auto-detected from GitHub Pages URL. You can edit if
-              needed for custom domains.
-            </p>
+            <p className='mb-2'>{t('pr.repoAutoDetect')}</p>
           </div>
           <div className='grid grid-cols-2 gap-2'>
             <Input
-              placeholder='Repository Owner (e.g., your-username)'
+              placeholder={t('pr.repoOwnerPlaceholder')}
               value={targetRepo.owner}
               onChange={(e) =>
                 onTargetRepoChange({ ...targetRepo, owner: e.target.value })
@@ -58,7 +58,7 @@ export const PRPreviewModal: React.FC<PRPreviewModalProps> = ({
               prefix={<GithubOutlined />}
             />
             <Input
-              placeholder='Repository Name (e.g., RoboSkills)'
+              placeholder={t('pr.repoNamePlaceholder')}
               value={targetRepo.repo}
               onChange={(e) =>
                 onTargetRepoChange({ ...targetRepo, repo: e.target.value })
@@ -69,28 +69,17 @@ export const PRPreviewModal: React.FC<PRPreviewModalProps> = ({
 
         <div className='bg-blue-500/10 border border-blue-500/20 p-4 rounded-lg'>
           <h4 className='font-semibold text-blue-400 mb-2'>
-            Automatic PR Creation
+            {t('pr.automaticPrCreation')}
           </h4>
           <div className='text-sm text-gray-400 mb-3 space-y-2'>
-            <p>
-              Enter your GitHub Personal Access Token (PAT) to automatically
-              create this PR.
-            </p>
+            <p>{t('pr.tokenHelp')}</p>
             <div className='bg-black/30 p-2 rounded text-xs'>
               <p className='font-semibold text-gray-300'>
-                Required Permissions:
+                {t('pr.requiredPermissions')}
               </p>
               <ul className='list-disc list-inside ml-1 space-y-1 mt-1'>
-                <li>
-                  <span className='text-yellow-400'>repo</span> (Full control of
-                  private repositories)
-                </li>
-                <li>
-                  OR for Fine-grained tokens:
-                  <span className='text-green-400'> Contents</span> (Read &
-                  write) +<span className='text-green-400'> Pull requests</span>{' '}
-                  (Read & write)
-                </li>
+                <li>{t('pr.tokenScopeRepo')}</li>
+                <li>{t('pr.tokenScopeFine')}</li>
               </ul>
             </div>
             <p>
@@ -100,13 +89,13 @@ export const PRPreviewModal: React.FC<PRPreviewModalProps> = ({
                 rel='noopener noreferrer'
                 className='text-blue-400 hover:text-blue-300 underline'
               >
-                Click here to generate a token with 'repo' scope
+                {t('pr.generateTokenLink')}
               </a>
             </p>
           </div>
           <div className='flex gap-2'>
             <Input.Password
-              placeholder='ghp_...'
+              placeholder={t('pr.tokenPlaceholder')}
               value={githubToken}
               onChange={(e) => onGithubTokenChange(e.target.value)}
             />
@@ -116,29 +105,34 @@ export const PRPreviewModal: React.FC<PRPreviewModalProps> = ({
               onClick={onCreatePR}
               icon={<GithubOutlined />}
             >
-              Create PR
+              {t('pr.createPr')}
             </Button>
           </div>
         </div>
 
-        <Divider className='!my-4 border-gray-700'>OR Manual Creation</Divider>
+        <Divider className='!my-4 border-gray-700'>
+          {t('pr.manualCreation')}
+        </Divider>
 
         <TextArea
           value={prContent}
           rows={10}
           readOnly
           className='font-mono text-sm'
-          style={{ background: '#1a1a2e', color: '#fff' }}
+          style={{
+            background: 'var(--color-bg-card)',
+            color: 'var(--color-text-primary)',
+          }}
         />
 
         <div className='flex justify-end gap-2 mt-4'>
-          <Button onClick={onClose}>Close</Button>
+          <Button onClick={onClose}>{t('pr.close')}</Button>
           <Button
             type='default'
             icon={<CopyOutlined />}
             onClick={onCopyToClipboard}
           >
-            Copy to Clipboard
+            {t('pr.copyClipboard')}
           </Button>
         </div>
       </div>

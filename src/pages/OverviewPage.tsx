@@ -5,10 +5,12 @@ import { SearchOutlined } from '@ant-design/icons';
 import { useSkillsData } from '../hooks/useSkillsData';
 import VennZoomChart from '../components/SkillChart';
 import MemberCard from '../components/MemberCard';
+import { useTranslation } from 'react-i18next';
 
 const { Option } = Select;
 
 export const OverviewPage: React.FC = () => {
+  const { t } = useTranslation();
   const { data, loading, error } = useSkillsData();
   const [searchParams] = useSearchParams();
   const initialMemberName = searchParams.get('member');
@@ -76,7 +78,7 @@ export const OverviewPage: React.FC = () => {
   if (error || !data) {
     return (
       <div className='flex items-center justify-center h-96'>
-        <Empty description={error || 'No data available'} />
+        <Empty description={error || t('common.noDataAvailable')} />
       </div>
     );
   }
@@ -102,12 +104,13 @@ export const OverviewPage: React.FC = () => {
       {/* Header */}
       <div className='text-center'>
         <h1 className='text-3xl font-bold bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400 bg-clip-text text-transparent mb-2'>
-          Lab Skills Overview
+          {t('overview.title')}
         </h1>
-        <p className='text-gray-400 text-sm max-w-xl mx-auto'>
-          Skills in overlapping regions span multiple categories. Scroll to
-          zoom, drag to pan. Click a skill name to focus, or click an inner
-          slice to activate a user.
+        <p
+          className='text-sm max-w-xl mx-auto'
+          style={{ color: 'var(--color-text-secondary)' }}
+        >
+          {t('overview.subtitle')}
         </p>
       </div>
 
@@ -126,7 +129,7 @@ export const OverviewPage: React.FC = () => {
       {/* Filters */}
       <div className='flex flex-wrap gap-3'>
         <Input
-          placeholder='Search members...'
+          placeholder={t('overview.searchMembers')}
           prefix={<SearchOutlined className='text-gray-400' />}
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
@@ -134,7 +137,7 @@ export const OverviewPage: React.FC = () => {
           allowClear
         />
         <Select
-          placeholder='Filter by category'
+          placeholder={t('overview.filterByCategory')}
           value={selectedCategory}
           onChange={setSelectedCategory}
           allowClear
@@ -150,8 +153,11 @@ export const OverviewPage: React.FC = () => {
 
       {/* Members Grid */}
       <div id='members-grid'>
-        <h2 className='text-lg font-semibold text-white mb-3'>
-          Lab Members ({filteredMembers.length})
+        <h2
+          className='text-lg font-semibold mb-3'
+          style={{ color: 'var(--color-text-primary)' }}
+        >
+          {t('overview.membersCount', { count: filteredMembers.length })}
         </h2>
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4'>
           {filteredMembers.map((member) => (
@@ -164,7 +170,7 @@ export const OverviewPage: React.FC = () => {
           ))}
         </div>
         {filteredMembers.length === 0 && (
-          <Empty description='No members match your filters' />
+          <Empty description={t('overview.noMembersMatch')} />
         )}
       </div>
     </div>

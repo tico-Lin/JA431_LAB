@@ -1,6 +1,7 @@
 import React from 'react';
 import { Card, Input, Button, Checkbox, Space } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
+import { useTranslation } from 'react-i18next';
 import type { SkillCategory } from '../../types/types';
 
 interface AddSkillFormProps {
@@ -20,27 +21,30 @@ export const AddSkillForm: React.FC<AddSkillFormProps> = ({
   onCategoriesChange,
   onGeneratePR,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <Card className='glass-card !mb-8'>
       <h2 className='text-lg font-semibold text-white mb-4'>
-        Add New Skill (with Category Overlap)
+        {t('pr.addSkillCardTitle')}
       </h2>
       <p className='text-gray-400 text-sm mb-4'>
-        Create a new skill that can span multiple categories. Skills with
-        multiple categories create overlap regions in the visualization.
+        {t('pr.addSkillCardDescription')}
       </p>
       <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
         <div>
-          <label className='text-gray-300 text-sm block mb-2'>Skill Name</label>
+          <label className='text-gray-300 text-sm block mb-2'>
+            {t('pr.skillName')}
+          </label>
           <Input
-            placeholder='e.g., Imitation Learning'
+            placeholder={t('pr.skillNamePlaceholder')}
             value={skillName}
             onChange={(e) => onSkillNameChange(e.target.value)}
           />
         </div>
         <div className='md:col-span-2'>
           <label className='text-gray-300 text-sm block mb-2'>
-            Belongs to Categories (select multiple for overlap)
+            {t('pr.belongsToCategories')}
           </label>
           <Checkbox.Group
             value={selectedCategories}
@@ -67,7 +71,7 @@ export const AddSkillForm: React.FC<AddSkillFormProps> = ({
         className='!mt-4'
         disabled={!skillName || selectedCategories.length === 0}
       >
-        Generate Skill PR
+        {t('pr.generateSkillPr')}
       </Button>
     </Card>
   );

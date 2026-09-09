@@ -21,11 +21,11 @@ export type ProficiencyLevel =
   | 'advanced'
   | 'expert';
 
-export const PROFICIENCY_LABELS: Record<ProficiencyLevel, string> = {
-  beginner: 'Beginner',
-  intermediate: 'Intermediate',
-  advanced: 'Advanced',
-  expert: 'Expert',
+export const PROFICIENCY_LABEL_KEYS: Record<ProficiencyLevel, string> = {
+  beginner: 'proficiency.beginner',
+  intermediate: 'proficiency.intermediate',
+  advanced: 'proficiency.advanced',
+  expert: 'proficiency.expert',
 };
 
 export const PROFICIENCY_COLORS: Record<ProficiencyLevel, string> = {
@@ -65,5 +65,5 @@ export interface SkillGap {
   categories: SkillCategory[];
   currentCoverage: number;
   expertCount: number;
-  recommendation: string;
+  recommendationKey: 'noCoverage' | 'noExpert' | 'singlePoint' | null;
 }

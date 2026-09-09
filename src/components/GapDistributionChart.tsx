@@ -4,7 +4,8 @@ import * as d3 from 'd3';
 import { Avatar, Tooltip } from 'antd';
 import { UserOutlined, TeamOutlined, StarOutlined } from '@ant-design/icons';
 import type { SkillGap, SkillCategory, ProficiencyLevel } from '../types/types';
-import { PROFICIENCY_COLORS, PROFICIENCY_LABELS } from '../types/types';
+import { PROFICIENCY_COLORS, PROFICIENCY_LABEL_KEYS } from '../types/types';
+import { useTranslation } from 'react-i18next';
 
 interface GapDistributionChartProps {
   gaps: SkillGap[];
@@ -62,6 +63,7 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
   categories,
   members,
 }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const radarRef = useRef<SVGSVGElement>(null);
   const barRef = useRef<SVGSVGElement>(null);
@@ -196,6 +198,11 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
   useEffect(() => {
     if (!radarRef.current || categoryData.length === 0) return;
     const svg = d3.select(radarRef.current);
+    const styles = getComputedStyle(document.documentElement);
+    const textPrimary =
+      styles.getPropertyValue('--color-text-primary').trim() || '#ffffff';
+    const textSecondary =
+      styles.getPropertyValue('--color-text-secondary').trim() || '#a0a0b0';
     const width = 400;
     const height = 400;
     const centerX = width / 2;
@@ -230,14 +237,14 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
       g.append('circle')
         .attr('r', r)
         .attr('fill', 'none')
-        .attr('stroke', 'rgba(255,255,255,0.08)');
+        .attr('stroke', 'rgba(148, 163, 184, 0.22)');
 
       g.append('text')
         .attr('x', 0)
         .attr('y', -r)
         .attr('dy', -2)
         .attr('text-anchor', 'middle')
-        .attr('fill', 'rgba(255,255,255,0.3)')
+        .attr('fill', textSecondary)
         .attr('font-size', '9px')
         .text(tick);
     });
@@ -258,7 +265,7 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
         .attr('y2', y)
         .attr(
           'stroke',
-          isSelected ? d.category.color : 'rgba(255,255,255,0.12)',
+          isSelected ? d.category.color : 'rgba(148, 163, 184, 0.3)',
         )
         .attr('stroke-width', isSelected ? 2 : 1)
         .attr('stroke-opacity', isSelected ? 0.8 : 1)
@@ -301,7 +308,7 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
         .attr('y', ly)
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'middle')
-        .attr('fill', isSelected ? d.category.color : 'rgba(255,255,255,0.7)')
+        .attr('fill', isSelected ? d.category.color : textSecondary)
         .attr('font-size', isSelected ? '12px' : '11px')
         .attr('font-weight', isSelected ? '700' : '400')
         .style('transition', 'all 0.2s ease')
@@ -315,16 +322,13 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
           // Also highlight the box slightly on hover if not selected
           if (!isSelected) {
             d3.select(this.previousSibling as Element)
-              .attr('fill', 'rgba(255,255,255,0.05)')
+              .attr('fill', 'rgba(148, 163, 184, 0.15)')
               .attr('fill-opacity', 1);
           }
         })
         .on('mouseleave', function () {
           d3.select(this)
-            .attr(
-              'fill',
-              isSelected ? d.category.color : 'rgba(255,255,255,0.7)',
-            )
+            .attr('fill', isSelected ? d.category.color : textSecondary)
             .attr('font-weight', isSelected ? '700' : '400')
             .style('filter', 'none');
 
@@ -377,7 +381,7 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
           .attr('cy', cy)
           .attr('r', 4)
           .attr('fill', color)
-          .attr('stroke', '#fff')
+          .attr('stroke', textPrimary)
           .attr('stroke-width', 1.5)
           .attr('opacity', 0) // Hidden by default
           .style('cursor', 'pointer');
@@ -403,20 +407,25 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
         circle
           .append('title')
           .text(
-            `${d.category.name}\n${PROFICIENCY_LABELS[level]}: ${val} people`,
+            `${d.category.name}\n${t(PROFICIENCY_LABEL_KEYS[level])}: ${val} ${t('gaps.people')}`,
           );
       });
     });
-  }, [categoryData, selectedCategory, hoveredLevel]);
+  }, [categoryData, selectedCategory, hoveredLevel, t]);
 
   // Draw Stacked Bar Chart with hover effect
   useEffect(() => {
     if (!barRef.current || skillsData.length === 0) return;
     const svg = d3.select(barRef.current);
+    const styles = getComputedStyle(document.documentElement);
+    const textPrimary =
+      styles.getPropertyValue('--color-text-primary').trim() || '#ffffff';
+    const textSecondary =
+      styles.getPropertyValue('--color-text-secondary').trim() || '#a0a0b0';
     const container = barRef.current.parentElement;
     const containerWidth = container?.clientWidth || 600;
 
-    const margin = { top: 20, right: 20, bottom: 110, left: 45 };
+    const margin = { top: 10, right: 20, bottom: 110, left: 45 };
     const width = Math.max(
       containerWidth,
       skillsData.length * 45 + margin.left + margin.right,
@@ -463,7 +472,7 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
           .tickFormat(() => ''),
       )
       .selectAll('line')
-      .attr('stroke', 'rgba(255,255,255,0.05)');
+      .attr('stroke', 'rgba(148, 163, 184, 0.18)');
     g.select('.domain').remove();
 
     // Draw bars with HOVER EFFECT using D3 direct manipulation
@@ -522,7 +531,7 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
         rect
           .append('title')
           .text(
-            `${skill.name}\n${PROFICIENCY_LABELS[bar.level]}: ${bar.value} people`,
+            `${skill.name}\n${t(PROFICIENCY_LABEL_KEYS[bar.level])}: ${bar.value} ${t('gaps.people')}`,
           );
       });
     });
@@ -531,12 +540,10 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
       .append('g')
       .attr('transform', `translate(0,${innerHeight})`)
       .call(d3.axisBottom(xScale).tickSize(0));
-    xAxis.select('.domain').attr('stroke', 'rgba(255,255,255,0.2)');
+    xAxis.select('.domain').attr('stroke', 'rgba(148, 163, 184, 0.3)');
     xAxis
       .selectAll('text')
-      .attr('fill', (d) =>
-        selectedSkill === d ? '#fff' : 'rgba(255,255,255,0.7)',
-      )
+      .attr('fill', (d) => (selectedSkill === d ? textPrimary : textSecondary))
       .attr('font-size', '10px')
       .attr('font-weight', (d) => (selectedSkill === d ? '700' : '400'))
       .attr('transform', 'rotate(-50)')
@@ -549,7 +556,7 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
       .on('mouseenter', function (_, d) {
         const skillId = d as string;
         // Highlight this text
-        d3.select(this).attr('fill', '#fff').attr('font-weight', '700');
+        d3.select(this).attr('fill', textPrimary).attr('font-weight', '700');
 
         // Update bars to highlight this skill
         allRects.forEach((r) => {
@@ -566,7 +573,7 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
         // Reset text style based on selection
         const isSelected = selectedSkill === skillId;
         d3.select(this)
-          .attr('fill', isSelected ? '#fff' : 'rgba(255,255,255,0.7)')
+          .attr('fill', isSelected ? textPrimary : textSecondary)
           .attr('font-weight', isSelected ? '700' : '400');
 
         // Restore bar opacities based on selection state
@@ -579,10 +586,10 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
       .on('click', (_, d) => setSelectedSkill(d as string));
 
     const yAxis = g.append('g').call(d3.axisLeft(yScale).ticks(5));
-    yAxis.select('.domain').attr('stroke', 'rgba(255,255,255,0.2)');
+    yAxis.select('.domain').attr('stroke', 'rgba(148, 163, 184, 0.3)');
     yAxis
       .selectAll('text')
-      .attr('fill', 'rgba(255,255,255,0.6)')
+      .attr('fill', textSecondary)
       .attr('font-size', '10px');
 
     g.append('text')
@@ -590,10 +597,10 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
       .attr('y', -32)
       .attr('x', -innerHeight / 2)
       .attr('text-anchor', 'middle')
-      .attr('fill', 'rgba(255,255,255,0.5)')
+      .attr('fill', textSecondary)
       .attr('font-size', '11px')
-      .text('Team Members');
-  }, [skillsData, selectedSkill]);
+      .text(t('home.teamMembers'));
+  }, [skillsData, selectedSkill, t]);
 
   return (
     <div className='space-y-4'>
@@ -603,7 +610,7 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
         <div className='flex-shrink-0 xl:w-[400px]'>
           <div className='h-full p-4 rounded-xl bg-white/5 border border-white/10 flex flex-col'>
             <h3 className='text-white font-semibold text-sm mb-2 text-center'>
-              Expertise Distribution
+              {t('gaps.distTitle')}
             </h3>
             <div className='flex-1 flex items-center justify-center'>
               <svg ref={radarRef} className='w-[400px] h-[400px]' />
@@ -621,7 +628,7 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
                     style={{ backgroundColor: PROFICIENCY_COLORS[level] }}
                   />
                   <span className='text-gray-300 text-xs'>
-                    {PROFICIENCY_LABELS[level]}
+                    {t(PROFICIENCY_LABEL_KEYS[level])}
                   </span>
                 </div>
               ))}
@@ -640,7 +647,8 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
                     backgroundColor: selectedCategoryInfo?.category.color,
                   }}
                 />
-                {selectedCategoryInfo?.category.name || 'Select a category'}
+                {selectedCategoryInfo?.category.name ||
+                  t('gaps.selectCategory')}
               </h3>
               <span className='text-gray-500 text-xs'>
                 {skillsData.length} skills
@@ -666,7 +674,7 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
                   {selectedSkillInfo.name}
                 </h3>
                 <span className='text-gray-400 text-sm flex items-center gap-1'>
-                  <TeamOutlined /> {totalSelectedMembers} members
+                  <TeamOutlined /> {totalSelectedMembers} {t('gaps.members')}
                 </span>
               </div>
             </div>
@@ -681,7 +689,7 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
           {totalSelectedMembers === 0 ? (
             <div className='p-4 text-center text-red-400 bg-red-500/10 rounded-lg border border-red-500/20'>
               <p className='font-semibold'>
-                ⚠️ No team members have this skill
+                ⚠️ {t('gaps.noTeamMembersWithSkill')}
               </p>
             </div>
           ) : (
@@ -704,7 +712,7 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
                   >
                     {/* Label */}
                     <span className='text-gray-400 text-xs w-20 text-right flex-shrink-0'>
-                      {PROFICIENCY_LABELS[level]}
+                      {t(PROFICIENCY_LABEL_KEYS[level])}
                     </span>
 
                     {/* Bar */}
@@ -757,7 +765,7 @@ const GapDistributionChart: React.FC<GapDistributionChartProps> = ({
                       ))}
                       {count === 0 && (
                         <span className='text-gray-600 text-xs italic'>
-                          None
+                          {t('gaps.none')}
                         </span>
                       )}
                     </div>

@@ -1,0 +1,60 @@
+{
+  "hero": {
+    "title": "RoboSkills",
+    "subtitle": "團隊技能視覺化與管理平台",
+    "description": "追蹤、分析並強化你的團隊能力。透過視覺化技能分布、找出缺口，並有效管理團隊專長。"
+  },
+  "lab": {
+    "name": "你的實驗室",
+    "fullName": "你的實驗室完整名稱",
+    "institution": "你的學校或機構",
+    "description": "請替換為你的實驗室研究主題與使命，描述團隊專長、研究領域與目標。這是範本內容，可依需求客製化。",
+    "website": "https://yourlab.example.com",
+    "director": {
+      "name": "王教授",
+      "title": "計畫主持人",
+      "email": "contact@yourlab.example.com"
+    }
+  },
+  "features": [
+    {
+      "icon": "TeamOutlined",
+      "title": "團隊總覽",
+      "description": "視覺化呈現團隊在各分類的技能分布，快速辨識專長領域。"
+    },
+    {
+      "icon": "SearchOutlined",
+      "title": "缺口分析",
+      "description": "找出技能缺口並協助排序發展與招募優先順序。"
+    },
+    {
+      "icon": "PullRequestOutlined",
+      "title": "快速更新",
+      "description": "透過直覺介面更新成員技能，並自動生成 GitHub PR 內容。"
+    }
+  ],
+  "statistics": {
+    "showStats": true,
+    "customStats": []
+  },
+  "quickLinks": [
+    {
+      "title": "查看團隊總覽",
+      "description": "探索技能視覺化細節",
+      "link": "/overview",
+      "icon": "TeamOutlined"
+    },
+    {
+      "title": "分析技能缺口",
+      "description": "辨識成長重點",
+      "link": "/gaps",
+      "icon": "SearchOutlined"
+    },
+    {
+      "title": "更新技能資料",
+      "description": "管理成員技能資料",
+      "link": "/update",
+      "icon": "PullRequestOutlined"
+    }
+  ]
+}

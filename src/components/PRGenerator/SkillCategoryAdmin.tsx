@@ -25,6 +25,7 @@ import {
 } from '@ant-design/icons';
 import type { SkillCategory, Subcategory, LabMember } from '../../types/types';
 import type { ColumnsType } from 'antd/es/table';
+import { useTranslation } from 'react-i18next';
 
 // Type for pending changes
 interface PendingChange {
@@ -53,6 +54,17 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
   members,
   onGenerateBatchPR,
 }) => {
+  const { t } = useTranslation();
+
+  const changeTypeLabelMap: Record<PendingChange['type'], string> = {
+    'add-skill': t('pr.changeTypeAddSkill'),
+    'update-skill': t('pr.changeTypeUpdateSkill'),
+    'delete-skill': t('pr.changeTypeDeleteSkill'),
+    'add-category': t('pr.changeTypeAddCategory'),
+    'update-category': t('pr.changeTypeUpdateCategory'),
+    'delete-category': t('pr.changeTypeDeleteCategory'),
+  };
+
   // Pending changes state
   const [pendingChanges, setPendingChanges] = useState<PendingChange[]>([]);
 
@@ -130,13 +142,13 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
   // Skills Table Columns
   const skillColumns: ColumnsType<Subcategory> = [
     {
-      title: 'Skill Name',
+      title: t('pr.skillNameColumn'),
       dataIndex: 'name',
       key: 'name',
       render: (name: string) => <span className='text-white'>{name}</span>,
     },
     {
-      title: 'Categories',
+      title: t('pr.categoriesColumn'),
       dataIndex: 'belongsTo',
       key: 'belongsTo',
       render: (belongsTo: string[]) => (
@@ -160,7 +172,7 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
       ),
     },
     {
-      title: 'Actions',
+      title: t('pr.actionsColumn'),
       key: 'actions',
       width: 120,
       render: (_: any, record: Subcategory) => {
@@ -169,7 +181,7 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
 
         return (
           <Space>
-            <Tooltip title='Edit Skill'>
+            <Tooltip title={t('pr.tooltipEditSkill')}>
               <Button
                 size='small'
                 icon={<EditOutlined />}
@@ -188,8 +200,8 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
             <Tooltip
               title={
                 inUse
-                  ? `Cannot delete: Used by ${usedBy.join(', ')}`
-                  : 'Delete Skill'
+                  ? t('pr.tooltipCannotDelete', { names: usedBy.join(', ') })
+                  : t('pr.tooltipDeleteSkill')
               }
             >
               <Button
@@ -201,7 +213,9 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
                   addPendingChange({
                     type: 'delete-skill',
                     data: record,
-                    description: `Delete skill "${record.name}"`,
+                    description: t('pr.changeDeleteSkill', {
+                      name: record.name,
+                    }),
                   });
                 }}
               />
@@ -215,7 +229,7 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
   // Categories Table Columns
   const categoryColumns: ColumnsType<SkillCategory> = [
     {
-      title: 'Category Name',
+      title: t('pr.categoryNameColumn'),
       dataIndex: 'name',
       key: 'name',
       render: (name: string, record: SkillCategory) => (
@@ -223,7 +237,7 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
       ),
     },
     {
-      title: 'Color',
+      title: t('pr.colorColumn'),
       dataIndex: 'color',
       key: 'color',
       width: 80,
@@ -232,7 +246,7 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
       ),
     },
     {
-      title: 'Skills Count',
+      title: t('pr.skillsCountColumn'),
       key: 'skillsCount',
       width: 100,
       render: (_: any, record: SkillCategory) => {
@@ -243,7 +257,7 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
       },
     },
     {
-      title: 'Actions',
+      title: t('pr.actionsColumn'),
       key: 'actions',
       width: 120,
       render: (_: any, record: SkillCategory) => {
@@ -252,7 +266,7 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
 
         return (
           <Space>
-            <Tooltip title='Edit Category'>
+            <Tooltip title={t('pr.tooltipEditCategory')}>
               <Button
                 size='small'
                 icon={<EditOutlined />}
@@ -270,8 +284,10 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
             <Tooltip
               title={
                 inUse
-                  ? `Cannot delete: Used by ${usedBy.slice(0, 3).join(', ')}${usedBy.length > 3 ? '...' : ''}`
-                  : 'Delete Category'
+                  ? t('pr.tooltipCannotDelete', {
+                      names: `${usedBy.slice(0, 3).join(', ')}${usedBy.length > 3 ? '...' : ''}`,
+                    })
+                  : t('pr.tooltipDeleteCategory')
               }
             >
               <Button
@@ -283,7 +299,9 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
                   addPendingChange({
                     type: 'delete-category',
                     data: record,
-                    description: `Delete category "${record.name}"`,
+                    description: t('pr.changeDeleteCategory', {
+                      name: record.name,
+                    }),
                   });
                 }}
               />
@@ -321,7 +339,10 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
             ...values,
             color: colorValue,
           },
-          description: `Update category "${values.name}"${changeDesc}`,
+          description: t('pr.changeUpdateCategory', {
+            name: values.name,
+            details: changeDesc,
+          }),
         });
       } else {
         addPendingChange({
@@ -331,7 +352,7 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
             ...values,
             color: colorValue,
           },
-          description: `Add new category "${values.name}"`,
+          description: t('pr.changeAddCategory', { name: values.name }),
         });
       }
       setCategoryModalOpen(false);
@@ -349,10 +370,12 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
           data: {
             id: skillId,
             name: values.name,
-            description: values.description || `Description for ${values.name}`,
+            description:
+              values.description ||
+              t('pr.autoDescription', { name: values.name }),
             belongsTo: values.belongsTo || [],
           },
-          description: `Add new skill "${values.name}"`,
+          description: t('pr.changeAddSkill', { name: values.name }),
         });
       } else if (editingSkill) {
         const changes: string[] = [];
@@ -395,7 +418,10 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
             ...editingSkill,
             ...values,
           },
-          description: `Update skill "${values.name}"${changeDesc}`,
+          description: t('pr.changeUpdateSkill', {
+            name: values.name,
+            details: changeDesc,
+          }),
         });
       }
       setSkillModalOpen(false);
@@ -428,7 +454,10 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
             const catName =
               categories.find((c) => c.id === catId)?.name || catId;
             errors.push(
-              `Skill "${change.data.name}" references category "${catName}" which is being deleted`,
+              t('pr.validationSkillReferencesDeletedCategory', {
+                skill: change.data.name,
+                category: catName,
+              }),
             );
           }
         }
@@ -440,14 +469,18 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
       if (change.type === 'update-category') {
         if (deletedCategoryIds.includes(change.data.id)) {
           errors.push(
-            `Category "${change.data.name}" is both being updated and deleted`,
+            t('pr.validationCategoryUpdatedAndDeleted', {
+              name: change.data.name,
+            }),
           );
         }
       }
       if (change.type === 'update-skill') {
         if (deletedSkillIds.includes(change.data.id)) {
           errors.push(
-            `Skill "${change.data.name}" is both being updated and deleted`,
+            t('pr.validationSkillUpdatedAndDeleted', {
+              name: change.data.name,
+            }),
           );
         }
       }
@@ -462,7 +495,7 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
     const validation = validatePendingChanges();
     if (!validation.valid) {
       Modal.error({
-        title: 'Invalid Changes Detected',
+        title: t('pr.invalidChangesTitle'),
         content: (
           <ul className='list-disc pl-4'>
             {validation.errors.map((err, i) => (
@@ -489,7 +522,7 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
             label: (
               <Space>
                 <span className='text-white font-semibold'>
-                  Skill & Category Administration
+                  {t('pr.adminTitle')}
                 </span>
                 {pendingChanges.length > 0 && (
                   <Badge
@@ -506,7 +539,9 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
                   <div className='bg-green-500/10 border border-green-500/30 rounded-lg p-4'>
                     <div className='flex justify-between items-center mb-3'>
                       <h3 className='text-green-400 font-medium'>
-                        Pending Changes ({pendingChanges.length})
+                        {t('pr.pendingChanges', {
+                          count: pendingChanges.length,
+                        })}
                       </h3>
                       <Space>
                         <Button
@@ -514,7 +549,7 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
                           icon={<UndoOutlined />}
                           onClick={clearPendingChanges}
                         >
-                          Clear All
+                          {t('pr.clearAll')}
                         </Button>
                         <Button
                           type='primary'
@@ -522,7 +557,7 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
                           icon={<GithubOutlined />}
                           onClick={handleGeneratePR}
                         >
-                          Generate PR
+                          {t('pr.generatePr')}
                         </Button>
                       </Space>
                     </div>
@@ -552,7 +587,7 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
                                   : 'blue'
                             }
                           >
-                            {item.type.replace('-', ' ').toUpperCase()}
+                            {changeTypeLabelMap[item.type]}
                           </Tag>
                           <span className='text-gray-300'>
                             {item.description}
@@ -566,7 +601,9 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
                 {/* Skills Section */}
                 <div>
                   <div className='flex justify-between items-center mb-3'>
-                    <h3 className='text-white font-medium'>Skills</h3>
+                    <h3 className='text-white font-medium'>
+                      {t('pr.skillsSection')}
+                    </h3>
                     <Button
                       size='small'
                       type='primary'
@@ -578,7 +615,7 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
                         setSkillModalOpen(true);
                       }}
                     >
-                      Add Skill
+                      {t('pr.addSkill')}
                     </Button>
                   </div>
                   <Table
@@ -596,7 +633,9 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
                 {/* Categories Section */}
                 <div>
                   <div className='flex justify-between items-center mb-3'>
-                    <h3 className='text-white font-medium'>Categories</h3>
+                    <h3 className='text-white font-medium'>
+                      {t('pr.categoriesSection')}
+                    </h3>
                     <Button
                       size='small'
                       type='primary'
@@ -607,7 +646,7 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
                         setCategoryModalOpen(true);
                       }}
                     >
-                      Add Category
+                      {t('pr.addCategory')}
                     </Button>
                   </div>
                   <Table
@@ -627,7 +666,7 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
 
       {/* Category Modal */}
       <Modal
-        title={editingCategory ? 'Edit Category' : 'Add New Category'}
+        title={editingCategory ? t('pr.editCategory') : t('pr.addNewCategory')}
         open={categoryModalOpen}
         onCancel={() => {
           setCategoryModalOpen(false);
@@ -635,23 +674,27 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
           setEditingCategory(null);
         }}
         onOk={handleCategorySubmit}
-        okText='Add to Changes'
+        okText={t('pr.addToChanges')}
       >
         <Form form={categoryForm} layout='vertical'>
           <Form.Item
             name='name'
-            label='Category Name'
-            rules={[{ required: true, message: 'Please enter category name' }]}
+            label={t('pr.categoryName')}
+            rules={[
+              { required: true, message: t('pr.pleaseEnterCategoryName') },
+            ]}
           >
-            <Input placeholder='e.g., Machine Learning' />
+            <Input placeholder={t('pr.categoryNamePlaceholder')} />
           </Form.Item>
-          <Form.Item name='description' label='Description'>
-            <Input.TextArea placeholder='Brief description of the category' />
+          <Form.Item name='description' label={t('pr.categoryDescription')}>
+            <Input.TextArea
+              placeholder={t('pr.categoryDescriptionPlaceholder')}
+            />
           </Form.Item>
           <Form.Item
             name='color'
-            label='Color'
-            rules={[{ required: true, message: 'Please select a color' }]}
+            label={t('pr.categoryColor')}
+            rules={[{ required: true, message: t('pr.pleaseSelectColor') }]}
           >
             <ColorPicker showText />
           </Form.Item>
@@ -660,7 +703,7 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
 
       {/* Skill Add/Edit Modal */}
       <Modal
-        title={isAddingSkill ? 'Add New Skill' : 'Edit Skill'}
+        title={isAddingSkill ? t('pr.addNewSkill') : t('pr.editSkill')}
         open={skillModalOpen}
         onCancel={() => {
           setSkillModalOpen(false);
@@ -669,24 +712,24 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
           setIsAddingSkill(false);
         }}
         onOk={handleSkillSubmit}
-        okText='Add to Changes'
+        okText={t('pr.addToChanges')}
       >
         <Form form={skillForm} layout='vertical'>
           <Form.Item
             name='name'
-            label='Skill Name'
-            rules={[{ required: true, message: 'Please enter skill name' }]}
+            label={t('pr.skillName')}
+            rules={[{ required: true, message: t('pr.pleaseEnterSkillName') }]}
           >
-            <Input placeholder='e.g., Computer Vision' />
+            <Input placeholder={t('pr.skillNamePlaceholder')} />
           </Form.Item>
-          <Form.Item name='description' label='Description'>
-            <Input.TextArea placeholder='Brief description of the skill' />
+          <Form.Item name='description' label={t('pr.skillDescription')}>
+            <Input.TextArea placeholder={t('pr.skillDescriptionPlaceholder')} />
           </Form.Item>
           <Form.Item
             name='belongsTo'
-            label='Categories (select multiple for overlap)'
+            label={t('pr.skillCategories')}
             rules={[
-              { required: true, message: 'Select at least one category' },
+              { required: true, message: t('pr.pleaseSelectOneCategory') },
             ]}
           >
             <Checkbox.Group>
