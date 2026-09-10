@@ -8,37 +8,118 @@
     "name": "有機-無機儲能材料研究室",
     "fullName": "靜宜大學化學系 有機-無機儲能材料研究室",
     "institution": "靜宜大學化學系",
-    "description": "研究主軸聚焦高熵參雜與農廢綠色化學，整合水熱法、電鍍法、共沉澱法、高溫鍛燒退火、XRD、SEM(EDS)、FT-IR、Raman，以及北極光 SP-50e 平台之 CV、LSV、GCD、EIS 分析。",
+    "description": "研究室以有機—無機複合儲能材料為核心，發展高分子、金屬氧化物、高熵材料、金屬硫化物、氫氧化物與永續生質材料；從材料合成與熱處理改質，延伸至結構、形貌、元素與同步輻射分析，並以原位與電化學實驗解析儲能機制。",
     "website": "https://chem.pu.edu.tw/p/403-1108-30.php?Lang=zh-tw",
     "director": {
       "name": "許峰豪",
       "title": "助理教授 / PI",
-      "email": "hsu0625@pu.edu.tw"
+      "email": "hsu0625@pu.edu.tw",
+      "education": "國立中興大學材料科學與工程學系博士",
+      "bio": "專注於有機與無機儲能材料的組成、界面與電化學機制設計，並以原位光譜與結構分析連結材料特性與儲能表現。",
+      "expertise": [
+        "儲能材料",
+        "高熵材料",
+        "導電高分子",
+        "石墨烯",
+        "同步輻射分析"
+      ],
+      "profileUrl": "https://chem.pu.edu.tw/p/404-1108-40133.php?Lang=zh-tw",
+      "publicationsUrl": "https://alcat.pu.edu.tw/_research/search/t_research.php?MjAyMjAmMTA4MjEy"
     }
   },
   "features": [
     {
       "icon": "ExperimentOutlined",
-      "title": "合成與改質",
-      "description": "水熱法、電鍍法、共沉澱法與高溫鍛燒退火，對應不同材料路徑。"
+      "title": "合成",
+      "description": "依材料組成與形貌需求建立可控的前驅物與成長路徑。",
+      "methods": ["水熱法", "電鍍法", "共沉澱法"]
     },
     {
-      "icon": "SearchOutlined",
-      "title": "表徵分析",
-      "description": "XRD、SEM(EDS)、FT-IR 與 Raman 協助建立結構與成分證據鏈。"
+      "icon": "FireOutlined",
+      "title": "改質",
+      "description": "透過熱處理與氣氛控制調整材料的結晶性、缺陷與表面化學。",
+      "methods": ["高溫退火", "氣氛鍛燒"]
     },
     {
-      "icon": "PullRequestOutlined",
-      "title": "電化學平台",
-      "description": "以北極光 SP-50e 執行 CV、LSV、GCD、EIS，快速評估儲能表現。"
+      "icon": "ApartmentOutlined",
+      "title": "結構鑑定",
+      "description": "從晶相、官能基到局部化學環境，建立完整結構資訊。",
+      "methods": ["XRD", "FTIR", "Raman", "NMR"]
+    },
+    {
+      "icon": "ScanOutlined",
+      "title": "形貌分析",
+      "description": "觀察材料的尺寸、微結構與表面特徵，連結形貌與電化學行為。",
+      "methods": ["SEM", "TEM", "AFM"]
+    },
+    {
+      "icon": "DashboardOutlined",
+      "title": "物性分析",
+      "description": "量測熱性質、孔洞結構與分散狀態，評估材料穩定性與傳輸潛力。",
+      "methods": ["TGA", "DSC", "BET", "DLS"]
+    },
+    {
+      "icon": "DatabaseOutlined",
+      "title": "元素定性與定量",
+      "description": "分析材料表面與體相元素組成、價態與含量，確保配方與組成可追溯。",
+      "methods": ["XPS", "EDS", "ICP-MS", "AA"]
+    },
+    {
+      "icon": "RadarChartOutlined",
+      "title": "同步輻射技術",
+      "description": "運用高亮度 X 光探測原子尺度結構與電子狀態，解析關鍵反應機制。",
+      "methods": ["XRD", "XAS"]
+    },
+    {
+      "icon": "ThunderboltOutlined",
+      "title": "電化學實驗",
+      "description": "以多尺度測試評估儲能反應、動力學與循環穩定性，並支援原位機制分析。",
+      "methods": [
+        "CV",
+        "GCD",
+        "EIS",
+        "GITT",
+        "PITT",
+        "CA",
+        "LSV",
+        "In-situ XRD",
+        "In-situ Raman",
+        "In-situ FTIR",
+        "In-situ XAS"
+      ]
     }
   ],
   "researchDirections": [
-    "高分子",
-    "金屬氧化物",
-    "高熵材料",
-    "硫化物",
-    "氫氧化物"
+    {
+      "title": "高分子",
+      "description": "探索導電高分子與高分子複合材料在電池、超級電容與柔性儲能元件中的材料設計與電化學應用。",
+      "href": "https://advanced.onlinelibrary.wiley.com/doi/full/10.1002/adma.202000587"
+    },
+    {
+      "title": "金屬氧化物",
+      "description": "以奈米結構金屬氧化物調控比表面積、氧化還原活性與離子傳輸效率，提升超級電容儲能表現。",
+      "href": "https://www.researchgate.net/publication/398124720_Metal_Oxide_Nanostructures_for_Supercapacitor_Applications-_Recent_Progress_and_Future_Perspectives_A_Short_Review"
+    },
+    {
+      "title": "高熵材料",
+      "description": "透過多元素協同效應設計高熵材料，兼顧結構穩定性、活性位點與儲能反應動力學。",
+      "href": "https://www.nature.com/articles/s41467-018-05774-5"
+    },
+    {
+      "title": "金屬硫化物",
+      "description": "利用金屬硫化物的多樣化組成與氧化還原特性，開發高容量、高倍率的電化學儲能電極。",
+      "href": "https://pubmed.ncbi.nlm.nih.gov/28160327/"
+    },
+    {
+      "title": "儲能氫氧化物",
+      "description": "以層狀氫氧化物與複合結構為基礎，優化離子擴散與電荷傳遞，應用於高效能儲能系統。",
+      "href": "https://advanced.onlinelibrary.wiley.com/doi/10.1002/advs.201801797"
+    },
+    {
+      "title": "永續生質材料",
+      "description": "將生質資源轉化為功能性碳材與複合材料，兼顧材料循環、低碳製程與電化學儲能應用。",
+      "href": "https://www.sciencedirect.com/science/article/pii/S2352186425006480"
+    }
   ],
   "statistics": {
     "showStats": true,

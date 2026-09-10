@@ -42,6 +42,8 @@ export const resources = {
         labDirector: 'Principal Investigator',
         keyFeatures: 'Research Focus',
         researchDirections: 'Research Directions',
+        piProfileSource: 'Official PI Profile',
+        piPublicationsSource: 'Publications',
         quickLinks: 'Quick Access',
         github: 'GitHub',
         templateProvided: 'Template Provided',
@@ -59,6 +61,47 @@ export const resources = {
         profileName: 'Feng-Hao Hsu',
         profileBio:
           'Assistant Professor with expertise in energy-storage materials, metal oxides, conducting polymers, graphene, and electrochemistry.',
+        academicProfileTitle: 'Academic Background & Research Positioning',
+        education:
+          'Ph.D., Department of Materials Science and Engineering, National Chung Hsing University',
+        researchPositioning:
+          'Research integrates organic-inorganic energy-storage materials, from composition and interface design to operando structural analysis. Key applications include aluminum-ion batteries, supercapacitors, solid-state batteries, and multivalent-ion energy storage.',
+        specialtiesItems: [
+          'Energy-storage materials',
+          'Conducting polymers',
+          'Graphene nanocomposites',
+          'Metal oxides',
+          'High-entropy materials',
+          'Electrochemistry',
+          'Synchrotron radiation analysis',
+        ],
+        projectsTitle: 'Selected Research Projects',
+        projectsItems: [
+          {
+            title:
+              'Material-tuning strategies and performance mechanisms of two-dimensional molybdenum-carbon layered nanocomposites for aluminum-ion battery cathodes',
+            period: '2026–2027',
+            role: 'Principal Investigator',
+          },
+          {
+            title:
+              'Design, synthesis, properties, and energy-storage behavior of high-performance high-entropy oxides and nanocomposites',
+            period: '2025–2026',
+            role: 'Principal Investigator',
+          },
+          {
+            title:
+              'High-performance high-entropy materials for energy-storage electrodes and energy-storage mechanisms',
+            period: '2024–2025',
+            role: 'Principal Investigator',
+          },
+          {
+            title:
+              'Electrochemical properties of high-entropy layered double hydroxides for energy storage',
+            period: '2026–2027',
+            role: 'Undergraduate Research Project Advisor',
+          },
+        ],
         officeHoursLabel: 'Office hours: ',
         contactTitle: 'Contact',
         phone: '(04) 2632-8001 ext. 15205',
@@ -95,29 +138,59 @@ export const resources = {
         methodsItems: [
           {
             icon: 'synthesisMethods',
-            title: 'Synthesis Methods',
-            description: 'Hydrothermal, electrodeposition, co-precipitation',
-            tags: ['Materials precursors', 'Scalable routes'],
+            title: 'Material Synthesis',
+            description:
+              'Controlled routes for composition, phase, and morphology design.',
+            tags: ['Hydrothermal', 'Electrodeposition', 'Co-precipitation'],
           },
           {
             icon: 'thermalTuning',
-            title: 'Thermal Tuning',
-            description: 'Calcination and annealing',
-            tags: ['Phase control', 'Surface modification'],
+            title: 'Thermal and Atmosphere Tuning',
+            description:
+              'Control crystallinity, defects, and surface chemistry.',
+            tags: ['High-temperature Annealing', 'Atmosphere Calcination'],
           },
           {
             icon: 'characterization',
-            title: 'Characterization',
+            title: 'Structural Identification',
             description:
-              'X-ray Diffraction (XRD), Scanning Electron Microscopy with Energy Dispersive Spectroscopy (SEM-EDS), Fourier-Transform Infrared Spectroscopy (FT-IR), Raman Spectroscopy',
-            tags: ['Phase', 'Morphology', 'Functional groups', 'Vibrations'],
+              'Resolve crystal phase, functional groups, and local chemical environments.',
+            tags: ['XRD', 'FTIR', 'Raman', 'NMR'],
           },
           {
             icon: 'instrumentExperience',
-            title: 'Instrument Experience',
+            title: 'Morphology and Physical Properties',
             description:
-              'SP-50e: Cyclic Voltammetry (CV), Linear Sweep Voltammetry (LSV), Galvanostatic Charge-Discharge (GCD), Electrochemical Impedance Spectroscopy (EIS)',
-            tags: ['Electrode testing', 'Impedance', 'Cycling stability'],
+              'Connect microstructure, thermal behavior, and surface area with performance.',
+            tags: ['SEM', 'TEM', 'AFM', 'TGA', 'DSC', 'BET', 'DLS'],
+          },
+          {
+            icon: 'characterization',
+            title: 'Elemental Analysis',
+            description:
+              'Determine elemental composition, surface states, and concentrations.',
+            tags: ['XPS', 'EDS', 'ICP-MS', 'AA'],
+          },
+          {
+            icon: 'instrumentExperience',
+            title: 'Synchrotron and Operando Analysis',
+            description:
+              'Follow structural and electronic changes during operation.',
+            tags: [
+              'Synchrotron XRD',
+              'XAS',
+              'In-situ XRD',
+              'In-situ Raman',
+              'In-situ FTIR',
+              'In-situ XAS',
+            ],
+          },
+          {
+            icon: 'instrumentExperience',
+            title: 'Electrochemical Evaluation',
+            description:
+              'Evaluate storage reactions, transport kinetics, and cycling stability.',
+            tags: ['CV', 'GCD', 'EIS', 'GITT', 'PITT', 'CA', 'LSV'],
           },
         ],
         collaborationsItems: [
@@ -126,6 +199,207 @@ export const resources = {
           'Electrochemical evaluation and mechanism analysis',
           'Industry-academic collaboration and joint proposals',
         ],
+        outputCategories: {
+          publications: 'Publications',
+          projects: 'Projects',
+          conferences: 'Conferences',
+          patents: 'Patents',
+        },
+        outputsItems: {
+          publications: [
+            {
+              title:
+                'Preparation and Properties of Polypyrrole/Molybdenum trioxide/Graphene Nanoribbon Ternary Nanocomposite as a Supercapacitor Electrode',
+              meta: 'Ph.D. Thesis, National Chung Hsing University, 2017',
+              href: 'https://link.springer.com/article/10.1007/s10008-015-3094-2',
+            },
+            {
+              title:
+                'Preparation and Characterization of Intrinsic Conducting Polymer/Graphene Nanocomposites',
+              meta: 'Master’s Thesis, National Chung Hsing University, 2011',
+              href: 'https://hdl.handle.net/11296/6357us',
+            },
+            {
+              title:
+                'W-doped α-phase molybdenum trioxide for aqueous aluminum-ion batteries',
+              meta: 'Journal of Energy Storage, 2026',
+              href: 'https://www.sciencedirect.com/science/article/abs/pii/S2352152X25042720',
+            },
+            {
+              title:
+                '2D MoO3 ion behavior in hydrated eutectic electrolyte for aluminum-ion energy storage',
+              meta: 'Journal of Energy Storage, 2024',
+              href: 'https://www.sciencedirect.com/science/article/abs/pii/S2352152X24002779',
+            },
+            {
+              title:
+                'Correlation of crystal structure and ion storage behavior of MoO3 electrode materials for aluminum-ion energy storage studied with in-situ X-ray spectroscopies',
+              meta: 'Nanoscale, 2022',
+              href: 'https://pubs.rsc.org/nr/article-abstract/14/20/7502/776332/Correlation-of-the-crystal-structure-and-ion?redirectedFrom=fulltext',
+            },
+            {
+              title:
+                'Electrochemical properties and mechanism of CoMoO4@NiWO4 core-shell nanoplates for high-performance supercapacitor electrode and studied with in-situ X-ray absorption spectroscopy',
+              meta: 'Nanoscale, 2020',
+              href: 'https://pubs.rsc.org/nr/article-abstract/12/25/13388/694162/Electrochemical-properties-and-mechanism-of-CoMoO4?redirectedFrom=fulltext',
+            },
+            {
+              title:
+                '1.8 V Aqueous Symmetric Carbon-Based Supercapacitors with Agarose-Bound Activated Carbons in an Acidic Electrolyte',
+              meta: 'Nanomaterials, 2021',
+              href: 'https://www.mdpi.com/2079-4991/11/7/1731',
+            },
+            {
+              title:
+                'The supercapacitor electrode properties and energy storage mechanism of binary transition metal sulfide MnCo2S4 compared with oxide MnCo2O4 studied using in situ quick X-ray absorption spectroscopy',
+              meta: 'Materials Chemistry Frontiers, 2021',
+              href: 'https://pubs.rsc.org/qm/article-abstract/5/13/4937/740387/The-supercapacitor-electrode-properties-and-energy?redirectedFrom=fulltext',
+            },
+            {
+              title:
+                'Facile synthesis of polypyrrole/carbon-coated MoO3 nanoparticle/graphene nanoribbon nanocomposite with high-capacitance applied in supercapacitor electrode',
+              meta: 'Journal of Materials Science: Materials in Electronics, 2018',
+              href: 'https://link.springer.com/article/10.1007/s10854-017-7927-x',
+            },
+            {
+              title:
+                'Poypyrrole/molybdenum trioxide/graphene nanoribbon ternary nanocomposite with enhanced capacitive performance as an electrode for supercapacitor',
+              meta: 'Journal of Solid State Electrochemistry, 2015',
+              href: 'https://link.springer.com/article/10.1007/s10008-015-3094-2',
+            },
+            {
+              title:
+                'Electrochemical characteristics of graphene nanoribbon/polypyrrole composite prepared via oxidation polymerization in the presence of poly-(sodium 4-styrenesulfonate)',
+              meta: 'Materials Chemistry and Physics, 2015',
+              href: 'https://www.sciencedirect.com/science/article/abs/pii/S0254058415301127',
+            },
+            {
+              title:
+                'Enhanced capacitance of one-dimensional polypyrrole/graphene oxide nanoribbon nanocomposite as electrode material for high performance supercapacitors',
+              meta: 'Synthetic Metals, 2014',
+              href: 'https://www.sciencedirect.com/science/article/abs/pii/S0379677914003555',
+            },
+            {
+              title:
+                'Enhanced conductivity and thermal stability of conductive polyaniline/graphene composite synthesized by in situ chemical oxidation polymerization with sodium dodecyl sulfate',
+              meta: 'Synthetic Metals, 2013',
+              href: 'https://www.sciencedirect.com/science/article/abs/pii/S0379677913004785',
+            },
+            {
+              title:
+                'In-situ synthesis and characterization of conductive polypyrrole/graphene composites with improved solubility and conductivity',
+              meta: 'Synthetic Metals, 2012',
+              href: 'https://www.sciencedirect.com/science/article/abs/pii/S0379677912000793',
+            },
+          ],
+          projects: [
+            {
+              title:
+                'Two-dimensional molybdenum-carbon nanocomposites for aluminum-ion battery cathodes',
+              meta: 'NSTC Principal Investigator, 2026–2027',
+              href: 'https://wsts.nstc.gov.tw/STSWeb/Award/AwardMultiQuery.aspx?year=115&code=QS01&organ=D,FD23,FD23B023&name=%e8%a8%b1%e5%b3%b0%e8%b1%aa',
+            },
+            {
+              title:
+                'High-performance high-entropy oxides and nanocomposites for energy storage',
+              meta: 'Providence University Principal Investigator, 2025–2026',
+              href: 'https://alcat.pu.edu.tw/_research/search/t_research.php?MjAyMjAmMTA4MjEy',
+            },
+            {
+              title:
+                'High-entropy materials for energy-storage electrodes and mechanisms',
+              meta: 'NSTC Principal Investigator, 2024–2025',
+              href: 'https://wsts.nstc.gov.tw/STSWeb/Award/AwardMultiQuery.aspx?year=113&code=QS01&organ=D,FD23,FD23B023&name=%E8%A8%B1%E5%B3%B0%E8%B1%AA',
+            },
+            {
+              title:
+                'High-entropy layered double hydroxides for energy storage',
+              meta: 'NSTC Undergraduate Project Advisor, 2026–2027',
+              href: 'https://wsts.nstc.gov.tw/STSWeb/Award/AwardMultiQuery.aspx?year=115&code=QS05&organ=D%2cFD23%2cFD23B023&name=%E5%90%B3%E5%8F%99%E6%9D%AD',
+            },
+            {
+              title:
+                'Two-dimensional high-entropy materials for multivalent-ion energy-storage electrodes',
+              meta: 'NSTC Principal Investigator, 2023–2024',
+              href: 'https://wsts.nstc.gov.tw/STSWeb/Award/AwardMultiQuery.aspx?year=112&code=QS01&organ=D,FD23,FD23B023&name=%E8%A8%B1%E5%B3%B0%E8%B1%AA',
+            },
+            {
+              title:
+                'Local agricultural products: plastic reduction, value creation, safety, and applications',
+              meta: 'Providence University Co-Principal Investigator, 2026–2027',
+              href: 'https://alcat.pu.edu.tw/_research/search/t_research.php?MjAyMjAmMTA4MjEy',
+            },
+            {
+              title:
+                'Green campus and green energy materials development and applications',
+              meta: 'Providence University Co-Principal Investigator, 2023–2024',
+              href: 'https://alcat.pu.edu.tw/_research/search/t_research.php?MjAyMjAmMTA4MjEy',
+            },
+          ],
+          conferences: [
+            {
+              title:
+                'Multi-element molybdate electrode materials for supercapacitors',
+              meta: '9th ICMDA, Sendai, 2026',
+              href: 'https://alcat.pu.edu.tw/_research/search/t_research.php?MjAyMjAmMTA4MjEy',
+            },
+            {
+              title:
+                'Ion behavior of α-MoO3 and h-MoO3 for aluminum-ion storage',
+              meta: 'ICMENS, Fukuoka, 2025',
+              href: 'https://alcat.pu.edu.tw/_research/search/t_research.php?MjAyMjAmMTA4MjEy',
+            },
+            {
+              title: 'MoO3 electrode materials for aluminum-ion energy storage',
+              meta: '7th ICMDA, Tokyo, 2024',
+              href: 'https://alcat.pu.edu.tw/_research/search/t_research.php?MjAyMjAmMTA4MjEy',
+            },
+            {
+              title:
+                'Energy-storage mechanism of CoMoO4@NiWO4 core-shell nanoplates',
+              meta: 'Materials Annual Meeting, Taiwan, 2020',
+              href: 'https://alcat.pu.edu.tw/_research/search/t_research.php?MjAyMjAmMTA4MjEy',
+            },
+            {
+              title:
+                'Binary metal oxide NiWO4 coated on nickel foam for supercapacitors',
+              meta: 'Physical Society of Taiwan Annual Meeting, Hsinchu, 2019',
+              href: 'https://alcat.pu.edu.tw/_research/search/t_research.php?MjAyMjAmMTA4MjEy',
+            },
+            {
+              title:
+                'Electrochemical capacitance and cycling stability of graphene nanoribbon/polypyrrole nanocomposites',
+              meta: '32nd PPS, Lyon, 2016',
+              href: 'https://alcat.pu.edu.tw/_research/search/t_research.php?MjAyMjAmMTA4MjEy',
+            },
+            {
+              title:
+                'Preparation and characterization of one-dimensional polypyrrole nanostructures',
+              meta: 'ICCE-21, Tenerife, 2013',
+              href: 'https://alcat.pu.edu.tw/_research/search/t_research.php?MjAyMjAmMTA4MjEy',
+            },
+            {
+              title:
+                'Preparation and characterization of conducting polypyrrole/graphene nanocomposites',
+              meta: 'IUMRS-ICA, Busan, 2012',
+              href: 'https://alcat.pu.edu.tw/_research/search/t_research.php?MjAyMjAmMTA4MjEy',
+            },
+            {
+              title:
+                'Properties and energy-storage mechanism of CoMoO4@NiWO4 core-shell nanoplates studied via in-situ XAS',
+              meta: 'Materials Annual Meeting, Taiwan, 2020',
+              href: 'https://alcat.pu.edu.tw/_research/search/t_research.php?MjAyMjAmMTA4MjEy',
+            },
+          ],
+          patents: [
+            {
+              title:
+                'Graphene nanoribbon/polypyrrole nanocomposite, manufacturing method, and supercapacitor',
+              meta: 'Taiwan Patent I522416, 2016–2034',
+              href: 'https://arspb.nstc.gov.tw/NSCWebFront/modules/talentSearch/talentSearch.do?action=initRsm05&rsNo=c23bd64b872040a791b32a4e4e03a056&LANG=chi',
+            },
+          ],
+        },
         highlightsItems: [
           {
             title:
@@ -168,6 +442,22 @@ export const resources = {
           {
             title: 'Instrumentation',
             href: 'https://chem.pu.edu.tw/p/412-1108-2249.php?Lang=zh-tw',
+          },
+          {
+            title: 'NSTC Researcher Profile',
+            href: 'https://arspb.nstc.gov.tw/NSCWebFront/modules/talentSearch/talentSearch.do?action=initRsm02&rsNo=c23bd64b872040a791b32a4e4e03a056&LANG=chi',
+          },
+          {
+            title: 'NSTC Publications',
+            href: 'https://arspb.nstc.gov.tw/NSCWebFront/modules/talentSearch/talentSearch.do?action=initRsm03&rsNo=c23bd64b872040a791b32a4e4e03a056&LANG=chi',
+          },
+          {
+            title: 'NSTC Patents',
+            href: 'https://arspb.nstc.gov.tw/NSCWebFront/modules/talentSearch/talentSearch.do?action=initRsm05&rsNo=c23bd64b872040a791b32a4e4e03a056&LANG=chi',
+          },
+          {
+            title: 'NSTC Project Overview',
+            href: 'https://arspb.nstc.gov.tw/NSCWebFront/modules/talentSearch/talentSearch.do?action=initRsm17new&rsNo=c23bd64b872040a791b32a4e4e03a056&LANG=chi',
           },
         ],
         researchFocusTitle: 'Research Focus',
@@ -467,6 +757,8 @@ export const resources = {
         labDirector: '主持人',
         keyFeatures: '研究重點',
         researchDirections: '研究方向',
+        piProfileSource: '官方 PI 資料',
+        piPublicationsSource: '著作目錄',
         quickLinks: '快速入口',
         github: 'GitHub',
         templateProvided: '範本提供',
@@ -484,6 +776,45 @@ export const resources = {
         profileName: '許峰豪',
         profileBio:
           '助理教授，專長於儲能材料、金屬氧化物、導電高分子、石墨烯與電化學。',
+        academicProfileTitle: '學術背景與研究定位',
+        education: '國立中興大學材料科學與工程學系博士',
+        researchPositioning:
+          '研究結合有機與無機儲能材料，從材料組成、界面設計到原位結構分析，發展鋁離子電池、超級電容、固態電池與多價離子儲能等關鍵技術。',
+        specialtiesItems: [
+          '儲能材料',
+          '導電高分子',
+          '石墨烯奈米複材',
+          '金屬氧化物',
+          '高熵材料',
+          '電化學',
+          '同步輻射分析技術',
+        ],
+        projectsTitle: '代表性研究計畫',
+        projectsItems: [
+          {
+            title:
+              '二維鉬系碳基層狀奈米複合材料於鋁離子電池陰極之材料改質策略與性能提升機制研究',
+            period: '2026–2027',
+            role: '計畫主持人',
+          },
+          {
+            title:
+              'PU 高性能高熵氧化物及其奈米複合材料之設計、合成、性能與儲能行為研究',
+            period: '2025–2026',
+            role: '計畫主持人',
+          },
+          {
+            title:
+              '前瞻高性能高熵材料應用於儲能裝置電極材料與儲能機制之開發與研究',
+            period: '2024–2025',
+            role: '計畫主持人',
+          },
+          {
+            title: '高熵層狀雙氫氧化物（MnCoNiCuZn）-Fe LDH 之電化學性能探討',
+            period: '2026–2027',
+            role: '大專生研究計畫指導老師',
+          },
+        ],
         officeHoursLabel: '辦公時間：',
         contactTitle: '聯絡資訊',
         phone: '(04) 2632-8001 分機 15205',
@@ -516,29 +847,54 @@ export const resources = {
         methodsItems: [
           {
             icon: 'synthesisMethods',
-            title: '合成方法',
-            description: '水熱法、電鍍法、共沉澱法',
-            tags: ['材料前驅物', '可擴充製程'],
+            title: '材料合成',
+            description: '以濕式化學與電鍍途徑控制材料的組成、晶相與形貌。',
+            tags: ['水熱法', '電鍍法', '共沉澱法'],
           },
           {
             icon: 'thermalTuning',
-            title: '表徵修飾',
-            description: '高溫鍛燒退火',
-            tags: ['相結構調控', '表面改質'],
+            title: '熱處理與氣氛改質',
+            description: '藉由熱處理與氣氛控制，調整結晶性、缺陷與表面化學。',
+            tags: ['高溫退火', '氣氛鍛燒'],
           },
           {
             icon: 'characterization',
-            title: '表徵分析',
-            description:
-              'X 射線繞射（XRD）、掃描式電子顯微鏡與能量散佈光譜（SEM-EDS）、傅立葉轉換紅外光譜（FT-IR）、拉曼光譜（Raman）',
-            tags: ['晶相', '形貌', '官能基', '振動光譜'],
+            title: '結構鑑定',
+            description: '以互補光譜技術解析晶相、官能基與局部化學環境。',
+            tags: ['XRD', 'FTIR', 'Raman', 'NMR'],
           },
           {
             icon: 'instrumentExperience',
-            title: '儀器經驗',
+            title: '形貌與物性分析',
             description:
-              'SP-50e：循環伏安法（CV）、線性掃描伏安法（LSV）、恆電流充放電（GCD）、電化學阻抗頻譜（EIS）',
-            tags: ['電極評估', '阻抗分析', '循環穩定性'],
+              '連結微結構、比表面積、熱行為與分散狀態，評估材料性能。',
+            tags: ['SEM', 'TEM', 'AFM', 'TGA', 'DSC', 'BET', 'DLS'],
+          },
+          {
+            icon: 'characterization',
+            title: '元素定性與定量',
+            description:
+              '從表面到體相分析元素組成、價態與濃度，確保材料配方可追溯。',
+            tags: ['XPS', 'EDS', 'ICP-MS', 'AA'],
+          },
+          {
+            icon: 'instrumentExperience',
+            title: '同步輻射與原位分析',
+            description: '以同步輻射與原位量測追蹤操作中的結構及電子狀態變化。',
+            tags: [
+              '同步輻射 XRD',
+              'XAS',
+              'In-situ XRD',
+              'In-situ Raman',
+              'In-situ FTIR',
+              'In-situ XAS',
+            ],
+          },
+          {
+            icon: 'instrumentExperience',
+            title: '電化學評估',
+            description: '評估儲能反應、傳輸動力學、倍率能力與循環穩定性。',
+            tags: ['CV', 'GCD', 'EIS', 'GITT', 'PITT', 'CA', 'LSV'],
           },
         ],
         collaborationsItems: [
@@ -547,6 +903,196 @@ export const resources = {
           '電化學性能測試與機制解析',
           '產學合作與共同計畫',
         ],
+        outputCategories: {
+          publications: '論文',
+          projects: '計畫',
+          conferences: '會議',
+          patents: '專利',
+        },
+        outputsItems: {
+          publications: [
+            {
+              title:
+                'Preparation and Properties of Polypyrrole/Molybdenum trioxide/Graphene Nanoribbon Ternary Nanocomposite as a Supercapacitor Electrode',
+              meta: '博士論文，國立中興大學，2017',
+              href: 'https://link.springer.com/article/10.1007/s10008-015-3094-2',
+            },
+            {
+              title:
+                'Preparation and Characterization of Intrinsic Conducting Polymer/Graphene Nanocomposites',
+              meta: '碩士論文，國立中興大學，2011',
+              href: 'https://hdl.handle.net/11296/6357us',
+            },
+            {
+              title:
+                'W-doped α-phase molybdenum trioxide with enhanced cycling stability as a cathode material for aqueous aluminum-ion batteries',
+              meta: 'Journal of Energy Storage，2026',
+              href: 'https://www.sciencedirect.com/science/article/abs/pii/S2352152X25042720',
+            },
+            {
+              title:
+                'The ion behavior and storage mechanism of 2D MoO3 layer structure in an air-stable hydrated eutectic electrolyte for aluminum-ion energy storage',
+              meta: 'Journal of Energy Storage，2024',
+              href: 'https://www.sciencedirect.com/science/article/abs/pii/S2352152X24002779',
+            },
+            {
+              title:
+                'Correlation of crystal structure and ion storage behavior of MoO3 electrode materials for aluminum-ion energy storage studied with in-situ X-ray spectroscopies',
+              meta: 'Nanoscale，2022',
+              href: 'https://pubs.rsc.org/nr/article-abstract/14/20/7502/776332/Correlation-of-the-crystal-structure-and-ion?redirectedFrom=fulltext',
+            },
+            {
+              title:
+                'Electrochemical properties and mechanism of CoMoO4@NiWO4 core-shell nanoplates for high-performance supercapacitor electrode and studied with in-situ X-ray absorption spectroscopy',
+              meta: 'Nanoscale，2020',
+              href: 'https://pubs.rsc.org/nr/article-abstract/12/25/13388/694162/Electrochemical-properties-and-mechanism-of-CoMoO4?redirectedFrom=fulltext',
+            },
+            {
+              title:
+                '1.8 V Aqueous Symmetric Carbon-Based Supercapacitors with Agarose-Bound Activated Carbons in an Acidic Electrolyte',
+              meta: 'Nanomaterials，2021',
+              href: 'https://www.mdpi.com/2079-4991/11/7/1731',
+            },
+            {
+              title:
+                'The supercapacitor electrode properties and energy storage mechanism of binary transition metal sulfide MnCo2S4 compared with oxide MnCo2O4 studied using in situ quick X-ray absorption spectroscopy',
+              meta: 'Materials Chemistry Frontiers，2021',
+              href: 'https://pubs.rsc.org/qm/article-abstract/5/13/4937/740387/The-supercapacitor-electrode-properties-and-energy?redirectedFrom=fulltext',
+            },
+            {
+              title:
+                'Facile synthesis of polypyrrole/carbon-coated MoO3 nanoparticle/graphene nanoribbon nanocomposite with high-capacitance applied in supercapacitor electrode',
+              meta: 'Journal of Materials Science: Materials in Electronics，2018',
+              href: 'https://link.springer.com/article/10.1007/s10854-017-7927-x',
+            },
+            {
+              title:
+                'Poypyrrole/molybdenum trioxide/graphene nanoribbon ternary nanocomposite with enhanced capacitive performance as an electrode for supercapacitor',
+              meta: 'Journal of Solid State Electrochemistry，2015',
+              href: 'https://link.springer.com/article/10.1007/s10008-015-3094-2',
+            },
+            {
+              title:
+                'Electrochemical characteristics of graphene nanoribbon/polypyrrole composite prepared via oxidation polymerization in the presence of poly-(sodium 4-styrenesulfonate)',
+              meta: 'Materials Chemistry and Physics，2015',
+              href: 'https://www.sciencedirect.com/science/article/abs/pii/S0254058415301127',
+            },
+            {
+              title:
+                'Enhanced capacitance of one-dimensional polypyrrole/graphene oxide nanoribbon nanocomposite as electrode material for high performance supercapacitors',
+              meta: 'Synthetic Metals，2014',
+              href: 'https://www.sciencedirect.com/science/article/abs/pii/S0379677914003555',
+            },
+            {
+              title:
+                'Enhanced conductivity and thermal stability of conductive polyaniline/graphene composite synthesized by in situ chemical oxidation polymerization with sodium dodecyl sulfate',
+              meta: 'Synthetic Metals，2013',
+              href: 'https://www.sciencedirect.com/science/article/abs/pii/S0379677913004785',
+            },
+            {
+              title:
+                'In-situ synthesis and characterization of conductive polypyrrole/graphene composites with improved solubility and conductivity',
+              meta: 'Synthetic Metals，2012',
+              href: 'https://www.sciencedirect.com/science/article/abs/pii/S0379677912000793',
+            },
+          ],
+          projects: [
+            {
+              title:
+                '二維鉬系碳基層狀奈米複合材料於鋁離子電池陰極之材料改質策略與性能提升機制研究',
+              meta: '國科會計畫主持人，2026–2027',
+              href: 'https://wsts.nstc.gov.tw/STSWeb/Award/AwardMultiQuery.aspx?year=115&code=QS01&organ=D,FD23,FD23B023&name=%e8%a8%b1%e5%b3%b0%e8%b1%aa',
+            },
+            {
+              title:
+                'PU 高性能高熵氧化物及其奈米複合材料之設計、合成、性能與儲能行為研究',
+              meta: '靜宜大學計畫主持人，2025–2026',
+              href: 'https://alcat.pu.edu.tw/_research/search/t_research.php?MjAyMjAmMTA4MjEy',
+            },
+            {
+              title:
+                '前瞻高性能高熵材料應用於儲能裝置電極材料與儲能機制之開發與研究',
+              meta: '國科會計畫主持人，2024–2025',
+              href: 'https://wsts.nstc.gov.tw/STSWeb/Award/AwardMultiQuery.aspx?year=113&code=QS01&organ=D,FD23,FD23B023&name=%E8%A8%B1%E5%B3%B0%E8%B1%AA',
+            },
+            {
+              title: '高熵層狀雙氫氧化物（MnCoNiCuZn）-Fe LDH 之電化學性能探討',
+              meta: '國科會大專生研究計畫指導老師，2026–2027',
+              href: 'https://wsts.nstc.gov.tw/STSWeb/Award/AwardMultiQuery.aspx?year=115&code=QS05&organ=D%2cFD23%2cFD23B023&name=%E5%90%B3%E5%8F%99%E6%9D%AD',
+            },
+            {
+              title:
+                '二維高熵材料應用於多價離子儲能電極材料之性能與電化學機制研究',
+              meta: '國科會計畫主持人，2023–2024',
+              href: 'https://wsts.nstc.gov.tw/STSWeb/Award/AwardMultiQuery.aspx?year=112&code=QS01&organ=D,FD23,FD23B023&name=%E8%A8%B1%E5%B3%B0%E8%B1%AA',
+            },
+            {
+              title: 'PU 在地農產之減塑、加值、安全與應用',
+              meta: '靜宜大學共同主持人，2026–2027',
+              href: 'https://alcat.pu.edu.tw/_research/search/t_research.php?MjAyMjAmMTA4MjEy',
+            },
+            {
+              title: 'PU 綠色校園暨綠能材料之開發與應用',
+              meta: '靜宜大學共同主持人，2023–2024',
+              href: 'https://alcat.pu.edu.tw/_research/search/t_research.php?MjAyMjAmMTA4MjEy',
+            },
+          ],
+          conferences: [
+            {
+              title: '多元素鉬酸鹽電極材料應用於超級電容',
+              meta: '第 9 屆 ICMDA，日本仙台，2026',
+              href: 'https://alcat.pu.edu.tw/_research/search/t_research.php?MjAyMjAmMTA4MjEy',
+            },
+            {
+              title: 'α-MoO3 與 h-MoO3 於鋁離子儲能的離子行為與性能',
+              meta: 'ICMENS，日本福岡，2025',
+              href: 'https://alcat.pu.edu.tw/_research/search/t_research.php?MjAyMjAmMTA4MjEy',
+            },
+            {
+              title: 'MoO3 電極材料應用於鋁離子儲能之晶體結構與性能',
+              meta: '第 7 屆 ICMDA，日本東京，2024',
+              href: 'https://alcat.pu.edu.tw/_research/search/t_research.php?MjAyMjAmMTA4MjEy',
+            },
+            {
+              title: 'CoMoO4@NiWO4 核殼奈米片的儲能機制',
+              meta: '材料年會，臺灣，2020',
+              href: 'https://alcat.pu.edu.tw/_research/search/t_research.php?MjAyMjAmMTA4MjEy',
+            },
+            {
+              title: 'NiWO4 包覆鎳泡沫之二元金屬氧化物電極材料用於超級電容',
+              meta: '臺灣物理年會，新竹，2019',
+              href: 'https://alcat.pu.edu.tw/_research/search/t_research.php?MjAyMjAmMTA4MjEy',
+            },
+            {
+              title:
+                '石墨烯奈米帶／聚吡咯奈米複材的一維結構電化學電容與循環穩定性',
+              meta: '第 32 屆 PPS，法國里昂，2016',
+              href: 'https://alcat.pu.edu.tw/_research/search/t_research.php?MjAyMjAmMTA4MjEy',
+            },
+            {
+              title: '一維聚吡咯奈米結構的製備與鑑定',
+              meta: 'ICCE-21，西班牙特內里費，2013',
+              href: 'https://alcat.pu.edu.tw/_research/search/t_research.php?MjAyMjAmMTA4MjEy',
+            },
+            {
+              title: '導電聚吡咯／石墨烯奈米複材的製備與鑑定',
+              meta: 'IUMRS-ICA，韓國釜山，2012',
+              href: 'https://alcat.pu.edu.tw/_research/search/t_research.php?MjAyMjAmMTA4MjEy',
+            },
+            {
+              title: '以原位 XAS 技術研究 CoMoO4@NiWO4 核殼奈米片的儲能機制',
+              meta: '材料年會，臺灣，2020',
+              href: 'https://alcat.pu.edu.tw/_research/search/t_research.php?MjAyMjAmMTA4MjEy',
+            },
+          ],
+          patents: [
+            {
+              title: '帶狀奈米石墨烯／聚吡咯奈米複材、其製造方法及超級電容',
+              meta: '臺灣專利 I522416，2016–2034',
+              href: 'https://arspb.nstc.gov.tw/NSCWebFront/modules/talentSearch/talentSearch.do?action=initRsm05&rsNo=c23bd64b872040a791b32a4e4e03a056&LANG=chi',
+            },
+          ],
+        },
         highlightsItems: [
           {
             title:
@@ -589,6 +1135,22 @@ export const resources = {
           {
             title: '儀器設備',
             href: 'https://chem.pu.edu.tw/p/412-1108-2249.php?Lang=zh-tw',
+          },
+          {
+            title: '國科會研究人才資料',
+            href: 'https://arspb.nstc.gov.tw/NSCWebFront/modules/talentSearch/talentSearch.do?action=initRsm02&rsNo=c23bd64b872040a791b32a4e4e03a056&LANG=chi',
+          },
+          {
+            title: '國科會著作目錄',
+            href: 'https://arspb.nstc.gov.tw/NSCWebFront/modules/talentSearch/talentSearch.do?action=initRsm03&rsNo=c23bd64b872040a791b32a4e4e03a056&LANG=chi',
+          },
+          {
+            title: '國科會專利資料',
+            href: 'https://arspb.nstc.gov.tw/NSCWebFront/modules/talentSearch/talentSearch.do?action=initRsm05&rsNo=c23bd64b872040a791b32a4e4e03a056&LANG=chi',
+          },
+          {
+            title: '國科會計畫總覽',
+            href: 'https://arspb.nstc.gov.tw/NSCWebFront/modules/talentSearch/talentSearch.do?action=initRsm17new&rsNo=c23bd64b872040a791b32a4e4e03a056&LANG=chi',
           },
         ],
         researchFocusTitle: '研究重點',

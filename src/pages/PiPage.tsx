@@ -1,15 +1,24 @@
-import React from 'react';
-import { Button, Card, Col, Divider, Row, Space, Tag, Typography } from 'antd';
+import React, { useState } from 'react';
+import {
+  Button,
+  Card,
+  Col,
+  Divider,
+  Pagination,
+  Row,
+  Space,
+  Tag,
+  Typography,
+} from 'antd';
 import {
   MailOutlined,
   GlobalOutlined,
   PhoneOutlined,
   ReadOutlined,
-  ExperimentOutlined,
   SafetyOutlined,
-  DotChartOutlined,
   ThunderboltOutlined,
   BuildOutlined,
+  SolutionOutlined,
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 
@@ -28,14 +37,16 @@ interface PiLinkItem {
   href: string;
 }
 
+interface PiOutputItem {
+  title: string;
+  meta: string;
+  href: string;
+}
+
 const iconMap: Record<string, React.ReactNode> = {
   highEntropyDoping: <SafetyOutlined />,
   agriWasteGreenChemistry: <BuildOutlined />,
   energyMaterialsApplications: <ThunderboltOutlined />,
-  synthesisMethods: <ExperimentOutlined />,
-  thermalTuning: <ReadOutlined />,
-  characterization: <DotChartOutlined />,
-  instrumentExperience: <ThunderboltOutlined />,
 };
 
 const PiPage: React.FC = () => {
@@ -43,18 +54,23 @@ const PiPage: React.FC = () => {
   const researchFocus = t('pi.researchFocusItems', {
     returnObjects: true,
   }) as PiSectionItem[];
-  const methods = t('pi.methodsItems', {
-    returnObjects: true,
-  }) as PiSectionItem[];
   const collaborations = t('pi.collaborationsItems', {
     returnObjects: true,
   }) as string[];
-  const highlights = t('pi.highlightsItems', {
-    returnObjects: true,
-  }) as PiLinkItem[];
   const links = t('pi.externalLinksItems', {
     returnObjects: true,
   }) as PiLinkItem[];
+  const specialties = t('pi.specialtiesItems', {
+    returnObjects: true,
+  }) as string[];
+  const outputCategories = t('pi.outputCategories', {
+    returnObjects: true,
+  }) as Record<string, string>;
+  const outputs = t('pi.outputsItems', {
+    returnObjects: true,
+  }) as Record<string, PiOutputItem[]>;
+  const [outputPages, setOutputPages] = useState<Record<string, number>>({});
+  const outputEntries = Object.entries(outputCategories);
 
   return (
     <div className='space-y-10 md:space-y-14'>
@@ -203,53 +219,45 @@ const PiPage: React.FC = () => {
         </Col>
       </Row>
 
-      <Card className='glass-card mb-2 md:mb-4'>
-        <Title
-          level={3}
-          className='!mb-4'
-          style={{ color: 'var(--color-text-primary)' }}
-        >
-          {t('pi.coreCapabilitiesTitle')}
-        </Title>
-        <Row gutter={[20, 20]}>
-          {methods.map((item) => (
-            <Col xs={24} md={12} key={item.title}>
-              <div className='rounded-2xl border border-white/10 bg-white/5 p-6 h-full'>
-                <div className='flex items-start gap-3'>
-                  <div className='text-2xl text-indigo-300 mt-1'>
-                    {iconMap[item.icon] || <ExperimentOutlined />}
-                  </div>
-                  <div className='flex-1'>
-                    <Title
-                      level={5}
-                      className='!mb-1'
-                      style={{ color: 'var(--color-text-primary)' }}
-                    >
-                      {item.title}
-                    </Title>
-                    <Paragraph
-                      className='!mb-2'
-                      style={{ color: 'var(--color-text-secondary)' }}
-                    >
-                      {item.description}
-                    </Paragraph>
-                    <Space wrap>
-                      {item.tags.map((tag) => (
-                        <Tag className='research-tag' key={tag}>
-                          {tag}
-                        </Tag>
-                      ))}
-                    </Space>
-                  </div>
-                </div>
+      <Card className='glass-card'>
+        <Row gutter={[32, 24]}>
+          <Col xs={24} lg={8}>
+            <div className='flex items-start gap-3'>
+              <SolutionOutlined className='text-2xl text-indigo-300 mt-1' />
+              <div>
+                <Title
+                  level={3}
+                  className='!mb-2'
+                  style={{ color: 'var(--color-text-primary)' }}
+                >
+                  {t('pi.academicProfileTitle')}
+                </Title>
+                <Text style={{ color: 'var(--color-text-secondary)' }}>
+                  {t('pi.education')}
+                </Text>
               </div>
-            </Col>
-          ))}
+            </div>
+          </Col>
+          <Col xs={24} lg={16}>
+            <Paragraph
+              className='!mb-4 !text-base'
+              style={{ color: 'var(--color-text-secondary)' }}
+            >
+              {t('pi.researchPositioning')}
+            </Paragraph>
+            <div className='flex flex-wrap gap-2'>
+              {specialties.map((specialty) => (
+                <Tag className='research-tag' key={specialty}>
+                  {specialty}
+                </Tag>
+              ))}
+            </div>
+          </Col>
         </Row>
       </Card>
 
-      <Row gutter={[32, 32]} className='mt-2 md:mt-4'>
-        <Col xs={24} lg={10}>
+      <Row gutter={[24, 24]}>
+        <Col xs={24}>
           <Card className='glass-card h-full'>
             <Title
               level={3}
@@ -267,36 +275,76 @@ const PiPage: React.FC = () => {
             </ul>
           </Card>
         </Col>
-        <Col xs={24} lg={14}>
-          <Card className='glass-card h-full'>
-            <Title
-              level={3}
-              className='!mb-4'
-              style={{ color: 'var(--color-text-primary)' }}
-            >
-              {t('pi.outputsTitle')}
-            </Title>
-            <div className='space-y-4'>
-              {highlights.map((item) => (
-                <a
-                  key={item.title}
-                  href={item.href}
-                  target='_blank'
-                  rel='noreferrer'
-                  className='block rounded-2xl border border-white/10 bg-white/5 p-4 hover:border-cyan-300/50 transition-colors'
-                >
-                  <Paragraph
-                    className='!mb-0'
-                    style={{ color: 'var(--color-text-secondary)' }}
-                  >
-                    {item.title}
-                  </Paragraph>
-                </a>
-              ))}
-            </div>
-          </Card>
-        </Col>
       </Row>
+
+      <section>
+        <Title
+          level={3}
+          className='!mb-4'
+          style={{ color: 'var(--color-text-primary)' }}
+        >
+          {t('pi.outputsTitle')}
+        </Title>
+        <Row gutter={[24, 24]}>
+          {outputEntries.map(([category, label]) => {
+            const categoryOutputs = outputs[category] ?? [];
+            const currentPage = outputPages[category] ?? 1;
+            const pageItems = categoryOutputs.slice(
+              (currentPage - 1) * 4,
+              currentPage * 4,
+            );
+
+            return (
+              <Col xs={24} md={12} key={category}>
+                <Card
+                  className='pi-output-card glass-card h-full'
+                  title={label}
+                >
+                  <div className='pi-output-list'>
+                    {pageItems.map((item) => (
+                      <a
+                        key={item.title}
+                        href={item.href}
+                        target='_blank'
+                        rel='noreferrer'
+                        className='pi-output-item'
+                      >
+                        <Text
+                          strong
+                          style={{ color: 'var(--color-text-primary)' }}
+                        >
+                          {item.title}
+                        </Text>
+                        <Text
+                          className='block mt-1'
+                          style={{ color: 'var(--color-text-secondary)' }}
+                        >
+                          {item.meta}
+                        </Text>
+                      </a>
+                    ))}
+                  </div>
+                  <Pagination
+                    className='mt-4'
+                    align='center'
+                    current={currentPage}
+                    pageSize={4}
+                    total={categoryOutputs.length}
+                    showSizeChanger={false}
+                    hideOnSinglePage
+                    onChange={(page) =>
+                      setOutputPages((pages) => ({
+                        ...pages,
+                        [category]: page,
+                      }))
+                    }
+                  />
+                </Card>
+              </Col>
+            );
+          })}
+        </Row>
+      </section>
 
       <Card className='glass-card'>
         <Title

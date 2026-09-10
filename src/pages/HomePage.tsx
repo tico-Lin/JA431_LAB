@@ -16,6 +16,14 @@ import {
   PullRequestOutlined,
   GlobalOutlined,
   RocketOutlined,
+  ExperimentOutlined,
+  FireOutlined,
+  ApartmentOutlined,
+  ScanOutlined,
+  DashboardOutlined,
+  DatabaseOutlined,
+  RadarChartOutlined,
+  ThunderboltOutlined,
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { useLocale } from '../hooks/useLocale';
@@ -38,14 +46,24 @@ interface HomeConfig {
       name: string;
       title: string;
       email?: string;
+      education: string;
+      bio: string;
+      expertise: string[];
+      profileUrl: string;
+      publicationsUrl: string;
     };
   };
   features: Array<{
     icon: string;
     title: string;
     description: string;
+    methods: string[];
   }>;
-  researchDirections: string[];
+  researchDirections: Array<{
+    title: string;
+    description: string;
+    href: string;
+  }>;
   statistics: {
     showStats: boolean;
     customStats: Array<{
@@ -77,6 +95,14 @@ const iconMap: Record<string, React.ReactNode> = {
   SearchOutlined: <SearchOutlined />,
   PullRequestOutlined: <PullRequestOutlined />,
   RocketOutlined: <RocketOutlined />,
+  ExperimentOutlined: <ExperimentOutlined />,
+  FireOutlined: <FireOutlined />,
+  ApartmentOutlined: <ApartmentOutlined />,
+  ScanOutlined: <ScanOutlined />,
+  DashboardOutlined: <DashboardOutlined />,
+  DatabaseOutlined: <DatabaseOutlined />,
+  RadarChartOutlined: <RadarChartOutlined />,
+  ThunderboltOutlined: <ThunderboltOutlined />,
 };
 
 const HomePage: React.FC = () => {
@@ -205,25 +231,6 @@ const HomePage: React.FC = () => {
             </Space>
           </div>
         </div>
-      </div>
-
-      <div className='container mx-auto px-4 py-12 bg-transparent'>
-        <Title
-          level={2}
-          className='text-center !mb-8'
-          style={{ color: 'var(--color-text-primary)' }}
-        >
-          {t('home.researchDirections')}
-        </Title>
-        <Card className='glass-card'>
-          <div className='flex flex-wrap justify-center gap-3'>
-            {config.researchDirections.map((direction) => (
-              <span className='research-direction-tag' key={direction}>
-                {direction}
-              </span>
-            ))}
-          </div>
-        </Card>
       </div>
 
       {/* Statistics Section */}
@@ -359,10 +366,47 @@ const HomePage: React.FC = () => {
               >
                 {config.lab.director.title}
               </Text>
+              <Text
+                style={{ color: 'var(--color-text-muted)' }}
+                className='block mt-1'
+              >
+                {config.lab.director.education}
+              </Text>
+              <Paragraph
+                className='!mt-3 !mb-3'
+                style={{ color: 'var(--color-text-secondary)' }}
+              >
+                {config.lab.director.bio}
+              </Paragraph>
+              <div className='flex flex-wrap gap-2 mb-3'>
+                {config.lab.director.expertise.map((expertise) => (
+                  <span className='research-method-tag' key={expertise}>
+                    {expertise}
+                  </span>
+                ))}
+              </div>
+              <Space wrap>
+                <a
+                  href={config.lab.director.profileUrl}
+                  target='_blank'
+                  rel='noreferrer'
+                  className='home-pi-link'
+                >
+                  {t('home.piProfileSource')}
+                </a>
+                <a
+                  href={config.lab.director.publicationsUrl}
+                  target='_blank'
+                  rel='noreferrer'
+                  className='home-pi-link'
+                >
+                  {t('home.piPublicationsSource')}
+                </a>
+              </Space>
               {config.lab.director.email && (
                 <a
                   href={`mailto:${config.lab.director.email}`}
-                  className='!text-indigo-400 hover:!text-indigo-300 transition-colors'
+                  className='home-pi-email block mt-3'
                 >
                   {config.lab.director.email}
                 </a>
@@ -381,33 +425,80 @@ const HomePage: React.FC = () => {
         >
           {t('home.keyFeatures')}
         </Title>
-        <Row gutter={[24, 24]}>
+        <Row gutter={[20, 20]}>
           {config.features.map((feature, index) => (
-            <Col xs={24} md={8} key={index}>
+            <Col xs={24} sm={12} lg={6} key={index}>
               <Card
-                className='backdrop-blur-md border-white/10 h-full hover:shadow-xl transition-all duration-300 hover:scale-105'
+                className='research-focus-card backdrop-blur-md border-white/10 h-full'
                 bordered={false}
                 style={{
                   background: 'var(--color-surface-1)',
-                  borderRadius: '16px',
                 }}
               >
-                <div className='text-center'>
-                  <div className='text-5xl mb-4 text-indigo-400'>
+                <div className='flex flex-col h-full'>
+                  <div className='text-3xl mb-4 text-indigo-400'>
                     {iconMap[feature.icon] || <RocketOutlined />}
                   </div>
+                  <Title
+                    level={4}
+                    className='!mb-2'
+                    style={{ color: 'var(--color-text-primary)' }}
+                  >
+                    {feature.title}
+                  </Title>
+                  <Paragraph
+                    className='!mb-4'
+                    style={{ color: 'var(--color-text-secondary)' }}
+                  >
+                    {feature.description}
+                  </Paragraph>
+                  <div className='flex flex-wrap gap-2 mt-auto'>
+                    {feature.methods.map((method) => (
+                      <span className='research-method-tag' key={method}>
+                        {method}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              </Card>
+            </Col>
+          ))}
+        </Row>
+      </div>
+
+      <div className='container mx-auto px-4 py-12 bg-transparent'>
+        <Title
+          level={2}
+          className='text-center !mb-8'
+          style={{ color: 'var(--color-text-primary)' }}
+        >
+          {t('home.researchDirections')}
+        </Title>
+        <Row gutter={[24, 24]}>
+          {config.researchDirections.map((direction) => (
+            <Col xs={24} sm={12} lg={8} key={direction.title}>
+              <a
+                href={direction.href}
+                target='_blank'
+                rel='noreferrer'
+                className='block h-full'
+              >
+                <Card className='research-direction-card glass-card h-full'>
                   <Title
                     level={4}
                     className='!mb-3'
                     style={{ color: 'var(--color-text-primary)' }}
                   >
-                    {feature.title}
+                    {direction.title}
                   </Title>
-                  <Paragraph style={{ color: 'var(--color-text-secondary)' }}>
-                    {feature.description}
+                  <Paragraph
+                    className='!mb-0'
+                    style={{ color: 'var(--color-text-secondary)' }}
+                  >
+                    {direction.description}
                   </Paragraph>
-                </div>
-              </Card>
+                </Card>
+              </a>
             </Col>
           ))}
         </Row>

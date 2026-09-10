@@ -8,37 +8,118 @@
     "name": "Organic-Inorganic Energy Storage Materials Laboratory",
     "fullName": "Organic-Inorganic Energy Storage Materials Laboratory, Department of Chemistry, Providence University",
     "institution": "Department of Chemistry, Providence University",
-    "description": "Focused on high-entropy doping, agricultural-waste green chemistry, hydrothermal synthesis, electrodeposition, co-precipitation, thermal treatment, XRD, SEM(EDS), FT-IR, Raman, and SP-50e electrochemical analysis (CV, LSV, GCD, EIS).",
+    "description": "The laboratory develops organic-inorganic energy-storage materials spanning polymers, metal oxides, high-entropy materials, metal sulfides, hydroxides, and sustainable biomass materials. Research integrates synthesis and thermal tuning with structural, morphological, elemental, synchrotron, operando, and electrochemical analysis to reveal storage mechanisms.",
     "website": "https://chem.pu.edu.tw/p/403-1108-30.php?Lang=zh-tw",
     "director": {
       "name": "Feng-Hao Hsu",
       "title": "Assistant Professor / PI",
-      "email": "hsu0625@pu.edu.tw"
+      "email": "hsu0625@pu.edu.tw",
+      "education": "Ph.D., Department of Materials Science and Engineering, National Chung Hsing University",
+      "bio": "Focuses on composition, interfaces, and electrochemical mechanisms in organic-inorganic energy-storage materials, using operando spectroscopy and structural analysis to connect material properties with storage performance.",
+      "expertise": [
+        "Energy-storage materials",
+        "High-entropy materials",
+        "Conducting polymers",
+        "Graphene",
+        "Synchrotron analysis"
+      ],
+      "profileUrl": "https://chem.pu.edu.tw/p/404-1108-40133.php?Lang=zh-tw",
+      "publicationsUrl": "https://alcat.pu.edu.tw/_research/search/t_research.php?MjAyMjAmMTA4MjEy"
     }
   },
   "features": [
     {
       "icon": "ExperimentOutlined",
-      "title": "Synthesis & Tuning",
-      "description": "Hydrothermal, electrodeposition, co-precipitation, and calcination/annealing routes for energy materials."
+      "title": "Synthesis",
+      "description": "Establish controlled precursor and growth routes for targeted material compositions and morphologies.",
+      "methods": ["Hydrothermal", "Electrodeposition", "Co-precipitation"]
     },
     {
-      "icon": "SearchOutlined",
-      "title": "Characterization",
-      "description": "XRD, SEM(EDS), FT-IR, and Raman to build a strong structure-property evidence chain."
+      "icon": "FireOutlined",
+      "title": "Material Tuning",
+      "description": "Use thermal treatment and atmosphere control to tune crystallinity, defects, and surface chemistry.",
+      "methods": ["High-temperature Annealing", "Atmosphere Calcination"]
     },
     {
-      "icon": "PullRequestOutlined",
-      "title": "Electrochemical Platform",
-      "description": "Use the SP-50e platform for CV, LSV, GCD, and EIS to assess storage performance."
+      "icon": "ApartmentOutlined",
+      "title": "Structural Identification",
+      "description": "Build complete structural information from crystal phase and functional groups to local chemical environments.",
+      "methods": ["XRD", "FTIR", "Raman", "NMR"]
+    },
+    {
+      "icon": "ScanOutlined",
+      "title": "Morphology Analysis",
+      "description": "Examine dimensions, microstructures, and surface features to connect morphology with electrochemical behavior.",
+      "methods": ["SEM", "TEM", "AFM"]
+    },
+    {
+      "icon": "DashboardOutlined",
+      "title": "Physical Property Analysis",
+      "description": "Measure thermal behavior, pore structure, and dispersion to assess material stability and transport potential.",
+      "methods": ["TGA", "DSC", "BET", "DLS"]
+    },
+    {
+      "icon": "DatabaseOutlined",
+      "title": "Elemental Qualitative and Quantitative Analysis",
+      "description": "Determine surface and bulk composition, oxidation states, and elemental concentrations for traceable formulations.",
+      "methods": ["XPS", "EDS", "ICP-MS", "AA"]
+    },
+    {
+      "icon": "RadarChartOutlined",
+      "title": "Synchrotron Radiation Techniques",
+      "description": "Use high-brightness X-rays to probe atomic-scale structure and electronic states for reaction-mechanism insight.",
+      "methods": ["XRD", "XAS"]
+    },
+    {
+      "icon": "ThunderboltOutlined",
+      "title": "Electrochemical Experiments",
+      "description": "Evaluate storage reactions, kinetics, and cycling stability across multiple scales, including operando analysis.",
+      "methods": [
+        "CV",
+        "GCD",
+        "EIS",
+        "GITT",
+        "PITT",
+        "CA",
+        "LSV",
+        "In-situ XRD",
+        "In-situ Raman",
+        "In-situ FTIR",
+        "In-situ XAS"
+      ]
     }
   ],
   "researchDirections": [
-    "Polymers",
-    "Metal Oxides",
-    "High-Entropy Materials",
-    "Sulfides",
-    "Hydroxides"
+    {
+      "title": "Polymers",
+      "description": "Explore conducting polymers and polymer composites for batteries, supercapacitors, and flexible energy-storage devices.",
+      "href": "https://advanced.onlinelibrary.wiley.com/doi/full/10.1002/adma.202000587"
+    },
+    {
+      "title": "Metal Oxides",
+      "description": "Engineer nanostructured metal oxides to improve surface area, redox activity, ion transport, and supercapacitor performance.",
+      "href": "https://www.researchgate.net/publication/398124720_Metal_Oxide_Nanostructures_for_Supercapacitor_Applications-_Recent_Progress_and_Future_Perspectives_A_Short_Review"
+    },
+    {
+      "title": "High-Entropy Materials",
+      "description": "Use multi-element synergy to design high-entropy materials with stable structures, active sites, and efficient storage kinetics.",
+      "href": "https://www.nature.com/articles/s41467-018-05774-5"
+    },
+    {
+      "title": "Metal Sulfides",
+      "description": "Develop high-capacity, high-rate electrochemical electrodes using the compositionally diverse and redox-active properties of metal sulfides.",
+      "href": "https://pubmed.ncbi.nlm.nih.gov/28160327/"
+    },
+    {
+      "title": "Energy-Storage Hydroxides",
+      "description": "Optimize layered hydroxides and composite structures for ion diffusion and charge transfer in high-performance energy-storage systems.",
+      "href": "https://advanced.onlinelibrary.wiley.com/doi/10.1002/advs.201801797"
+    },
+    {
+      "title": "Sustainable Biomass Materials",
+      "description": "Transform biomass resources into functional carbons and composites for circular, low-carbon, and electrochemical energy-storage applications.",
+      "href": "https://www.sciencedirect.com/science/article/pii/S2352186425006480"
+    }
   ],
   "statistics": {
     "showStats": true,
