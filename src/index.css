@@ -459,6 +459,21 @@ body {
   border-radius: 12px !important;
 }
 
+.research-tag {
+  background: var(--color-surface-2) !important;
+  border-color: var(--shell-border) !important;
+  color: var(--color-text-primary) !important;
+}
+
+.research-direction-tag {
+  border: 1px solid var(--shell-border);
+  border-radius: 999px;
+  background: var(--color-surface-2);
+  color: var(--color-text-primary);
+  font-weight: 600;
+  padding: 8px 16px;
+}
+
 /* Checkbox */
 .ant-checkbox-wrapper {
   color: var(--color-text-primary) !important;

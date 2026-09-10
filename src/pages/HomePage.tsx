@@ -45,6 +45,7 @@ interface HomeConfig {
     title: string;
     description: string;
   }>;
+  researchDirections: string[];
   statistics: {
     showStats: boolean;
     customStats: Array<{
@@ -204,6 +205,25 @@ const HomePage: React.FC = () => {
             </Space>
           </div>
         </div>
+      </div>
+
+      <div className='container mx-auto px-4 py-12 bg-transparent'>
+        <Title
+          level={2}
+          className='text-center !mb-8'
+          style={{ color: 'var(--color-text-primary)' }}
+        >
+          {t('home.researchDirections')}
+        </Title>
+        <Card className='glass-card'>
+          <div className='flex flex-wrap justify-center gap-3'>
+            {config.researchDirections.map((direction) => (
+              <span className='research-direction-tag' key={direction}>
+                {direction}
+              </span>
+            ))}
+          </div>
+        </Card>
       </div>
 
       {/* Statistics Section */}

@@ -1,12 +1,12 @@
 {
   "hero": {
-    "title": "Energy and Polymer Research Lab",
-    "subtitle": "High-Entropy Doping × Agricultural-Waste Green Chemistry",
-    "description": "A public entry point for materials synthesis, surface tuning, characterization, and electrochemical collaboration in energy research."
+    "title": "Organic-Inorganic Energy Storage Materials Laboratory",
+    "subtitle": "Energy Storage Materials Development",
+    "description": "The laboratory develops organic and inorganic energy-storage materials through synthesis, tuning, characterization, and electrochemical analysis."
   },
   "lab": {
-    "name": "Energy and Polymer Research Lab",
-    "fullName": "Department of Chemistry, Providence University",
+    "name": "Organic-Inorganic Energy Storage Materials Laboratory",
+    "fullName": "Organic-Inorganic Energy Storage Materials Laboratory, Department of Chemistry, Providence University",
     "institution": "Department of Chemistry, Providence University",
     "description": "Focused on high-entropy doping, agricultural-waste green chemistry, hydrothermal synthesis, electrodeposition, co-precipitation, thermal treatment, XRD, SEM(EDS), FT-IR, Raman, and SP-50e electrochemical analysis (CV, LSV, GCD, EIS).",
     "website": "https://chem.pu.edu.tw/p/403-1108-30.php?Lang=zh-tw",
@@ -32,6 +32,13 @@
       "title": "Electrochemical Platform",
       "description": "Use the SP-50e platform for CV, LSV, GCD, and EIS to assess storage performance."
     }
+  ],
+  "researchDirections": [
+    "Polymers",
+    "Metal Oxides",
+    "High-Entropy Materials",
+    "Sulfides",
+    "Hydroxides"
   ],
   "statistics": {
     "showStats": true,

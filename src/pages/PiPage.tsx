@@ -190,7 +190,9 @@ const PiPage: React.FC = () => {
                     </Paragraph>
                     <Space wrap>
                       {item.tags.map((tag) => (
-                        <Tag key={tag}>{tag}</Tag>
+                        <Tag className='research-tag' key={tag}>
+                          {tag}
+                        </Tag>
                       ))}
                     </Space>
                   </Card>
@@ -233,7 +235,9 @@ const PiPage: React.FC = () => {
                     </Paragraph>
                     <Space wrap>
                       {item.tags.map((tag) => (
-                        <Tag key={tag}>{tag}</Tag>
+                        <Tag className='research-tag' key={tag}>
+                          {tag}
+                        </Tag>
                       ))}
                     </Space>
                   </div>

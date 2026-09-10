@@ -1,12 +1,12 @@
 {
   "hero": {
-    "title": "能源及高分子研究室",
-    "subtitle": "高熵參雜 × 農廢綠色化學",
-    "description": "本研究室專注能源材料、綠色化學與電化學分析，提供材料合成、改質、表徵與合作委託的對外入口。"
+    "title": "有機-無機儲能材料研究室",
+    "subtitle": "儲能材料開發",
+    "description": "本研究室專注有機與無機儲能材料開發，結合材料合成、改質、表徵與電化學分析。"
   },
   "lab": {
-    "name": "能源及高分子研究室",
-    "fullName": "靜宜大學化學系 能源及高分子研究室",
+    "name": "有機-無機儲能材料研究室",
+    "fullName": "靜宜大學化學系 有機-無機儲能材料研究室",
     "institution": "靜宜大學化學系",
     "description": "研究主軸聚焦高熵參雜與農廢綠色化學，整合水熱法、電鍍法、共沉澱法、高溫鍛燒退火、XRD、SEM(EDS)、FT-IR、Raman，以及北極光 SP-50e 平台之 CV、LSV、GCD、EIS 分析。",
     "website": "https://chem.pu.edu.tw/p/403-1108-30.php?Lang=zh-tw",
@@ -32,6 +32,13 @@
       "title": "電化學平台",
       "description": "以北極光 SP-50e 執行 CV、LSV、GCD、EIS，快速評估儲能表現。"
     }
+  ],
+  "researchDirections": [
+    "高分子",
+    "金屬氧化物",
+    "高熵材料",
+    "硫化物",
+    "氫氧化物"
   ],
   "statistics": {
     "showStats": true,
