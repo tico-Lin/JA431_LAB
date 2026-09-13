@@ -19,6 +19,7 @@ import {
   ThunderboltOutlined,
   BuildOutlined,
   SolutionOutlined,
+  RadarChartOutlined,
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 
@@ -44,7 +45,10 @@ interface PiOutputItem {
 }
 
 const iconMap: Record<string, React.ReactNode> = {
+  highEntropyMaterials: <SafetyOutlined />,
   highEntropyDoping: <SafetyOutlined />,
+  aluminumIonBatteries: <ThunderboltOutlined />,
+  synchrotronAnalysis: <RadarChartOutlined />,
   agriWasteGreenChemistry: <BuildOutlined />,
   energyMaterialsApplications: <ThunderboltOutlined />,
 };
@@ -122,6 +126,10 @@ const PiPage: React.FC = () => {
               href={t('pi.profileUrl')}
               target='_blank'
               icon={<GlobalOutlined />}
+              style={{
+                color: 'var(--color-text-primary)',
+                borderColor: 'var(--color-text-primary)',
+              }}
             >
               {t('pi.viewProfileButton')}
             </Button>
@@ -164,10 +172,12 @@ const PiPage: React.FC = () => {
                 <MailOutlined className='mr-2' />
                 {t('pi.email')}
               </a>
-              <Text style={{ color: 'var(--color-text-secondary)' }}>
-                {t('pi.officeHoursLabel')}
-                {t('pi.officeHours')}
-              </Text>
+              <div className='flex gap-1 text-[var(--color-text-secondary)]'>
+                <span className='shrink-0'>{t('pi.officeHoursLabel')}</span>
+                <span className='whitespace-pre-line'>
+                  {t('pi.officeHours')}
+                </span>
+              </div>
             </Space>
           </Card>
         </Col>
@@ -182,7 +192,7 @@ const PiPage: React.FC = () => {
             </Title>
             <Row gutter={[16, 16]}>
               {researchFocus.map((item) => (
-                <Col xs={24} md={8} key={item.title}>
+                <Col xs={24} md={12} key={item.title}>
                   <Card
                     className='h-full border-white/10'
                     style={{ background: 'var(--color-surface-1)' }}

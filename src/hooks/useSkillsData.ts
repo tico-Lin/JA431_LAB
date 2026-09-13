@@ -21,7 +21,7 @@ const CATEGORY_NAME_ZH: Record<string, string> = {
 };
 
 const CATEGORY_DESC_ZH: Record<string, string> = {
-  'research-focus': '高熵參雜與農廢綠色化學',
+  'research-focus': '高熵儲能材料與農廢綠色化學',
   synthesis: '水熱法、電鍍法與共沉澱法',
   'thermal-treatment': '高溫鍛燒與退火修飾',
   characterization:
@@ -32,7 +32,7 @@ const CATEGORY_DESC_ZH: Record<string, string> = {
 };
 
 const SKILL_NAME_ZH: Record<string, string> = {
-  'high-entropy-doping': '高熵參雜',
+  'high-entropy-doping': '高熵材料與摻雜',
   'agri-waste-green-chemistry': '農廢綠色化學',
   hydrothermal: '水熱法',
   electrodeposition: '電鍍法',

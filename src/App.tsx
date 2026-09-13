@@ -83,7 +83,7 @@ const SettingsControls: React.FC<{ mobile?: boolean }> = ({ mobile }) => {
 
 const TopSettingsBar: React.FC = () => {
   return (
-    <div className='fixed top-16 md:top-3 right-22 z-[60]'>
+    <div className='hidden md:block fixed top-3 right-22 z-[60]'>
       <div className='glass-card px-3 py-2'>
         <SettingsControls mobile />
       </div>
@@ -147,15 +147,19 @@ const Navigation: React.FC<{
         }}
         trigger={null}
       >
-        <div className='h-16 flex items-center justify-center px-6 border-b border-white/10'>
-          <Link to='/' className='flex items-center gap-2'>
+        <div className='h-16 flex items-center gap-3 px-4 border-b border-white/10'>
+          <MenuOutlined
+            className='text-[var(--color-text-primary)] text-xl cursor-pointer shrink-0'
+            onClick={() => setCollapsed(!collapsed)}
+          />
+          <Link to='/' className='flex items-center gap-2 min-w-0'>
             <img
               src={`${import.meta.env.BASE_URL}logo.svg`}
               alt={t('appName')}
               className='w-8 h-8'
             />
             {!collapsed && (
-              <span className='text-xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent'>
+              <span className='text-lg font-bold truncate bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent'>
                 {t('appName')}
               </span>
             )}
@@ -220,6 +224,9 @@ const Navigation: React.FC<{
               style={{ background: 'transparent' }}
               onClick={() => setCollapsed(true)}
             />
+            <div className='border-t border-[var(--shell-border)] p-3'>
+              <SettingsControls mobile />
+            </div>
           </div>
         </div>
       )}
@@ -236,7 +243,7 @@ const AppContent: React.FC = () => {
       <Layout>
         <TopSettingsBar />
         <Content
-          className='p-4 md:p-8 !pt-32 md:pt-20'
+          className='p-4 md:p-8 !pt-20 md:pt-20'
           style={{
             background: 'transparent',
             minHeight: '100vh',
