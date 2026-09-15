@@ -137,29 +137,75 @@
   "members": [
     {
       "id": "pi-hsu",
-      "name": "Feng-Hao Hsu",
-      "nameZh": "許峰豪",
-      "nameEn": "Feng-Hao Hsu",
+      "name": "許峰豪",
       "role": "Assistant Professor",
       "email": "hsu0625@pu.edu.tw",
       "landline": "+886-4-2632-8001 ext. 15205",
       "skills": [
-        { "skillId": "high-entropy-doping", "proficiency": "expert" },
-        { "skillId": "agri-waste-green-chemistry", "proficiency": "expert" },
-        { "skillId": "hydrothermal", "proficiency": "expert" },
-        { "skillId": "electrodeposition", "proficiency": "advanced" },
-        { "skillId": "coprecipitation", "proficiency": "advanced" },
-        { "skillId": "calcination-annealing", "proficiency": "expert" },
-        { "skillId": "xrd", "proficiency": "expert" },
-        { "skillId": "sem-eds", "proficiency": "advanced" },
-        { "skillId": "ftir", "proficiency": "advanced" },
-        { "skillId": "raman", "proficiency": "advanced" },
-        { "skillId": "cv", "proficiency": "expert" },
-        { "skillId": "lsv", "proficiency": "expert" },
-        { "skillId": "gcd", "proficiency": "expert" },
-        { "skillId": "eis", "proficiency": "expert" },
-        { "skillId": "sp-50e", "proficiency": "advanced" }
-      ]
+        {
+          "skillId": "high-entropy-doping",
+          "proficiency": "expert"
+        },
+        {
+          "skillId": "agri-waste-green-chemistry",
+          "proficiency": "expert"
+        },
+        {
+          "skillId": "hydrothermal",
+          "proficiency": "expert"
+        },
+        {
+          "skillId": "electrodeposition",
+          "proficiency": "advanced"
+        },
+        {
+          "skillId": "coprecipitation",
+          "proficiency": "advanced"
+        },
+        {
+          "skillId": "calcination-annealing",
+          "proficiency": "expert"
+        },
+        {
+          "skillId": "xrd",
+          "proficiency": "expert"
+        },
+        {
+          "skillId": "sem-eds",
+          "proficiency": "advanced"
+        },
+        {
+          "skillId": "ftir",
+          "proficiency": "advanced"
+        },
+        {
+          "skillId": "raman",
+          "proficiency": "advanced"
+        },
+        {
+          "skillId": "cv",
+          "proficiency": "expert"
+        },
+        {
+          "skillId": "lsv",
+          "proficiency": "expert"
+        },
+        {
+          "skillId": "gcd",
+          "proficiency": "expert"
+        },
+        {
+          "skillId": "eis",
+          "proficiency": "expert"
+        },
+        {
+          "skillId": "sp-50e",
+          "proficiency": "advanced"
+        }
+      ],
+      "localizedNames": {
+        "en": "Feng-Hao Hsu"
+      }
     }
   ]
 }

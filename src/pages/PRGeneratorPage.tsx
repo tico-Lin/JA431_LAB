@@ -47,22 +47,59 @@ const decodeBase64 = (base64: string): string => {
 
 interface MemberFormData {
   name: string;
-  nameZh?: string;
-  nameEn?: string;
+  localizedNamesList?: { lang: string; value: string }[];
   role: string;
-  email?: string;
+  email: string;
+  phoneData?: { country: string; number: string };
+  landlineData?: { area: string; main: string; ext: string };
   github?: string;
 }
 
 const resolveLocalizedName = (
-  member: { name: string; nameZh?: string; nameEn?: string },
+  member: { name: string; localizedNames?: Record<string, string> },
   language: 'en' | 'zh-TW',
 ) => {
-  if (language === 'zh-TW') {
-    return member.nameZh ?? member.nameEn ?? member.name;
+  if (language === 'en' && member.localizedNames?.en) {
+    return member.localizedNames.en;
   }
+  // Default: always show Chinese name
+  return member.name;
+};
 
-  return member.nameEn ?? member.nameZh ?? member.name;
+/** Convert form phoneData to stored format */
+const buildPhoneString = (phoneData?: {
+  country: string;
+  number: string;
+}): string | undefined => {
+  if (!phoneData?.number) return undefined;
+  const country = phoneData.country || '+886';
+  return `${country}-9-${phoneData.number}`;
+};
+
+/** Convert form landlineData to stored format */
+const buildLandlineString = (landlineData?: {
+  area: string;
+  main: string;
+  ext: string;
+}): string | undefined => {
+  if (!landlineData?.main) return undefined;
+  const area = landlineData.area || '04';
+  const ext = landlineData.ext ? `#${landlineData.ext}` : '';
+  return `${area}-${landlineData.main}${ext}`;
+};
+
+/** Convert localizedNamesList array to Record */
+const buildLocalizedNames = (
+  list?: { lang: string; value: string }[],
+): Record<string, string> | undefined => {
+  if (!list || list.length === 0) return undefined;
+  const result: Record<string, string> = {};
+  for (const item of list) {
+    if (item.lang && item.value) {
+      result[item.lang] = item.value;
+    }
+  }
+  return Object.keys(result).length > 0 ? result : undefined;
 };
 
 export const PRGeneratorPage: React.FC = () => {
@@ -217,10 +254,13 @@ export const PRGeneratorPage: React.FC = () => {
             const newMember = {
               id: memberId,
               name: form.getFieldValue('name'),
-              nameZh: form.getFieldValue('nameZh'),
-              nameEn: form.getFieldValue('nameEn'),
+              localizedNames: buildLocalizedNames(
+                form.getFieldValue('localizedNamesList'),
+              ),
               role: form.getFieldValue('role'),
               email: form.getFieldValue('email'),
+              phone: buildPhoneString(form.getFieldValue('phoneData')),
+              landline: buildLandlineString(form.getFieldValue('landlineData')),
               github: form.getFieldValue('github'),
               skills: skills,
             };
@@ -230,10 +270,13 @@ export const PRGeneratorPage: React.FC = () => {
             const updatedMember = {
               ...selectedMember,
               name: form.getFieldValue('name'),
-              nameZh: form.getFieldValue('nameZh'),
-              nameEn: form.getFieldValue('nameEn'),
+              localizedNames: buildLocalizedNames(
+                form.getFieldValue('localizedNamesList'),
+              ),
               role: form.getFieldValue('role'),
               email: form.getFieldValue('email'),
+              phone: buildPhoneString(form.getFieldValue('phoneData')),
+              landline: buildLandlineString(form.getFieldValue('landlineData')),
               github: form.getFieldValue('github'),
               skills: skills,
             };
@@ -380,15 +423,21 @@ export const PRGeneratorPage: React.FC = () => {
     if (!selectedMember) return false;
 
     const nameChanged = currentFormValues.name !== selectedMember.name;
-    const nameZhChanged =
-      (currentFormValues.nameZh || '') !== (selectedMember.nameZh || '');
-    const nameEnChanged =
-      (currentFormValues.nameEn || '') !== (selectedMember.nameEn || '');
+    const localizedNamesChanged =
+      JSON.stringify(
+        buildLocalizedNames(currentFormValues.localizedNamesList) || {},
+      ) !== JSON.stringify(selectedMember.localizedNames || {});
     const roleChanged = currentFormValues.role !== selectedMember.role;
     const emailChanged =
       (currentFormValues.email || '') !== (selectedMember.email || '');
     const githubChanged =
       (currentFormValues.github || '') !== (selectedMember.github || '');
+    const phoneChanged =
+      buildPhoneString(currentFormValues.phoneData) !==
+      (selectedMember.phone || undefined);
+    const landlineChanged =
+      buildLandlineString(currentFormValues.landlineData) !==
+      (selectedMember.landline || undefined);
 
     // Compare skills
     if (currentSkills.length !== selectedMember.skills.length) return true;
@@ -404,11 +453,12 @@ export const PRGeneratorPage: React.FC = () => {
 
     return (
       nameChanged ||
-      nameZhChanged ||
-      nameEnChanged ||
+      localizedNamesChanged ||
       roleChanged ||
       emailChanged ||
       githubChanged ||
+      phoneChanged ||
+      landlineChanged ||
       skillsChanged
     );
   };
@@ -446,19 +496,27 @@ export const PRGeneratorPage: React.FC = () => {
         ? selectedMember.id
         : `member-${Date.now()}`;
 
-    const newMember = {
+    const localizedNames = buildLocalizedNames(formData.localizedNamesList);
+    const phone = buildPhoneString(formData.phoneData);
+    const landline = buildLandlineString(formData.landlineData);
+
+    const newMember: any = {
       id: memberId,
       name: formData.name,
-      nameZh: formData.nameZh,
-      nameEn: formData.nameEn,
+      ...(localizedNames && { localizedNames }),
       role: formData.role,
       email: formData.email,
-      github: formData.github,
+      ...(phone && { phone }),
+      ...(landline && { landline }),
+      ...(formData.github && { github: formData.github }),
       skills: skills,
     };
 
     const action = editMode === 'new' ? t('pr.addNew') : t('pr.update');
-    const displayName = resolveLocalizedName(formData, resolvedLanguage);
+    const displayName = resolveLocalizedName(
+      { name: formData.name, localizedNames },
+      resolvedLanguage,
+    );
     const description =
       editMode === 'new'
         ? t('pr.templateAddsProfile', {
@@ -474,6 +532,12 @@ export const PRGeneratorPage: React.FC = () => {
         ? t('pr.templateAddMemberEntry')
         : t('pr.templateReplaceMemberEntry');
 
+    const localizedNamesDisplay = localizedNames
+      ? Object.entries(localizedNames)
+          .map(([lang, val]) => `- ${lang}: ${val}`)
+          .join('\n')
+      : t('common.emptyValue');
+
     const content = `## ${action} ${t('pr.templateMemberTitle')}: ${displayName}
 
 ### ${t('pr.templateDescriptionHeading')}
@@ -488,8 +552,8 @@ ${JSON.stringify(newMember, null, 2)}
 \`\`\`
 
 ### ${t('pr.localizedNamesHeading')}
-- ${t('pr.chineseNameLabel')}：${formData.nameZh || t('common.emptyValue')}
-- ${t('pr.englishNameLabel')}: ${formData.nameEn || t('common.emptyValue')}
+- ${t('pr.nameLabel')}：${formData.name}
+${localizedNamesDisplay}
 
 ### ${t('pr.templateSkillsSummaryHeading')}
 ${skills
@@ -567,12 +631,52 @@ ${t('pr.templateRemoveEntry', { id: selectedMember.id })}
     setEditMode('edit');
     setSelectedMember(member);
     setSkills(member.skills);
+
+    // Parse phone string back to form data
+    const phoneData = { country: '+886', number: '' };
+    if (member.phone) {
+      const phoneMatch = member.phone.match(/^(\+\d+)-9-(\d{8})$/);
+      if (phoneMatch) {
+        phoneData.country = phoneMatch[1];
+        phoneData.number = phoneMatch[2];
+      }
+    }
+
+    // Parse landline string back to form data
+    const landlineData = { area: '04', main: '26328001', ext: '15231' };
+    if (member.landline) {
+      const landlineMatch = member.landline.match(/^(\d{2})-(\d+)(?:#(\S*))?$/);
+      if (landlineMatch) {
+        landlineData.area = landlineMatch[1];
+        landlineData.main = landlineMatch[2];
+        landlineData.ext = landlineMatch[3] || '';
+      } else {
+        const legacyMatch = member.landline.match(
+          /^\+886-(\d{2})-(\d{4})-(\d{4})(?: ext\.\s*(\S+))?$/i,
+        );
+        if (legacyMatch) {
+          landlineData.area = legacyMatch[1];
+          landlineData.main = `${legacyMatch[2]}${legacyMatch[3]}`;
+          landlineData.ext = legacyMatch[4] || '';
+        }
+      }
+    }
+
+    // Convert localizedNames record to list
+    const localizedNamesList = member.localizedNames
+      ? Object.entries(member.localizedNames).map(([lang, value]) => ({
+          lang,
+          value,
+        }))
+      : [];
+
     form.setFieldsValue({
       name: member.name,
-      nameZh: member.nameZh,
-      nameEn: member.nameEn,
+      localizedNamesList,
       role: member.role,
       email: member.email,
+      phoneData,
+      landlineData,
       github: member.github,
     });
     setHasChanges(false);

@@ -1,0 +1,66 @@
+{
+  "categories": [
+    {
+      "id": "electrochemical",
+      "nameZh": "電化學分析",
+      "nameEn": "Electrochemical Analysis"
+    },
+    {
+      "id": "spectroscopy",
+      "nameZh": "光譜與光學分析",
+      "nameEn": "Spectroscopy"
+    },
+    {
+      "id": "synthesis_prep",
+      "nameZh": "合成與製備",
+      "nameEn": "Synthesis & Preparation"
+    },
+    {
+      "id": "advanced_analysis",
+      "nameZh": "進階表面/結構分析",
+      "nameEn": "Advanced Analysis"
+    }
+  ],
+  "items": [
+    {
+      "id": "ec-cv",
+      "category": "electrochemical",
+      "nameZh": "循環伏安法測試 (CV)",
+      "nameEn": "Cyclic Voltammetry (CV)",
+      "basePrice": 800,
+      "unit": "樣品/條件",
+      "turnaroundDays": 3,
+      "description": "測量電極材料之氧化還原電位與可逆性。",
+      "requiresSampleType": ["electrode_sheet"],
+      "minSamples": 1,
+      "allowCustomParams": true
+    },
+    {
+      "id": "ec-eis",
+      "category": "electrochemical",
+      "nameZh": "電化學阻抗光譜 (EIS)",
+      "nameEn": "Electrochemical Impedance Spectroscopy (EIS)",
+      "basePrice": 1000,
+      "unit": "樣品/條件",
+      "turnaroundDays": 3,
+      "description": "分析電極與電解液介面之電荷轉移電阻與擴散行為。",
+      "requiresSampleType": ["electrode_sheet"],
+      "dependencies": ["ec-cv"],
+      "minSamples": 1,
+      "allowCustomParams": true
+    },
+    {
+      "id": "spec-raman",
+      "category": "spectroscopy",
+      "nameZh": "拉曼光譜分析 (Raman)",
+      "nameEn": "Raman Spectroscopy",
+      "basePrice": 1200,
+      "unit": "樣品/點",
+      "turnaroundDays": 5,
+      "description": "分析碳材料缺陷程度及分子振動模式。",
+      "requiresSampleType": ["powder", "electrode_sheet"],
+      "minSamples": 1,
+      "allowCustomParams": false
+    }
+  ]
+}

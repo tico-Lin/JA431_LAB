@@ -21,7 +21,7 @@ export const MemberList: React.FC<MemberListProps> = ({
 
   return (
     <Card className='glass-card lg:col-span-1'>
-      <h2 className='text-lg font-semibold text-white mb-4'>
+      <h2 className='text-lg font-semibold text-[var(--color-text-primary)] mb-4'>
         {t('pr.memberListTitle')}
       </h2>
       <Button
@@ -39,13 +39,17 @@ export const MemberList: React.FC<MemberListProps> = ({
             className={`p-3 rounded-lg cursor-pointer transition-all ${
               selectedMemberId === member.id
                 ? 'bg-indigo-500/20 border border-indigo-500'
-                : 'bg-white/5 hover:bg-white/10'
+                : 'bg-[var(--color-surface-2)] hover:bg-[var(--color-surface-3)]'
             }`}
             onClick={() => onSelectMember(member)}
           >
-            <h3 className='font-medium text-white'>{member.name}</h3>
-            <p className='text-sm text-gray-400'>{member.role}</p>
-            <p className='text-xs text-gray-500'>
+            <h3 className='font-medium text-[var(--color-text-primary)]'>
+              {member.name}
+            </h3>
+            <p className='text-sm text-[var(--color-text-secondary)]'>
+              {member.role}
+            </p>
+            <p className='text-xs text-[var(--color-text-secondary)]'>
               {t('pr.memberCount', { count: member.skills.length })}
             </p>
           </div>

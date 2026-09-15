@@ -81,11 +81,8 @@ const ROLE_ZH: Record<string, string> = {
 
 function localizeSkillsData(data: SkillsData, language: 'en' | 'zh-TW') {
   const resolveName = (member: LabMember) => {
-    if (language === 'zh-TW') {
-      return member.nameZh ?? member.nameEn ?? member.name;
-    }
-
-    return member.nameEn ?? member.nameZh ?? member.name;
+    if (language === 'zh-TW') return member.name;
+    return member.localizedNames?.en || member.name;
   };
 
   if (language !== 'zh-TW') {

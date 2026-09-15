@@ -25,15 +25,15 @@ export const AddSkillForm: React.FC<AddSkillFormProps> = ({
 
   return (
     <Card className='glass-card !mb-8'>
-      <h2 className='text-lg font-semibold text-white mb-4'>
+      <h2 className='text-lg font-semibold text-[var(--color-text-primary)] mb-4'>
         {t('pr.addSkillCardTitle')}
       </h2>
-      <p className='text-gray-400 text-sm mb-4'>
+      <p className='text-[var(--color-text-secondary)] text-sm mb-4'>
         {t('pr.addSkillCardDescription')}
       </p>
       <div className='grid grid-cols-1 md:grid-cols-3 gap-4'>
         <div>
-          <label className='text-gray-300 text-sm block mb-2'>
+          <label className='text-[var(--color-text-secondary)] text-sm block mb-2'>
             {t('pr.skillName')}
           </label>
           <Input
@@ -43,7 +43,7 @@ export const AddSkillForm: React.FC<AddSkillFormProps> = ({
           />
         </div>
         <div className='md:col-span-2'>
-          <label className='text-gray-300 text-sm block mb-2'>
+          <label className='text-[var(--color-text-secondary)] text-sm block mb-2'>
             {t('pr.belongsToCategories')}
           </label>
           <Checkbox.Group

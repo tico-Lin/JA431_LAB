@@ -145,7 +145,9 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
       title: t('pr.skillNameColumn'),
       dataIndex: 'name',
       key: 'name',
-      render: (name: string) => <span className='text-white'>{name}</span>,
+      render: (name: string) => (
+        <span className='text-[var(--color-text-primary)]'>{name}</span>
+      ),
     },
     {
       title: t('pr.categoriesColumn'),
@@ -253,7 +255,9 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
         const count = skills.filter((s) =>
           s.belongsTo.includes(record.id),
         ).length;
-        return <span className='text-gray-400'>{count}</span>;
+        return (
+          <span className='text-[var(--color-text-secondary)]'>{count}</span>
+        );
       },
     },
     {
@@ -515,13 +519,13 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
   return (
     <>
       <Collapse
-        className='glass-card !bg-white/5'
+        className='glass-card !bg-[var(--color-surface-2)]'
         items={[
           {
             key: 'admin',
             label: (
               <Space>
-                <span className='text-white font-semibold'>
+                <span className='text-[var(--color-text-primary)] font-semibold'>
                   {t('pr.adminTitle')}
                 </span>
                 {pendingChanges.length > 0 && (
@@ -589,7 +593,7 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
                           >
                             {changeTypeLabelMap[item.type]}
                           </Tag>
-                          <span className='text-gray-300'>
+                          <span className='text-[var(--color-text-secondary)]'>
                             {item.description}
                           </span>
                         </List.Item>
@@ -601,7 +605,7 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
                 {/* Skills Section */}
                 <div>
                   <div className='flex justify-between items-center mb-3'>
-                    <h3 className='text-white font-medium'>
+                    <h3 className='text-[var(--color-text-primary)] font-medium'>
                       {t('pr.skillsSection')}
                     </h3>
                     <Button
@@ -633,7 +637,7 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
                 {/* Categories Section */}
                 <div>
                   <div className='flex justify-between items-center mb-3'>
-                    <h3 className='text-white font-medium'>
+                    <h3 className='text-[var(--color-text-primary)] font-medium'>
                       {t('pr.categoriesSection')}
                     </h3>
                     <Button
@@ -668,6 +672,7 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
       <Modal
         title={editingCategory ? t('pr.editCategory') : t('pr.addNewCategory')}
         open={categoryModalOpen}
+        forceRender
         onCancel={() => {
           setCategoryModalOpen(false);
           categoryForm.resetFields();
@@ -705,6 +710,7 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
       <Modal
         title={isAddingSkill ? t('pr.addNewSkill') : t('pr.editSkill')}
         open={skillModalOpen}
+        forceRender
         onCancel={() => {
           setSkillModalOpen(false);
           skillForm.resetFields();

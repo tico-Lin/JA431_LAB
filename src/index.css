@@ -49,7 +49,8 @@
   --glass-border: var(--shell-border);
 }
 
-[data-theme='light'] {
+[data-theme='dynamic-light'],
+[data-theme='pure-light'] {
   color-scheme: light;
 
   --color-bg-primary: #f4f7ff;
@@ -87,18 +88,27 @@
   --glass-border: rgba(99, 102, 241, 0.18);
 }
 
-[data-theme='light'] .text-white,
-[data-theme='light'] .text-white\/90,
-[data-theme='light'] .text-white\/80,
-[data-theme='light'] .text-white\/70,
-[data-theme='light'] .text-white\/60,
-[data-theme='light'] .text-white\/50 {
+[data-theme='dynamic-light'],
+[data-theme='pure-light'] .text-white,
+[data-theme='dynamic-light'],
+[data-theme='pure-light'] .text-white\/90,
+[data-theme='dynamic-light'],
+[data-theme='pure-light'] .text-white\/80,
+[data-theme='dynamic-light'],
+[data-theme='pure-light'] .text-white\/70,
+[data-theme='dynamic-light'],
+[data-theme='pure-light'] .text-white\/60,
+[data-theme='dynamic-light'],
+[data-theme='pure-light'] .text-white\/50 {
   color: var(--color-text-primary) !important;
 }
 
-[data-theme='light'] .text-gray-500,
-[data-theme='light'] .text-gray-400,
-[data-theme='light'] .text-gray-300 {
+[data-theme='dynamic-light'],
+[data-theme='pure-light'] .text-gray-500,
+[data-theme='dynamic-light'],
+[data-theme='pure-light'] .text-gray-400,
+[data-theme='dynamic-light'],
+[data-theme='pure-light'] .text-gray-300 {
   color: var(--color-text-secondary) !important;
 }
 
@@ -112,50 +122,9 @@ body {
     Oxygen,
     Ubuntu,
     sans-serif;
-  background: linear-gradient(
-    135deg,
-    var(--color-bg-primary) 0%,
-    var(--color-bg-secondary) 100%
-  );
+  background: transparent;
   color: var(--color-text-primary);
   min-height: 100vh;
-}
-
-/* Floating orbs animation */
-.orb {
-  position: fixed;
-  border-radius: 50%;
-  filter: blur(80px);
-  opacity: 0.4;
-  pointer-events: none;
-  animation: float 20s ease-in-out infinite;
-}
-
-.orb-1 {
-  width: 400px;
-  height: 400px;
-  background: var(--color-environment);
-  top: -100px;
-  right: -100px;
-  animation-delay: 0s;
-}
-
-.orb-2 {
-  width: 300px;
-  height: 300px;
-  background: var(--color-caregiver);
-  bottom: -50px;
-  left: -50px;
-  animation-delay: -5s;
-}
-
-.orb-3 {
-  width: 250px;
-  height: 250px;
-  background: var(--color-accent);
-  top: 50%;
-  left: 50%;
-  animation-delay: -10s;
 }
 
 @keyframes float {
@@ -327,7 +296,8 @@ body {
   backdrop-filter: blur(12px);
 }
 
-[data-theme='light'] .ant-select-dropdown {
+[data-theme='dynamic-light'],
+[data-theme='pure-light'] .ant-select-dropdown {
   background: rgba(255, 255, 255, 0.96) !important;
 }
 
@@ -581,4 +551,34 @@ body {
 .skill-label {
   text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
   font-family: 'Inter', sans-serif;
+}
+
+/* 強制修正輸入框在不同主題下的底色與邊框 */
+.ant-input,
+.ant-input-number,
+.ant-select-selector {
+  transition:
+    background-color 0.2s,
+    border-color 0.2s;
+}
+
+/* 解決 Chrome Autofill 造成黑字黑框或白底黃框 */
+input:-webkit-autofill,
+input:-webkit-autofill:hover,
+input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--color-text-primary) !important;
+  transition: background-color 5000s ease-in-out 0s;
+}
+
+/* 全站主題切換平滑過渡 */
+*,
+*::before,
+*::after {
+  transition:
+    background-color 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease,
+    fill 0.3s ease,
+    stroke 0.3s ease,
+    box-shadow 0.3s ease;
 }

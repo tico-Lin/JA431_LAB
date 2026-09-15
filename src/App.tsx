@@ -6,7 +6,16 @@ import {
   Link,
   useLocation,
 } from 'react-router-dom';
-import { ConfigProvider, Layout, Menu, Select, Space, theme } from 'antd';
+import {
+  ConfigProvider,
+  Layout,
+  Menu,
+  Select,
+  Space,
+  theme,
+  Result,
+  Button,
+} from 'antd';
 import {
   TeamOutlined,
   SearchOutlined,
@@ -16,6 +25,7 @@ import {
   GlobalOutlined,
   BulbOutlined,
   ReadOutlined,
+  ExperimentOutlined,
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import HomePage from './pages/HomePage';
@@ -23,8 +33,13 @@ import PiPage from './pages/PiPage';
 import OverviewPage from './pages/OverviewPage';
 import GapAnalysisPage from './pages/GapAnalysisPage';
 import PRGeneratorPage from './pages/PRGeneratorPage';
+import VendorPage from './pages/VendorPage';
 import { useThemeMode } from './hooks/useTheme';
 import { useLocale } from './hooks/useLocale';
+import { useRole } from './context/RoleContext';
+import { hasAccess } from './config/roles';
+import { SidebarRoleEntry } from './components/SidebarRoleEntry';
+import { DynamicBackground } from './components/DynamicBackground';
 
 const { Header, Content, Sider } = Layout;
 
@@ -46,12 +61,20 @@ const SettingsControls: React.FC<{ mobile?: boolean }> = ({ mobile }) => {
             label: `${t('controls.themeLabel')}: ${t('controls.system')}`,
           },
           {
-            value: 'light',
-            label: `${t('controls.themeLabel')}: ${t('controls.light')}`,
+            value: 'dynamic-dark',
+            label: `${t('controls.themeLabel')}: ${t('controls.dynamicDark')}`,
           },
           {
-            value: 'dark',
-            label: `${t('controls.themeLabel')}: ${t('controls.dark')}`,
+            value: 'dynamic-light',
+            label: `${t('controls.themeLabel')}: ${t('controls.dynamicLight')}`,
+          },
+          {
+            value: 'pure-dark',
+            label: `${t('controls.themeLabel')}: ${t('controls.pureDark')}`,
+          },
+          {
+            value: 'pure-light',
+            label: `${t('controls.themeLabel')}: ${t('controls.pureLight')}`,
           },
         ]}
         suffixIcon={<BulbOutlined />}
@@ -83,7 +106,7 @@ const SettingsControls: React.FC<{ mobile?: boolean }> = ({ mobile }) => {
 
 const TopSettingsBar: React.FC = () => {
   return (
-    <div className='hidden md:block fixed top-3 right-22 z-[60]'>
+    <div className='hidden md:block fixed top-3 right-10 z-[60]'>
       <div className='glass-card px-3 py-2'>
         <SettingsControls mobile />
       </div>
@@ -97,34 +120,48 @@ const Navigation: React.FC<{
 }> = ({ collapsed, setCollapsed }) => {
   const location = useLocation();
   const { t } = useTranslation();
+  const { role } = useRole();
 
-  const menuItems = [
+  const allMenuItems = [
     {
       key: '/',
       icon: <HomeOutlined />,
       label: <Link to='/'>{t('nav.home')}</Link>,
+      path: '/',
     },
     {
       key: '/pi',
       icon: <ReadOutlined />,
       label: <Link to='/pi'>{t('nav.pi')}</Link>,
+      path: '/pi',
+    },
+    {
+      key: '/services',
+      icon: <ExperimentOutlined />,
+      label: <Link to='/services'>{t('nav.services')}</Link>,
+      path: '/services',
     },
     {
       key: '/overview',
       icon: <TeamOutlined />,
       label: <Link to='/overview'>{t('nav.overview')}</Link>,
+      path: '/overview',
     },
     {
       key: '/gaps',
       icon: <SearchOutlined />,
       label: <Link to='/gaps'>{t('nav.gapAnalysis')}</Link>,
+      path: '/gaps',
     },
     {
       key: '/update',
       icon: <PullRequestOutlined />,
       label: <Link to='/update'>{t('nav.updateData')}</Link>,
+      path: '/update',
     },
   ];
+
+  const menuItems = allMenuItems.filter((item) => hasAccess(role, item.path));
 
   return (
     <>
@@ -133,7 +170,7 @@ const Navigation: React.FC<{
         collapsible
         collapsed={collapsed}
         onCollapse={setCollapsed}
-        className='hidden md:block'
+        className='hidden md:block pt-[64px]'
         style={{
           background: 'var(--shell-bg)',
           backdropFilter: 'blur(12px)',
@@ -147,63 +184,54 @@ const Navigation: React.FC<{
         }}
         trigger={null}
       >
-        <div className='h-16 flex items-center gap-3 px-4 border-b border-white/10'>
-          <MenuOutlined
-            className='text-[var(--color-text-primary)] text-xl cursor-pointer shrink-0'
-            onClick={() => setCollapsed(!collapsed)}
-          />
-          <Link to='/' className='flex items-center gap-2 min-w-0'>
-            <img
-              src={`${import.meta.env.BASE_URL}logo.svg`}
-              alt={t('appName')}
-              className='w-8 h-8'
+        <div className='flex flex-col h-full justify-between'>
+          <div>
+            <Menu
+              mode='inline'
+              selectedKeys={[location.pathname]}
+              items={menuItems}
+              style={{
+                background: 'transparent',
+                borderRight: 'none',
+              }}
             />
-            {!collapsed && (
-              <span className='text-lg font-bold truncate bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent'>
-                {t('appName')}
-              </span>
-            )}
-          </Link>
+          </div>
+          <SidebarRoleEntry collapsed={collapsed} />
         </div>
-        <Menu
-          mode='inline'
-          selectedKeys={[location.pathname]}
-          items={menuItems}
-          style={{
-            background: 'transparent',
-            borderRight: 'none',
-          }}
-        />
       </Sider>
 
-      {/* Mobile Header */}
       <Header
-        className='md:hidden fixed top-0 left-0 right-0 z-50'
+        className='fixed top-0 left-0 right-0 z-50'
         style={{
           background: 'var(--shell-bg-mobile)',
           backdropFilter: 'blur(12px)',
           borderBottom: '1px solid var(--shell-border)',
-          padding: '0 16px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between',
+          padding: 0,
+          height: '64px',
+          lineHeight: '64px',
         }}
       >
-        <Link to='/' className='flex items-center gap-2'>
-          <img
-            src={`${import.meta.env.BASE_URL}logo.svg`}
-            alt={t('appName')}
-            className='w-8 h-8'
-          />
-          <span className='text-xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent'>
-            {t('appName')}
-          </span>
-        </Link>
-        <div className='flex items-center gap-4'>
-          <MenuOutlined
-            className='text-[var(--color-text-primary)] text-xl cursor-pointer'
+        <div className='flex items-center justify-between md:justify-start px-4 w-full h-full md:gap-4'>
+          <Link
+            to='/'
+            className='flex items-center gap-2 min-w-0 order-1 md:order-2'
+          >
+            <img
+              src={`${import.meta.env.BASE_URL}logo.svg`}
+              alt={t('appName')}
+              className='w-8 h-8 shrink-0'
+            />
+            <span className='text-xl font-bold bg-gradient-to-r from-indigo-400 to-purple-400 bg-clip-text text-transparent truncate'>
+              {t('appName')}
+            </span>
+          </Link>
+          <button
+            className='p-1.5 rounded-lg text-[var(--color-text-primary)] hover:bg-white/10 transition-colors cursor-pointer shrink-0 flex items-center justify-center order-2 md:order-1'
             onClick={() => setCollapsed(!collapsed)}
-          />
+            title={collapsed ? '展開側邊欄' : '收合側邊欄'}
+          >
+            <MenuOutlined className='text-xl' />
+          </button>
         </div>
       </Header>
 
@@ -234,6 +262,33 @@ const Navigation: React.FC<{
   );
 };
 
+const ProtectedRoute: React.FC<{ path: string; element: React.ReactNode }> = ({
+  path,
+  element,
+}) => {
+  const { role } = useRole();
+  const { t } = useTranslation();
+
+  if (!hasAccess(role, path)) {
+    return (
+      <Result
+        status='403'
+        title='403'
+        subTitle={t(
+          'nav.noAccess',
+          'Sorry, you do not have permission to access this page.',
+        )}
+        extra={
+          <Link to='/'>
+            <Button type='primary'>{t('nav.backHome', 'Back to Home')}</Button>
+          </Link>
+        }
+      />
+    );
+  }
+  return <>{element}</>;
+};
+
 const AppContent: React.FC = () => {
   const [collapsed, setCollapsed] = useState(true);
 
@@ -251,37 +306,63 @@ const AppContent: React.FC = () => {
         >
           <div className='max-w-7xl mx-auto'>
             <Routes>
-              <Route path='/' element={<HomePage />} />
-              <Route path='/pi' element={<PiPage />} />
-              <Route path='/overview' element={<OverviewPage />} />
-              <Route path='/gaps' element={<GapAnalysisPage />} />
-              <Route path='/update' element={<PRGeneratorPage />} />
+              <Route
+                path='/'
+                element={<ProtectedRoute path='/' element={<HomePage />} />}
+              />
+              <Route
+                path='/services'
+                element={
+                  <ProtectedRoute path='/services' element={<VendorPage />} />
+                }
+              />
+              <Route
+                path='/pi'
+                element={<ProtectedRoute path='/pi' element={<PiPage />} />}
+              />
+              <Route
+                path='/overview'
+                element={
+                  <ProtectedRoute path='/overview' element={<OverviewPage />} />
+                }
+              />
+              <Route
+                path='/gaps'
+                element={
+                  <ProtectedRoute path='/gaps' element={<GapAnalysisPage />} />
+                }
+              />
+              <Route
+                path='/update'
+                element={
+                  <ProtectedRoute
+                    path='/update'
+                    element={<PRGeneratorPage />}
+                  />
+                }
+              />
             </Routes>
           </div>
         </Content>
       </Layout>
 
-      {/* Background Orbs */}
-      <div className='orb orb-1' />
-      <div className='orb orb-2' />
-      <div className='orb orb-3' />
+      <DynamicBackground />
     </Layout>
   );
 };
 
 const App: React.FC = () => {
-  const { resolvedTheme } = useThemeMode();
+  const { isDark } = useThemeMode();
 
   const themeConfig = useMemo(() => {
     return {
-      algorithm:
-        resolvedTheme === 'dark' ? theme.darkAlgorithm : theme.defaultAlgorithm,
+      algorithm: isDark ? theme.darkAlgorithm : theme.defaultAlgorithm,
       token: {
         colorPrimary: 'var(--color-accent)',
-        colorBgContainer: 'var(--color-surface-1)',
+        colorBgContainer: isDark ? '#141a24' : '#ffffff',
         colorBgElevated: 'var(--color-bg-card)',
-        colorBorder: 'var(--shell-border)',
-        colorText: 'var(--color-text-primary)',
+        colorBorder: isDark ? '#2d3748' : '#d9d9d9',
+        colorText: isDark ? '#f3f4f6' : '#1f2937',
         colorTextSecondary: 'var(--color-text-secondary)',
         borderRadius: 12,
       },
@@ -309,7 +390,7 @@ const App: React.FC = () => {
         },
       },
     };
-  }, [resolvedTheme]);
+  }, [isDark]);
 
   return (
     <ConfigProvider theme={themeConfig}>

@@ -11,7 +11,12 @@ import {
   Tooltip,
   Space,
 } from 'antd';
-import { GithubOutlined, DeleteOutlined } from '@ant-design/icons';
+import {
+  GithubOutlined,
+  DeleteOutlined,
+  PlusOutlined,
+  MinusCircleOutlined,
+} from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import type {
   LabMember,
@@ -23,6 +28,15 @@ import type {
 import { PROFICIENCY_LABEL_KEYS } from '../../types/types';
 
 const { Option } = Select;
+
+const LANGUAGE_OPTIONS = [
+  { value: 'en', labelKey: 'english' },
+  { value: 'ja', labelKey: 'japanese' },
+  { value: 'ko', labelKey: 'korean' },
+  { value: 'de', labelKey: 'german' },
+  { value: 'fr', labelKey: 'french' },
+  { value: 'es', labelKey: 'spanish' },
+];
 
 interface MemberFormProps {
   form: ReturnType<typeof Form.useForm>[0];
@@ -54,9 +68,6 @@ export const MemberForm: React.FC<MemberFormProps> = ({
   onRemoveMember,
 }) => {
   const { t } = useTranslation();
-  const [nameLanguage, setNameLanguage] = React.useState<'zh-TW' | 'en'>(
-    'zh-TW',
-  );
 
   const addSkill = (skillId: string, proficiency: ProficiencyLevel) => {
     const exists = skills.some((s) => s.skillId === skillId);
@@ -80,7 +91,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
 
   return (
     <Card className='glass-card lg:col-span-2'>
-      <h2 className='text-lg font-semibold text-white mb-4'>
+      <h2 className='text-lg font-semibold text-[var(--color-text-primary)] mb-4'>
         {editMode === 'new'
           ? t('pr.formNewMember')
           : t('pr.formEditMember', { name: selectedMember?.name || '' })}
@@ -93,59 +104,19 @@ export const MemberForm: React.FC<MemberFormProps> = ({
         onValuesChange={onFormValuesChange}
       >
         <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-          <div className='md:col-span-2'>
-            <Space align='center' size={8} className='mb-2'>
-              <span className='text-gray-300'>{t('pr.name')}</span>
-              <Select
-                size='small'
-                value={nameLanguage}
-                onChange={(value) => setNameLanguage(value)}
-                options={[
-                  { value: 'zh-TW', label: t('controls.traditionalChinese') },
-                  { value: 'en', label: t('controls.english') },
-                ]}
-                className='min-w-[120px]'
-              />
-            </Space>
-            <Form.Item
-              name='name'
-              rules={[{ required: true, message: t('pr.pleaseEnterName') }]}
-              className='mb-2'
-            >
-              <Input
-                placeholder={
-                  nameLanguage === 'zh-TW'
-                    ? t('pr.form.namePlaceholderZh')
-                    : t('pr.form.namePlaceholderEn')
-                }
-              />
-            </Form.Item>
-            <div className='grid grid-cols-1 md:grid-cols-2 gap-4'>
-              <Form.Item
-                name='nameZh'
-                label={
-                  <span className='text-gray-300'>
-                    {t('pr.form.nameZhLabel')}
-                  </span>
-                }
-              >
-                <Input placeholder={t('pr.form.namePlaceholderZh')} />
-              </Form.Item>
-              <Form.Item
-                name='nameEn'
-                label={
-                  <span className='text-gray-300'>
-                    {t('pr.form.nameEnLabel')}
-                  </span>
-                }
-              >
-                <Input placeholder={t('pr.form.namePlaceholderEn')} />
-              </Form.Item>
-            </div>
-          </div>
+          {/* Primary name (中文名字) - required */}
+          <Form.Item
+            name='name'
+            label={t('pr.nameLabel')}
+            rules={[{ required: true, message: t('pr.pleaseEnterName') }]}
+          >
+            <Input placeholder={t('pr.namePlaceholder')} />
+          </Form.Item>
+
+          {/* Role - required */}
           <Form.Item
             name='role'
-            label={<span className='text-gray-300'>{t('pr.role')}</span>}
+            label={t('pr.role')}
             rules={[{ required: true, message: t('pr.pleaseEnterRole') }]}
           >
             <AutoComplete
@@ -158,29 +129,226 @@ export const MemberForm: React.FC<MemberFormProps> = ({
               }
             />
           </Form.Item>
+
+          {/* Email - required */}
           <Form.Item
             name='email'
-            label={<span className='text-gray-300'>{t('pr.email')}</span>}
+            label={t('pr.email')}
+            rules={[
+              { required: true, message: t('pr.pleaseEnterEmail') },
+              { type: 'email', message: t('pr.invalidEmail') },
+            ]}
           >
             <Input placeholder={t('pr.emailPlaceholder')} />
           </Form.Item>
-          <Form.Item
-            name='github'
-            label={
-              <span className='text-gray-300'>{t('pr.githubUsername')}</span>
-            }
-          >
+
+          {/* GitHub */}
+          <Form.Item name='github' label={t('pr.githubUsername')}>
             <Input
               prefix={<GithubOutlined />}
               placeholder={t('pr.githubPlaceholder')}
             />
           </Form.Item>
+
+          {/* Mobile phone: [+country]-9-[8 digits] */}
+          <Form.Item label={t('pr.phoneLabel')} className='!mb-4'>
+            <Space.Compact style={{ width: '100%' }}>
+              <Form.Item
+                name={['phoneData', 'country']}
+                noStyle
+                initialValue='+886'
+                rules={[
+                  {
+                    pattern: /^\+\d{1,3}$/,
+                    message: t('pr.phoneCountryInvalid'),
+                  },
+                ]}
+              >
+                <Input
+                  style={{
+                    width: '25%',
+                    minWidth: '70px',
+                    textAlign: 'center',
+                  }}
+                  maxLength={4}
+                />
+              </Form.Item>
+              <Input
+                style={{
+                  width: '15%',
+                  borderLeft: 0,
+                  borderRight: 0,
+                  pointerEvents: 'none',
+                  textAlign: 'center',
+                  padding: '4px 0',
+                }}
+                disabled
+                defaultValue='-9-'
+              />
+              <Form.Item
+                name={['phoneData', 'number']}
+                noStyle
+                rules={[
+                  { pattern: /^\d{8}$/, message: t('pr.phoneMustBe8Digits') },
+                ]}
+              >
+                <Input
+                  style={{ width: '60%' }}
+                  placeholder='12345678'
+                  maxLength={8}
+                  inputMode='numeric'
+                />
+              </Form.Item>
+            </Space.Compact>
+          </Form.Item>
+
+          {/* Landline: [area 2 digits]-[main 8 digits] # [ext] */}
+          <Form.Item label={t('pr.landlineLabel')} className='!mb-4'>
+            <Space.Compact style={{ width: '100%' }}>
+              <Form.Item
+                name={['landlineData', 'area']}
+                noStyle
+                initialValue='04'
+                rules={[
+                  { pattern: /^\d{2}$/, message: t('pr.landlineAreaInvalid') },
+                ]}
+              >
+                <Input
+                  style={{
+                    width: '15%',
+                    minWidth: '45px',
+                    textAlign: 'center',
+                  }}
+                  maxLength={2}
+                  inputMode='numeric'
+                />
+              </Form.Item>
+              <Input
+                style={{
+                  width: '5%',
+                  borderLeft: 0,
+                  borderRight: 0,
+                  pointerEvents: 'none',
+                  textAlign: 'center',
+                  padding: '4px 0',
+                }}
+                disabled
+                defaultValue='-'
+              />
+              <Form.Item
+                name={['landlineData', 'main']}
+                noStyle
+                initialValue='26328001'
+                rules={[
+                  { pattern: /^\d{8}$/, message: t('pr.landlineMainInvalid') },
+                ]}
+              >
+                <Input
+                  style={{
+                    width: '30%',
+                    minWidth: '80px',
+                    textAlign: 'center',
+                  }}
+                  maxLength={8}
+                  inputMode='numeric'
+                />
+              </Form.Item>
+              <Input
+                style={{
+                  width: '15%',
+                  borderLeft: 0,
+                  borderRight: 0,
+                  pointerEvents: 'none',
+                  textAlign: 'center',
+                  padding: '4px 0',
+                  fontSize: '12px',
+                }}
+                disabled
+                defaultValue={t('pr.landlineExt')}
+              />
+              <Form.Item
+                name={['landlineData', 'ext']}
+                noStyle
+                initialValue='15231'
+              >
+                <Input
+                  style={{
+                    width: '35%',
+                    minWidth: '55px',
+                    textAlign: 'center',
+                  }}
+                />
+              </Form.Item>
+            </Space.Compact>
+          </Form.Item>
         </div>
+
+        {/* Multi-language names (extensible) */}
+        <Divider style={{ borderColor: 'var(--shell-border)' }} plain>
+          {t('pr.localizedNamesHeading')}
+        </Divider>
+        <Form.List name='localizedNamesList'>
+          {(fields, { add, remove }) => (
+            <>
+              {fields.map(({ key, name, ...restField }) => (
+                <div key={key} className='flex items-start gap-2 mb-2'>
+                  <Form.Item
+                    {...restField}
+                    name={[name, 'lang']}
+                    noStyle
+                    rules={[
+                      { required: true, message: t('pr.selectLanguage') },
+                    ]}
+                  >
+                    <Select
+                      placeholder={t('pr.selectLanguage')}
+                      style={{ width: 120 }}
+                    >
+                      {LANGUAGE_OPTIONS.map((opt) => (
+                        <Option key={opt.value} value={opt.value}>
+                          {t(`pr.languages.${opt.labelKey}`)}
+                        </Option>
+                      ))}
+                    </Select>
+                  </Form.Item>
+                  <Form.Item
+                    {...restField}
+                    name={[name, 'value']}
+                    noStyle
+                    rules={[
+                      { required: true, message: t('pr.enterLocalizedName') },
+                    ]}
+                  >
+                    <Input
+                      placeholder={t('pr.localizedNamePlaceholder')}
+                      style={{ flex: 1 }}
+                    />
+                  </Form.Item>
+                  <MinusCircleOutlined
+                    className='text-red-400 hover:text-red-300 cursor-pointer mt-2'
+                    onClick={() => remove(name)}
+                  />
+                </div>
+              ))}
+              <Button
+                type='dashed'
+                onClick={() => add()}
+                block
+                icon={<PlusOutlined />}
+                className='!mb-4'
+              >
+                {t('pr.addLocalizedName')}
+              </Button>
+            </>
+          )}
+        </Form.List>
 
         <Divider style={{ borderColor: 'var(--shell-border)' }} />
 
         {/* Skill Selection */}
-        <h3 className='text-white font-medium mb-4'>{t('pr.skillsHint')}</h3>
+        <h3 className='text-[var(--color-text-primary)] font-medium mb-4'>
+          {t('pr.skillsHint')}
+        </h3>
 
         {/* Group skills by category */}
         {categories.map((category) => {
@@ -212,7 +380,7 @@ export const MemberForm: React.FC<MemberFormProps> = ({
                           className={`cursor-pointer transition-all border ${
                             isSelected
                               ? ''
-                              : 'bg-white/5 text-gray-400 border-gray-700 hover:text-gray-300 hover:border-gray-600'
+                              : 'bg-[var(--color-surface-2)] text-[var(--color-text-secondary)] border-[var(--shell-border)] hover:text-[var(--color-text-primary)] hover:border-[var(--color-accent)]'
                           }`}
                           style={
                             isSelected
@@ -265,8 +433,8 @@ export const MemberForm: React.FC<MemberFormProps> = ({
 
         {/* Selected Skills Summary */}
         {skills.length > 0 && (
-          <div className='mb-4 p-4 rounded-lg bg-white/5'>
-            <h4 className='text-gray-300 text-sm mb-2'>
+          <div className='mb-4 p-4 rounded-lg bg-[var(--color-surface-2)]'>
+            <h4 className='text-[var(--color-text-primary)] text-sm mb-2'>
               {t('pr.selectedSkills', { count: skills.length })}
             </h4>
           </div>

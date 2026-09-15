@@ -17,9 +17,10 @@ import {
   ReadOutlined,
   SafetyOutlined,
   ThunderboltOutlined,
-  BuildOutlined,
   SolutionOutlined,
   RadarChartOutlined,
+  AppstoreOutlined,
+  EnvironmentOutlined,
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 
@@ -45,11 +46,11 @@ interface PiOutputItem {
 }
 
 const iconMap: Record<string, React.ReactNode> = {
-  highEntropyMaterials: <SafetyOutlined />,
+  highEntropyMaterials: <AppstoreOutlined />,
   highEntropyDoping: <SafetyOutlined />,
   aluminumIonBatteries: <ThunderboltOutlined />,
   synchrotronAnalysis: <RadarChartOutlined />,
-  agriWasteGreenChemistry: <BuildOutlined />,
+  agriWasteGreenChemistry: <EnvironmentOutlined />,
   energyMaterialsApplications: <ThunderboltOutlined />,
 };
 
@@ -81,14 +82,10 @@ const PiPage: React.FC = () => {
       <section
         className='relative overflow-hidden rounded-3xl border border-white/10 p-8 md:p-12 shadow-2xl'
         style={{
-          background:
-            'linear-gradient(135deg, var(--color-bg-primary), var(--color-bg-secondary))',
+          background: 'transparent',
         }}
       >
-        <div className='absolute inset-0 opacity-70'>
-          <div className='orb orb-1' style={{ top: '8%', left: '5%' }} />
-          <div className='orb orb-2' style={{ top: '50%', right: '8%' }} />
-        </div>
+        <div className='absolute inset-0 opacity-70'></div>
         <div className='relative z-10 max-w-4xl'>
           <Tag color='blue' className='mb-8 !border-0 !px-3 !py-1'>
             {t('pi.profileTag')}
@@ -157,7 +154,7 @@ const PiPage: React.FC = () => {
               {t('pi.profileBio')}
             </Paragraph>
             <Divider />
-            <Space direction='vertical' size={12}>
+            <Space orientation='vertical' size={12}>
               <a
                 href={makeTelHref(t('pi.phone'))}
                 className='text-[var(--color-text-secondary)] hover:text-cyan-300 transition-colors'

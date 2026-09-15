@@ -44,14 +44,13 @@ export interface MemberSkill {
 // Lab member
 export interface LabMember {
   id: string;
-  name: string;
-  nameZh?: string;
-  nameEn?: string;
+  name: string; // Primary name, required
+  localizedNames?: Record<string, string>; // e.g. { en: 'Feng-Hao Hsu', ja: '許峰豪' }
   avatar?: string;
   role: string;
-  email?: string;
-  phone?: string;
-  landline?: string;
+  email: string;
+  phone?: string; // Stored as "+886-9-12345678"
+  landline?: string; // Stored as "04-26328001#15231"
   github?: string;
   skills: MemberSkill[];
 }

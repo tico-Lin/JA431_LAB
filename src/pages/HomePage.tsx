@@ -24,9 +24,11 @@ import {
   DatabaseOutlined,
   RadarChartOutlined,
   ThunderboltOutlined,
+  ReadOutlined,
 } from '@ant-design/icons';
 import { useTranslation } from 'react-i18next';
 import { useLocale } from '../hooks/useLocale';
+import { useRole } from '../context/RoleContext';
 
 const { Title, Paragraph, Text } = Typography;
 
@@ -103,12 +105,44 @@ const iconMap: Record<string, React.ReactNode> = {
   DatabaseOutlined: <DatabaseOutlined />,
   RadarChartOutlined: <RadarChartOutlined />,
   ThunderboltOutlined: <ThunderboltOutlined />,
+  ReadOutlined: <ReadOutlined />,
 };
 
 const HomePage: React.FC = () => {
   const { t } = useTranslation();
   const { resolvedLanguage } = useLocale();
+  const { role } = useRole();
   const [config, setConfig] = useState<HomeConfig | null>(null);
+
+  const getSecondaryButtonProps = () => {
+    switch (role) {
+      case 'guest':
+        return {
+          text: t('home.goToDeptWebsite'),
+          icon: <GlobalOutlined />,
+          to: 'https://chem.pu.edu.tw/p/403-1108-30.php?Lang=zh-tw',
+          isExternal: true,
+        };
+      case 'vendor':
+        return {
+          text: t('home.commissionTesting'),
+          icon: <ExperimentOutlined />,
+          to: '/services',
+          isExternal: false,
+        };
+      case 'member':
+      case 'tester':
+      default:
+        return {
+          text: t('home.viewResearchCapabilities'),
+          icon: <GlobalOutlined />,
+          to: '/overview',
+          isExternal: false,
+        };
+    }
+  };
+
+  const secondaryBtn = getSecondaryButtonProps();
   const [stats, setStats] = useState<{
     members: number;
     skills: number;
@@ -170,14 +204,10 @@ const HomePage: React.FC = () => {
       <div
         className='relative overflow-hidden'
         style={{
-          background:
-            'linear-gradient(135deg, var(--color-bg-primary) 0%, var(--color-bg-secondary) 100%)',
+          background: 'transparent',
         }}
       >
-        <div className='absolute inset-0'>
-          <div className='orb orb-1' style={{ top: '10%', left: '10%' }} />
-          <div className='orb orb-2' style={{ top: '60%', right: '15%' }} />
-        </div>
+        <div className='absolute inset-0'></div>
         <div className='container mx-auto px-4 py-20 md:py-32 relative z-10'>
           <div className='text-center max-w-4xl mx-auto'>
             <Title
@@ -217,17 +247,35 @@ const HomePage: React.FC = () => {
                   {t('home.visitPiProfile')}
                 </Button>
               </Link>
-              <Link to='/overview'>
-                <Button
-                  size='large'
-                  icon={<GlobalOutlined />}
-                  ghost
-                  className='!border-[var(--shell-border)] hover:!bg-[var(--color-surface-1)]'
-                  style={{ color: 'var(--color-text-primary)' }}
+              {secondaryBtn.isExternal ? (
+                <a
+                  href={secondaryBtn.to}
+                  target='_blank'
+                  rel='noopener noreferrer'
                 >
-                  {t('home.viewResearchCapabilities')}
-                </Button>
-              </Link>
+                  <Button
+                    size='large'
+                    icon={secondaryBtn.icon}
+                    ghost
+                    className='!border-[var(--shell-border)] hover:!bg-[var(--color-surface-1)]'
+                    style={{ color: 'var(--color-text-primary)' }}
+                  >
+                    {secondaryBtn.text}
+                  </Button>
+                </a>
+              ) : (
+                <Link to={secondaryBtn.to}>
+                  <Button
+                    size='large'
+                    icon={secondaryBtn.icon}
+                    ghost
+                    className='!border-[var(--shell-border)] hover:!bg-[var(--color-surface-1)]'
+                    style={{ color: 'var(--color-text-primary)' }}
+                  >
+                    {secondaryBtn.text}
+                  </Button>
+                </Link>
+              )}
             </Space>
           </div>
         </div>
@@ -252,9 +300,11 @@ const HomePage: React.FC = () => {
                     </span>
                   }
                   value={stats.members}
-                  valueStyle={{
-                    color: 'var(--color-stat-primary)',
-                    fontSize: '2.5rem',
+                  styles={{
+                    content: {
+                      color: 'var(--color-stat-primary)',
+                      fontSize: '2.5rem',
+                    },
                   }}
                   prefix={<TeamOutlined />}
                 />
@@ -267,9 +317,11 @@ const HomePage: React.FC = () => {
                     </span>
                   }
                   value={stats.skills}
-                  valueStyle={{
-                    color: 'var(--color-stat-secondary)',
-                    fontSize: '2.5rem',
+                  styles={{
+                    content: {
+                      color: 'var(--color-stat-secondary)',
+                      fontSize: '2.5rem',
+                    },
                   }}
                   prefix={<RocketOutlined />}
                 />
@@ -282,9 +334,11 @@ const HomePage: React.FC = () => {
                     </span>
                   }
                   value={stats.categories}
-                  valueStyle={{
-                    color: 'var(--color-stat-tertiary)',
-                    fontSize: '2.5rem',
+                  styles={{
+                    content: {
+                      color: 'var(--color-stat-tertiary)',
+                      fontSize: '2.5rem',
+                    },
                   }}
                   prefix={<SearchOutlined />}
                 />
@@ -299,9 +353,11 @@ const HomePage: React.FC = () => {
                     }
                     value={stat.value}
                     suffix={stat.suffix}
-                    valueStyle={{
-                      color: 'var(--color-stat-primary)',
-                      fontSize: '2.5rem',
+                    styles={{
+                      content: {
+                        color: 'var(--color-stat-primary)',
+                        fontSize: '2.5rem',
+                      },
                     }}
                   />
                 </Col>
@@ -430,7 +486,7 @@ const HomePage: React.FC = () => {
             <Col xs={24} sm={12} lg={6} key={index}>
               <Card
                 className='research-focus-card backdrop-blur-md border-white/10 h-full'
-                bordered={false}
+                variant='borderless'
                 style={{
                   background: 'var(--color-surface-1)',
                 }}
@@ -519,7 +575,7 @@ const HomePage: React.FC = () => {
               <Link to={link.link}>
                 <Card
                   className='backdrop-blur-md border-white/10 h-full hover:shadow-xl transition-all duration-300 hover:scale-105 cursor-pointer'
-                  bordered={false}
+                  variant='borderless'
                   style={{
                     background: 'var(--color-surface-1)',
                     borderRadius: '16px',
@@ -584,7 +640,7 @@ const HomePage: React.FC = () => {
             className='!mt-4 !mb-0'
             style={{ color: 'var(--color-text-muted)' }}
           >
-            © {new Date().getFullYear()} {config.lab.name}. All rights{' '}
+            © {new Date().getFullYear()} {config.lab.name}.{' '}
             {t('home.rightsReserved')}
           </Paragraph>
         </div>

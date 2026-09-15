@@ -1,12 +1,87 @@
 import React from 'react';
 import { Card, Tag, Avatar, Tooltip, Flex } from 'antd';
-import {
-  UserOutlined,
-  GithubOutlined,
-  MailOutlined,
-  PhoneOutlined,
-  HomeOutlined,
-} from '@ant-design/icons';
+import { UserOutlined, GithubOutlined } from '@ant-design/icons';
+
+// Custom SVG icons for contact — only shown when member has the data
+const EmailSvg: React.FC<{ className?: string }> = ({ className }) => (
+  <svg
+    viewBox='0 0 24 24'
+    width='16'
+    height='16'
+    fill='none'
+    stroke='currentColor'
+    strokeWidth='2'
+    strokeLinecap='round'
+    strokeLinejoin='round'
+    className={className}
+  >
+    <rect x='2' y='4' width='20' height='16' rx='2' />
+    <path d='M22 4L12 13 2 4' />
+  </svg>
+);
+
+const MobileSvg: React.FC<{ className?: string }> = ({ className }) => (
+  <svg
+    viewBox='0 0 24 24'
+    width='16'
+    height='16'
+    fill='none'
+    stroke='currentColor'
+    strokeWidth='2'
+    strokeLinecap='round'
+    strokeLinejoin='round'
+    className={className}
+  >
+    <rect x='5' y='2' width='14' height='20' rx='2' ry='2' />
+    <line x1='12' y1='18' x2='12.01' y2='18' />
+  </svg>
+);
+
+const LandlineSvg: React.FC<{ className?: string }> = ({ className }) => (
+  <svg
+    viewBox='0 0 24 24'
+    width='16'
+    height='16'
+    fill='none'
+    stroke='currentColor'
+    strokeWidth='2'
+    strokeLinecap='round'
+    strokeLinejoin='round'
+    className={className}
+  >
+    <path d='M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.362 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.338 1.85.573 2.81.7A2 2 0 0122 16.92z' />
+  </svg>
+);
+
+/** Convert landline stored format to display and tel: href */
+const formatLandline = (
+  landline: string,
+): { display: string; href: string } => {
+  // Stored format: "04-26328001#15231"
+  const match = landline.match(/^(?:\+886-?)?(\d{2})-?(\d{8})(?:#(\S*))?$/);
+  if (match) {
+    const [, area, main, ext] = match;
+    const display = ext
+      ? `+886-${area}-${main} 轉 ${ext}`
+      : `+886-${area}-${main}`;
+    const telDigits = ext ? `+886${area}${main},${ext}` : `+886${area}${main}`;
+    return { display, href: `tel:${telDigits}` };
+  }
+  const legacyMatch = landline.match(
+    /^\+886-(\d{2})-(\d{4})-(\d{4})(?: ext\.\s*(\S+))?$/i,
+  );
+  if (legacyMatch) {
+    const [, area, first, second, ext] = legacyMatch;
+    const main = `${first}${second}`;
+    const display = ext
+      ? `+886-${area}-${main} 轉 ${ext}`
+      : `+886-${area}-${main}`;
+    const telDigits = ext ? `+886${area}${main},${ext}` : `+886${area}${main}`;
+    return { display, href: `tel:${telDigits}` };
+  }
+  // Fallback for other stored formats
+  return { display: landline, href: `tel:${landline.replace(/[^\d+]/g, '')}` };
+};
 import { useTranslation } from 'react-i18next';
 import type { LabMember, SkillsData, MemberSkill } from '../types/types';
 import { PROFICIENCY_COLORS, PROFICIENCY_LABEL_KEYS } from '../types/types';
@@ -124,7 +199,6 @@ export const MemberCard: React.FC<MemberCardProps> = ({
   const hasHiddenSkills = Object.values(skillsByCategory).some(
     (skills) => skills.length > INITIAL_VISIBLE_COUNT,
   );
-  const makeTelHref = (value: string) => `tel:${value.replace(/[^\d+]/g, '')}`;
 
   return (
     <Card
@@ -157,34 +231,38 @@ export const MemberCard: React.FC<MemberCardProps> = ({
                 <a
                   href={`mailto:${member.email}`}
                   onClick={(e) => e.stopPropagation()}
-                  className='text-gray-400 hover:text-white transition-colors'
+                  className='text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors'
                 >
-                  <MailOutlined />
+                  <EmailSvg />
                 </a>
               </Tooltip>
             )}
             {member.phone && (
               <Tooltip title={member.phone}>
                 <a
-                  href={makeTelHref(member.phone)}
+                  href={`tel:${member.phone.replace(/[^\d+]/g, '')}`}
                   onClick={(e) => e.stopPropagation()}
-                  className='text-gray-400 hover:text-white transition-colors'
+                  className='text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors'
                 >
-                  <PhoneOutlined />
+                  <MobileSvg />
                 </a>
               </Tooltip>
             )}
-            {member.landline && (
-              <Tooltip title={member.landline}>
-                <a
-                  href={makeTelHref(member.landline)}
-                  onClick={(e) => e.stopPropagation()}
-                  className='text-gray-400 hover:text-white transition-colors'
-                >
-                  <HomeOutlined />
-                </a>
-              </Tooltip>
-            )}
+            {member.landline &&
+              (() => {
+                const { display, href } = formatLandline(member.landline);
+                return (
+                  <Tooltip title={display}>
+                    <a
+                      href={href}
+                      onClick={(e) => e.stopPropagation()}
+                      className='text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors'
+                    >
+                      <LandlineSvg />
+                    </a>
+                  </Tooltip>
+                );
+              })()}
             {member.github && (
               <Tooltip title={`@${member.github}`}>
                 <a
@@ -192,7 +270,7 @@ export const MemberCard: React.FC<MemberCardProps> = ({
                   target='_blank'
                   rel='noopener noreferrer'
                   onClick={(e) => e.stopPropagation()}
-                  className='text-gray-400 hover:text-white transition-colors'
+                  className='text-[var(--color-text-secondary)] hover:text-[var(--color-text-primary)] transition-colors'
                 >
                   <GithubOutlined />
                 </a>

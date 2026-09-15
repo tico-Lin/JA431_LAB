@@ -6,20 +6,37 @@ import './i18n';
 import App from './App.tsx';
 import { ThemeProvider } from './hooks/useTheme';
 import { LocaleProvider } from './hooks/useLocale';
+import { RoleProvider } from './context/RoleContext';
 
 const applyInitialTheme = () => {
-  const savedMode = window.localStorage.getItem('app:theme-mode');
-  const themeMode =
-    savedMode === 'light' || savedMode === 'dark' || savedMode === 'system'
-      ? savedMode
-      : 'system';
+  const savedMode = window.localStorage.getItem('ja431_theme');
+  const validModes = [
+    'system',
+    'dynamic-dark',
+    'dynamic-light',
+    'pure-dark',
+    'pure-light',
+  ];
+
+  let themeMode = 'system';
+  if (savedMode && validModes.includes(savedMode)) {
+    themeMode = savedMode;
+  }
 
   const systemTheme = window.matchMedia('(prefers-color-scheme: dark)').matches
-    ? 'dark'
-    : 'light';
+    ? 'dynamic-dark'
+    : 'dynamic-light';
 
   const resolvedTheme = themeMode === 'system' ? systemTheme : themeMode;
+
+  const isDark =
+    resolvedTheme === 'dynamic-dark' || resolvedTheme === 'pure-dark';
   document.documentElement.setAttribute('data-theme', resolvedTheme);
+  if (isDark) {
+    document.documentElement.classList.add('dark');
+  } else {
+    document.documentElement.classList.remove('dark');
+  }
 };
 
 applyInitialTheme();
@@ -28,7 +45,9 @@ createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <ThemeProvider>
       <LocaleProvider>
-        <App />
+        <RoleProvider>
+          <App />
+        </RoleProvider>
       </LocaleProvider>
     </ThemeProvider>
   </StrictMode>,
