@@ -624,6 +624,7 @@ export const resources = {
         proficiencyLevels: 'Proficiency Levels',
         viewDetailsBelow: 'View Details Below',
         skillsWord: 'Skills',
+        unusedDomains: 'Unused Domains',
       },
       pr: {
         title: 'Research Data Admin & PR Generator',
@@ -1572,6 +1573,7 @@ export const resources = {
         proficiencyLevels: '熟練度等級',
         viewDetailsBelow: '查看下方詳情',
         skillsWord: '技能',
+        unusedDomains: '未使用領域',
       },
       pr: {
         title: '研究資料維護與 PR 產生器',

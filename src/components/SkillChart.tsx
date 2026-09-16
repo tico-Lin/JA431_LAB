@@ -130,7 +130,7 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
     }, [propWidth, propHeight]);
 
     // --- Data Preparation ---
-    const { nodes, groups, vennCircles } = useMemo(() => {
+    const { nodes, groups, vennCircles, unusedCategories } = useMemo(() => {
       const width = dimensions.width;
       const height = dimensions.height;
 
@@ -146,6 +146,7 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
             string,
             { x: number; y: number; radius: number }
           >,
+          unusedCategories: [] as Category[],
         };
       }
 
@@ -205,10 +206,24 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
         areas.push({ sets: key.split(','), size: size });
       }
 
-      // Ensure all base categories exist even if empty
+      // Separate used and unused categories to avoid concentric circles in d3-venn
+      const usedCategoryIds = new Set<string>();
+      skillList.forEach((s) =>
+        s.belongsTo.forEach((c) => usedCategoryIds.add(c)),
+      );
+
+      const unusedCategories = categoryList.filter(
+        (cat) => !usedCategoryIds.has(cat.id),
+      );
+
+      // We ONLY add used categories to areas for d3-venn layout.
+      // Unused categories will be rendered separately as boxes outside the circles.
       categoryList.forEach((cat) => {
-        if (!areas.some((a) => a.sets.length === 1 && a.sets[0] === cat.id)) {
-          areas.push({ sets: [cat.id], size: 50 }); // Minimum size for empty categories
+        if (
+          usedCategoryIds.has(cat.id) &&
+          !areas.some((a) => a.sets.length === 1 && a.sets[0] === cat.id)
+        ) {
+          areas.push({ sets: [cat.id], size: 50 }); // Minimum size for used empty categories? (Should be covered by usedCategoryIds, but safe to keep)
         }
       });
 
@@ -306,6 +321,7 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
         nodes: skillNodes,
         groups: groupNodes,
         vennCircles: scaledSolution,
+        unusedCategories,
       };
     }, [dimensions, data]);
 
@@ -1218,6 +1234,29 @@ const SkillChart: React.FC<SkillChartProps> = React.memo(
               </div>
             );
           })()}
+
+        {/* Unused Domains */}
+        {unusedCategories.length > 0 && (
+          <div className='absolute top-4 left-4 backdrop-blur-md p-3 rounded-lg border border-white/10 shadow-lg bg-[var(--color-bg-card)]'>
+            <h4
+              className='text-xs font-semibold mb-2 uppercase tracking-wider'
+              style={{ color: 'var(--color-text-primary)' }}
+            >
+              {t('gaps.unusedDomains') || '未使用領域'}
+            </h4>
+            <div className='flex flex-wrap gap-2 max-w-[200px]'>
+              {unusedCategories.map((cat) => (
+                <div
+                  key={cat.id}
+                  className='px-2 py-1 text-xs rounded border border-white/20'
+                  style={{ color: cat.color, borderColor: cat.color }}
+                >
+                  {cat.name}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
 
         {/* Legend */}
         <div className='absolute bottom-4 left-4 backdrop-blur-md p-3 rounded-lg border border-white/10 shadow-lg select-none bg-[var(--color-bg-card)]'>
