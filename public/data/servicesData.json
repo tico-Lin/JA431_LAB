@@ -2,35 +2,48 @@
   "categories": [
     {
       "id": "electrochemical",
-      "nameZh": "電化學分析",
-      "nameEn": "Electrochemical Analysis"
+      "name": "電化學分析",
+      "localizedNames": {
+        "en": "Electrochemical Analysis"
+      }
     },
     {
       "id": "spectroscopy",
-      "nameZh": "光譜與光學分析",
-      "nameEn": "Spectroscopy"
+      "name": "光譜與光學分析",
+      "localizedNames": {
+        "en": "Spectroscopy"
+      }
     },
     {
       "id": "synthesis_prep",
-      "nameZh": "合成與製備",
-      "nameEn": "Synthesis & Preparation"
+      "name": "合成與製備",
+      "localizedNames": {
+        "en": "Synthesis & Preparation"
+      }
     },
     {
       "id": "advanced_analysis",
-      "nameZh": "進階表面/結構分析",
-      "nameEn": "Advanced Analysis"
+      "name": "進階表面/結構分析",
+      "localizedNames": {
+        "en": "Advanced Analysis"
+      }
     }
   ],
   "items": [
     {
       "id": "ec-cv",
       "category": "electrochemical",
-      "nameZh": "循環伏安法測試 (CV)",
-      "nameEn": "Cyclic Voltammetry (CV)",
+      "name": "循環伏安法測試 (CV)",
+      "localizedNames": {
+        "en": "Cyclic Voltammetry (CV)"
+      },
       "basePrice": 800,
       "unit": "樣品/條件",
       "turnaroundDays": 3,
       "description": "測量電極材料之氧化還原電位與可逆性。",
+      "localizedDescriptions": {
+        "en": "Measure the redox potential and reversibility of electrode materials."
+      },
       "requiresSampleType": ["electrode_sheet"],
       "minSamples": 1,
       "allowCustomParams": true
@@ -38,12 +51,17 @@
     {
       "id": "ec-eis",
       "category": "electrochemical",
-      "nameZh": "電化學阻抗光譜 (EIS)",
-      "nameEn": "Electrochemical Impedance Spectroscopy (EIS)",
+      "name": "電化學阻抗光譜 (EIS)",
+      "localizedNames": {
+        "en": "Electrochemical Impedance Spectroscopy (EIS)"
+      },
       "basePrice": 1000,
       "unit": "樣品/條件",
       "turnaroundDays": 3,
       "description": "分析電極與電解液介面之電荷轉移電阻與擴散行為。",
+      "localizedDescriptions": {
+        "en": "Analyze the charge transfer resistance and diffusion behavior at the electrode-electrolyte interface."
+      },
       "requiresSampleType": ["electrode_sheet"],
       "dependencies": ["ec-cv"],
       "minSamples": 1,
@@ -52,12 +70,17 @@
     {
       "id": "spec-raman",
       "category": "spectroscopy",
-      "nameZh": "拉曼光譜分析 (Raman)",
-      "nameEn": "Raman Spectroscopy",
+      "name": "拉曼光譜分析 (Raman)",
+      "localizedNames": {
+        "en": "Raman Spectroscopy"
+      },
       "basePrice": 1200,
       "unit": "樣品/點",
       "turnaroundDays": 5,
       "description": "分析碳材料缺陷程度及分子振動模式。",
+      "localizedDescriptions": {
+        "en": "Analyze the degree of defect in carbon materials and molecular vibration modes."
+      },
       "requiresSampleType": ["powder", "electrode_sheet"],
       "minSamples": 1,
       "allowCustomParams": false

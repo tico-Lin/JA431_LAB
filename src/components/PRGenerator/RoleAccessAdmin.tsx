@@ -174,20 +174,20 @@ export const RoleAccessAdmin: React.FC<RoleAccessAdminProps> = ({
                   <Button
                     className='w-full'
                     onClick={() => {
-                      const prText = `## 更新角色金鑰 (Update Role Hash)
+                      const prText = `${t('admin.rolesAdmin.prTemplate.title')}
 
-### 變更說明
-管理員透過產生器生成了一組新的 SHA-256 雜湊，準備替換或新增至 \`src/config/roles.ts\` 中。
+${t('admin.rolesAdmin.prTemplate.descriptionHeading')}
+${t('admin.rolesAdmin.prTemplate.descriptionText')}
 
-### 新增內容 (請手動更新 \`ROLE_HASHES\`)
+${t('admin.rolesAdmin.prTemplate.contentHeading')}
 \`\`\`typescript
-// 新產生的金鑰雜湊
+${t('admin.rolesAdmin.prTemplate.contentComment')}
 '${hashResult}': 'YOUR_ROLE_HERE',
 \`\`\`
 
-### 檢查清單
-- [ ] 確保無明文密碼被提交。
-- [ ] 確保該角色名稱為合法的 \`Role\` 型別。`;
+${t('admin.rolesAdmin.prTemplate.checklistHeading')}
+${t('admin.rolesAdmin.prTemplate.checklistNoPlaintext')}
+${t('admin.rolesAdmin.prTemplate.checklistValidRole')}`;
                       onGeneratePR(prText);
                     }}
                   >

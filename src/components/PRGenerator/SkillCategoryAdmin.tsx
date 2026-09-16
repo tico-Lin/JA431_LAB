@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import {
-  Collapse,
   Table,
   Button,
   Tooltip,
@@ -10,10 +9,8 @@ import {
   Form,
   Modal,
   ColorPicker,
-  Badge,
   List,
   Checkbox,
-  Divider,
 } from 'antd';
 import {
   DeleteOutlined,
@@ -518,155 +515,132 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
 
   return (
     <>
-      <Collapse
-        className='glass-card !bg-[var(--color-surface-2)]'
-        items={[
-          {
-            key: 'admin',
-            label: (
+      <div className='space-y-8'>
+        {/* Pending Changes Section */}
+        {pendingChanges.length > 0 && (
+          <div className='bg-green-500/10 border border-green-500/30 rounded-lg p-4'>
+            <div className='flex justify-between items-center mb-3'>
+              <h3 className='text-green-400 font-medium'>
+                {t('pr.pendingChanges', {
+                  count: pendingChanges.length,
+                })}
+              </h3>
               <Space>
-                <span className='text-[var(--color-text-primary)] font-semibold'>
-                  {t('pr.adminTitle')}
-                </span>
-                {pendingChanges.length > 0 && (
-                  <Badge
-                    count={pendingChanges.length}
-                    style={{ backgroundColor: 'var(--color-status-success)' }}
-                  />
-                )}
+                <Button
+                  size='small'
+                  icon={<UndoOutlined />}
+                  onClick={clearPendingChanges}
+                >
+                  {t('pr.clearAll')}
+                </Button>
+                <Button
+                  type='primary'
+                  size='small'
+                  icon={<GithubOutlined />}
+                  onClick={handleGeneratePR}
+                >
+                  {t('pr.generatePr')}
+                </Button>
               </Space>
-            ),
-            children: (
-              <div className='space-y-6'>
-                {/* Pending Changes Section */}
-                {pendingChanges.length > 0 && (
-                  <div className='bg-green-500/10 border border-green-500/30 rounded-lg p-4'>
-                    <div className='flex justify-between items-center mb-3'>
-                      <h3 className='text-green-400 font-medium'>
-                        {t('pr.pendingChanges', {
-                          count: pendingChanges.length,
-                        })}
-                      </h3>
-                      <Space>
-                        <Button
-                          size='small'
-                          icon={<UndoOutlined />}
-                          onClick={clearPendingChanges}
-                        >
-                          {t('pr.clearAll')}
-                        </Button>
-                        <Button
-                          type='primary'
-                          size='small'
-                          icon={<GithubOutlined />}
-                          onClick={handleGeneratePR}
-                        >
-                          {t('pr.generatePr')}
-                        </Button>
-                      </Space>
-                    </div>
-                    <List
-                      size='small'
-                      dataSource={pendingChanges}
-                      renderItem={(item) => (
-                        <List.Item
-                          className='!border-green-500/20'
-                          actions={[
-                            <Button
-                              key='remove'
-                              type='text'
-                              size='small'
-                              danger
-                              icon={<DeleteOutlined />}
-                              onClick={() => removePendingChange(item.id)}
-                            />,
-                          ]}
-                        >
-                          <Tag
-                            color={
-                              item.type.includes('add')
-                                ? 'green'
-                                : item.type.includes('delete')
-                                  ? 'red'
-                                  : 'blue'
-                            }
-                          >
-                            {changeTypeLabelMap[item.type]}
-                          </Tag>
-                          <span className='text-[var(--color-text-secondary)]'>
-                            {item.description}
-                          </span>
-                        </List.Item>
-                      )}
-                    />
-                  </div>
-                )}
-
-                {/* Skills Section */}
-                <div>
-                  <div className='flex justify-between items-center mb-3'>
-                    <h3 className='text-[var(--color-text-primary)] font-medium'>
-                      {t('pr.skillsSection')}
-                    </h3>
+            </div>
+            <List
+              size='small'
+              dataSource={pendingChanges}
+              renderItem={(item) => (
+                <List.Item
+                  className='!border-green-500/20'
+                  actions={[
                     <Button
+                      key='remove'
+                      type='text'
                       size='small'
-                      type='primary'
-                      icon={<PlusOutlined />}
-                      onClick={() => {
-                        setEditingSkill(null);
-                        setIsAddingSkill(true);
-                        skillForm.resetFields();
-                        setSkillModalOpen(true);
-                      }}
-                    >
-                      {t('pr.addSkill')}
-                    </Button>
-                  </div>
-                  <Table
-                    dataSource={skills}
-                    columns={skillColumns}
-                    rowKey='id'
-                    size='small'
-                    pagination={{ pageSize: 5 }}
-                    className='admin-table'
-                  />
-                </div>
+                      danger
+                      icon={<DeleteOutlined />}
+                      onClick={() => removePendingChange(item.id)}
+                    />,
+                  ]}
+                >
+                  <Tag
+                    color={
+                      item.type.includes('add')
+                        ? 'green'
+                        : item.type.includes('delete')
+                          ? 'red'
+                          : 'blue'
+                    }
+                  >
+                    {changeTypeLabelMap[item.type]}
+                  </Tag>
+                  <span className='text-[var(--color-text-secondary)]'>
+                    {item.description}
+                  </span>
+                </List.Item>
+              )}
+            />
+          </div>
+        )}
 
-                <Divider className='!border-gray-700' />
+        <div className='grid grid-cols-1 xl:grid-cols-2 gap-8'>
+          {/* Skills Section */}
+          <div className='bg-[var(--color-surface-1)] border border-[var(--shell-border)] rounded-lg p-5'>
+            <div className='flex justify-between items-center mb-4 pb-2 border-b border-[var(--shell-border)]'>
+              <h3 className='text-[var(--color-text-primary)] text-lg font-medium m-0'>
+                {t('pr.skillsSection')}
+              </h3>
+              <Button
+                size='small'
+                type='primary'
+                icon={<PlusOutlined />}
+                onClick={() => {
+                  setEditingSkill(null);
+                  setIsAddingSkill(true);
+                  skillForm.resetFields();
+                  setSkillModalOpen(true);
+                }}
+              >
+                {t('pr.addSkill')}
+              </Button>
+            </div>
+            <Table
+              dataSource={skills}
+              columns={skillColumns}
+              rowKey='id'
+              size='small'
+              pagination={{ pageSize: 8 }}
+              className='admin-table'
+            />
+          </div>
 
-                {/* Categories Section */}
-                <div>
-                  <div className='flex justify-between items-center mb-3'>
-                    <h3 className='text-[var(--color-text-primary)] font-medium'>
-                      {t('pr.categoriesSection')}
-                    </h3>
-                    <Button
-                      size='small'
-                      type='primary'
-                      icon={<PlusOutlined />}
-                      onClick={() => {
-                        setEditingCategory(null);
-                        categoryForm.resetFields();
-                        setCategoryModalOpen(true);
-                      }}
-                    >
-                      {t('pr.addCategory')}
-                    </Button>
-                  </div>
-                  <Table
-                    dataSource={categories}
-                    columns={categoryColumns}
-                    rowKey='id'
-                    size='small'
-                    pagination={false}
-                    className='admin-table'
-                  />
-                </div>
-              </div>
-            ),
-          },
-        ]}
-      />
+          {/* Categories Section */}
+          <div className='bg-[var(--color-surface-1)] border border-[var(--shell-border)] rounded-lg p-5'>
+            <div className='flex justify-between items-center mb-4 pb-2 border-b border-[var(--shell-border)]'>
+              <h3 className='text-[var(--color-text-primary)] text-lg font-medium m-0'>
+                {t('pr.categoriesSection')}
+              </h3>
+              <Button
+                size='small'
+                type='primary'
+                icon={<PlusOutlined />}
+                onClick={() => {
+                  setEditingCategory(null);
+                  categoryForm.resetFields();
+                  setCategoryModalOpen(true);
+                }}
+              >
+                {t('pr.addCategory')}
+              </Button>
+            </div>
+            <Table
+              dataSource={categories}
+              columns={categoryColumns}
+              rowKey='id'
+              size='small'
+              pagination={{ pageSize: 8 }}
+              className='admin-table'
+            />
+          </div>
+        </div>
+      </div>
 
       {/* Category Modal */}
       <Modal

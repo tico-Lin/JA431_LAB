@@ -11,75 +11,11 @@ import { useLocale } from './useLocale';
 
 const DATA_URL = `${import.meta.env.BASE_URL}data/skillsData.json`;
 
-const CATEGORY_NAME_ZH: Record<string, string> = {
-  'research-focus': '研究主軸',
-  synthesis: '合成方法',
-  'thermal-treatment': '修飾與熱處理',
-  characterization: '表徵分析',
-  electrochemistry: '電化學分析',
-  'instrument-experience': '儀器經驗',
-};
-
-const CATEGORY_DESC_ZH: Record<string, string> = {
-  'research-focus': '高熵儲能材料與農廢綠色化學',
-  synthesis: '水熱法、電鍍法與共沉澱法',
-  'thermal-treatment': '高溫鍛燒與退火修飾',
-  characterization:
-    'X 射線繞射（XRD）、掃描式電子顯微鏡與能量散佈光譜（SEM-EDS）、傅立葉轉換紅外光譜（FT-IR）與拉曼光譜（Raman）',
-  electrochemistry:
-    '循環伏安法（CV）、線性掃描伏安法（LSV）、恆電流充放電（GCD）、電化學阻抗頻譜（EIS）',
-  'instrument-experience': 'SP-50e',
-};
-
-const SKILL_NAME_ZH: Record<string, string> = {
-  'high-entropy-doping': '高熵材料與摻雜',
-  'agri-waste-green-chemistry': '農廢綠色化學',
-  hydrothermal: '水熱法',
-  electrodeposition: '電鍍法',
-  coprecipitation: '共沉澱法',
-  'calcination-annealing': '高溫鍛燒退火',
-  xrd: 'X 射線繞射（XRD）',
-  'sem-eds': '掃描式電子顯微鏡與能量散佈光譜（SEM-EDS）',
-  ftir: '傅立葉轉換紅外光譜（FT-IR）',
-  raman: '拉曼光譜（Raman）',
-  cv: '循環伏安法（CV）',
-  lsv: '線性掃描伏安法（LSV）',
-  gcd: '恆電流充放電（GCD）',
-  eis: '電化學阻抗頻譜（EIS）',
-  'sp-50e': 'SP-50e',
-};
-
-const SKILL_DESC_ZH: Record<string, string> = {
-  'high-entropy-doping': '多元素共同調控以提升材料穩定性與性能',
-  'agri-waste-green-chemistry': '農業廢棄物升級再利用與綠色轉化',
-  hydrothermal: '以水熱條件合成奈米／層狀材料',
-  electrodeposition: '以電化學沉積建構功能性薄膜與複材',
-  coprecipitation: '以共沉澱控制成分均勻性與前驅物形貌',
-  'calcination-annealing': '利用高溫鍛燒與退火調控晶相與缺陷',
-  xrd: '相鑑定、結晶性與晶格分析',
-  'sem-eds': '形貌、粒徑與元素分布分析',
-  ftir: '官能基與化學鍵分析',
-  raman: '振動模態與結構缺陷分析',
-  cv: '循環伏安分析',
-  lsv: '線性掃描伏安分析',
-  gcd: '恆電流充放電分析',
-  eis: '電化學阻抗分析',
-  'sp-50e': 'SP-50e 電化學分析平台',
-};
-
-const ROLE_ZH: Record<string, string> = {
-  Professor: '教授',
-  'Assistant Professor': '助理教授',
-  Postdoc: '博士後研究員',
-  'PhD Student': '博士生',
-  'Master Student': '碩士生',
-  'Undergraduate Student': '大學生',
-  'Research Assistant': '研究助理',
-  'Visiting Scholar': '訪問學者',
-  Alumni: '校友',
-};
-
-function localizeSkillsData(data: SkillsData, language: 'en' | 'zh-TW') {
+function localizeSkillsData(
+  data: SkillsData,
+  language: 'en' | 'zh-TW',
+  t: any,
+) {
   const resolveName = (member: LabMember) => {
     if (language === 'zh-TW') return member.name;
     return member.localizedNames?.en || member.name;
@@ -99,18 +35,24 @@ function localizeSkillsData(data: SkillsData, language: 'en' | 'zh-TW') {
     ...data,
     categories: data.categories.map((category) => ({
       ...category,
-      name: CATEGORY_NAME_ZH[category.id] ?? category.name,
-      description: CATEGORY_DESC_ZH[category.id] ?? category.description,
+      name: t(`skillsData.categories.${category.id}.name`, category.name),
+      description: t(
+        `skillsData.categories.${category.id}.description`,
+        category.description,
+      ),
     })),
     skills: data.skills.map((skill) => ({
       ...skill,
-      name: SKILL_NAME_ZH[skill.id] ?? skill.name,
-      description: SKILL_DESC_ZH[skill.id] ?? skill.description,
+      name: t(`skillsData.skills.${skill.id}.name`, skill.name),
+      description: t(
+        `skillsData.skills.${skill.id}.description`,
+        skill.description,
+      ),
     })),
     members: data.members.map((member) => ({
       ...member,
       name: resolveName(member),
-      role: ROLE_ZH[member.role] ?? member.role,
+      role: t(`skillsData.roles.${member.role}`, member.role),
     })),
   };
 }
@@ -139,8 +81,8 @@ export function useSkillsData() {
   }, [t]);
 
   const data = useMemo(
-    () => (rawData ? localizeSkillsData(rawData, resolvedLanguage) : null),
-    [rawData, resolvedLanguage],
+    () => (rawData ? localizeSkillsData(rawData, resolvedLanguage, t) : null),
+    [rawData, resolvedLanguage, t],
   );
 
   return { data, loading, error, setData: setRawData };

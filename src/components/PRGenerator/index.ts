@@ -5,3 +5,7 @@ export { AddSkillForm } from './AddSkillForm';
 export { SkillCategoryAdmin } from './SkillCategoryAdmin';
 export { RoleAccessAdmin } from './RoleAccessAdmin';
 export { ServicesAdmin } from './ServicesAdmin';
+export { HomeConfigAdmin } from './HomeConfigAdmin';
+export { DynamicForm } from './DynamicForm';
+export { RolesAdmin } from './RolesAdmin';
+export * from './PiConfigAdmin';

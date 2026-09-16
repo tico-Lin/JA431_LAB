@@ -893,6 +893,85 @@ export const resources = {
         advanced: 'Advanced',
         expert: 'Expert',
       },
+      admin: {
+        tabHomeConfig: 'Home Config',
+        tabPiConfig: 'PI Config',
+        tabServices: 'Services',
+        tabMembers: 'Members',
+        tabSkills: 'Skills',
+        tabRoles: 'Roles',
+        title: 'System Data Administration',
+        subtitle: 'Manage static data and sync directly to GitHub',
+        piConfig: {
+          title: 'PI Profile Configuration',
+          delayNote: 'Changes take about 2 minutes to reflect on the site',
+          editZh: 'Edit Chinese (zh-TW)',
+          editEn: 'Edit English (en)',
+          setToken: 'Set GitHub Token',
+          saveDeploy: 'Save and Deploy',
+          heroSection: 'Hero Section',
+          contactInfo: 'Contact Information',
+          academicBg: 'Academic Background',
+          researchFocus: 'Research Focus',
+        },
+        rolesAdmin: {
+          roleNames: {
+            admin: 'Administrator',
+            pi: 'Principal Investigator (PI)',
+            member: 'Lab Member',
+            vendor: 'Vendor',
+            guest: 'Guest',
+          },
+          pageNames: {
+            home: 'Home (/)',
+            pi: 'PI Profile (/pi)',
+            overview: 'Overview (/overview)',
+            services: 'Services (/services)',
+            gaps: 'Gap Analysis (/gaps)',
+            update: 'Admin Panel (/update)',
+          },
+          formError: 'Please check the form for errors.',
+          title: 'Role Permissions',
+          subtitle: 'Control which pages each role can access',
+          setToken: 'Set GitHub Token',
+          saveDeploy: 'Save and Deploy',
+          selectPages: 'Select pages for {{role}}',
+          prTemplate: {
+            title: '## Update Role Hash',
+            descriptionHeading: '### Description',
+            descriptionText:
+              'Admin generated a new SHA-256 hash to replace or add to `src/config/roles.ts`.',
+            contentHeading:
+              '### New Content (Please update `ROLE_HASHES` manually)',
+            contentComment: '// Newly generated hash',
+            checklistHeading: '### Checklist',
+            checklistNoPlaintext:
+              '- [ ] Ensure no plaintext passwords are submitted.',
+            checklistValidRole:
+              '- [ ] Ensure the role name is a valid `Role` type.',
+          },
+        },
+        servicesAdmin: {
+          itemName: 'Service Name',
+          mainName: 'Primary Name (e.g., CV)',
+          localizedNames: 'Localized Names',
+          mainDesc: 'Primary Description (e.g., Carbon defect analysis)',
+          localizedDesc: 'Localized Descriptions',
+          searchService: 'Search services',
+          setToken: 'Set GitHub Token',
+          saveGithub: 'Save to GitHub',
+        },
+      },
+      dataSync: {
+        uploading:
+          'Uploading data to GitHub... This takes a few seconds, please wait.',
+        success:
+          'Save successful! The system is automatically updating the website. You can refresh the page in 2-3 minutes to see the latest results.',
+        errorToken:
+          'Save failed: GitHub Token is invalid or expired. Please re-authenticate in "Set GitHub Token".',
+        errorGeneric:
+          'Save failed: Please check your network connection or file format. Error: {{message}}',
+      },
     },
   },
   'zh-TW': {
@@ -954,7 +1033,7 @@ export const resources = {
       vendor: {
         title: '委託檢測與產學合作',
         subtitle:
-          '請選擇您需要的分析項目並填寫樣品資訊，系統將自動產生估價單並可直接寄送給負責窗口。',
+          '請選擇所需之分析項目並填寫樣品資訊，系統將自動生成估價單，並可供下載或寄送至專案窗口。',
         importQuotation: '匯入估價單（解析）',
         chooseServices: '1. 選擇檢測服務',
         requestInformation: '2. 委託資訊填寫',
@@ -982,9 +1061,10 @@ export const resources = {
         parseQuotation: '解析現有估價單',
         parseAndApply: '解析並套用',
         parseDescription:
-          '請貼上您先前生成的估價單純文字內容，系統將嘗試自動填寫表單。',
+          '請貼上既有估價單之純文字內容，系統將自動帶入表單資訊。',
         draftFound: '發現未送出的草稿',
-        draftQuestion: '您在 {{date}} 有未完成的委託單，是否要恢復進度？',
+        draftQuestion:
+          '系統偵測到您於 {{date}} 有一筆未完成之委託單，是否接續填寫？',
         restoreDraft: '恢復進度',
         clearDraft: '清除草稿',
         draftRestored: '已恢復草稿',
@@ -1016,7 +1096,7 @@ export const resources = {
       },
       pi: {
         profileTag: 'PI 介紹',
-        heroTitle: '許峰豪助理教授 / PI',
+        heroTitle: '許峰豪 助理教授 (PI)',
         heroSubtitle: '能源及高分子研究室',
         heroDescription:
           '本實驗室聚焦高熵儲能材料、新興鋁離子電池、同步輻射原位光譜機制解析與永續生質綠色化學，結合材料合成、改質修飾、結構表徵與電化學評估，提供產學合作、外部委託與前瞻材料驗證服務。',
@@ -1451,7 +1531,8 @@ export const resources = {
       gaps: {
         analyzing: '正在分析合作覆蓋狀況...',
         title: '合作與覆蓋分析',
-        subtitle: '快速看出哪些能力已具備、哪些能力適合外部委託或共同合作。',
+        subtitle:
+          '評估現有研究量能，辨識可由內部執行或需尋求外部產學合作與委託之技術項目。',
         statNoCoverage: '無人覆蓋',
         statNoExpert: '無專家',
         statHealthy: '覆蓋良好',
@@ -1463,7 +1544,7 @@ export const resources = {
         crossSubtitle: '這些方法與儀器可支援多個研究方向，是很好的合作切入點。',
         allCoverageTitle: '能力覆蓋總覽',
         collaborationsTitle: '可能的合作方向',
-        noCoverageGoodNews: '好消息！所有核心能力都有覆蓋。',
+        noCoverageGoodNews: '實驗室已具備所有核心技術量能。',
         skillColumn: '能力',
         categoriesColumn: '研究領域',
         coverageColumn: '覆蓋度',
@@ -1751,6 +1832,184 @@ export const resources = {
         intermediate: '中階',
         advanced: '進階',
         expert: '專家',
+      },
+      admin: {
+        tabHomeConfig: '首頁設定',
+        tabPiConfig: '主持人設定',
+        tabServices: '服務項目',
+        tabMembers: '成員管理',
+        tabSkills: '技能管理',
+        tabRoles: '系統權限',
+        title: '系統管理後台 (Admin Panel)',
+        subtitle: '集中管理全站靜態資料，並自動同步至 GitHub 儲存庫。',
+        piConfig: {
+          title: '主持人介紹設定 (PI Config)',
+          delayNote: '更新後約需 2 分鐘才會反映至前台',
+          editZh: '編輯中文版 (zh-TW)',
+          editEn: '編輯英文版 (en)',
+          setToken: '設定 GitHub Token',
+          saveDeploy: '儲存並自動部署',
+          heroSection: 'Hero (橫幅) 區塊',
+          contactInfo: '聯絡資訊',
+          academicBg: '學術背景',
+          researchFocus: '研究重點 (Research Focus)',
+        },
+        rolesAdmin: {
+          roleNames: {
+            admin: '管理員',
+            pi: '實驗室主持人 (PI)',
+            member: '實驗室成員',
+            vendor: '廠商',
+            guest: '訪客',
+          },
+          pageNames: {
+            home: '首頁 (/)',
+            pi: '主持人介紹 (/pi)',
+            overview: '實驗室總覽 (/overview)',
+            services: '檢測與服務 (/services)',
+            gaps: '產學合作與缺口分析 (/gaps)',
+            update: '系統管理後台 (/update)',
+          },
+          formError: '請檢查表單中是否有未填寫的必填欄位。',
+          title: '系統權限設定',
+          subtitle: '控制不同身分可訪問的頁面',
+          setToken: '設定 GitHub Token',
+          saveDeploy: '儲存並自動部署',
+          selectPages: '選擇 {{role}} 允許的頁面',
+          prTemplate: {
+            title: '## 更新角色金鑰 (Update Role Hash)',
+            descriptionHeading: '### 變更說明',
+            descriptionText:
+              '管理員透過產生器生成了一組新的 SHA-256 雜湊，準備替換或新增至 `src/config/roles.ts` 中。',
+            contentHeading: '### 新增內容 (請手動更新 `ROLE_HASHES`)',
+            contentComment: '// 新產生的金鑰雜湊',
+            checklistHeading: '### 檢查清單',
+            checklistNoPlaintext: '- [ ] 確保無明文密碼被提交。',
+            checklistValidRole: '- [ ] 確保該角色名稱為合法的 `Role` 型別。',
+          },
+        },
+        servicesAdmin: {
+          itemName: '檢測項目名稱',
+          mainName: '主要名稱 (如：循環伏安法)',
+          localizedNames: '多語系名稱',
+          mainDesc: '主要說明 (如：分析碳材料缺陷)',
+          localizedDesc: '多語系說明',
+          searchService: '搜尋服務',
+          setToken: '設定 GitHub Token',
+          saveGithub: '儲存至 GitHub',
+        },
+      },
+      dataSync: {
+        uploading: '資料正在上傳至 GitHub... 此過程約需數秒，請稍候。',
+        success:
+          '儲存成功！系統已開始自動部署網頁。約 2 至 3 分鐘後重新整理頁面即可檢視最新結果。',
+        errorToken:
+          '儲存失敗：GitHub Token 無效或已逾期，請至「設定 GitHub Token」重新驗證。',
+        errorGeneric:
+          '儲存失敗：請確認網路連線狀態或檔案格式是否正確。錯誤訊息：{{message}}',
+      },
+      skillsData: {
+        categories: {
+          'research-focus': {
+            name: '研究主軸',
+            description: '高熵儲能材料與農廢綠色化學',
+          },
+          synthesis: {
+            name: '合成方法',
+            description: '水熱法、電鍍法與共沉澱法',
+          },
+          'thermal-treatment': {
+            name: '修飾與熱處理',
+            description: '高溫鍛燒與退火修飾',
+          },
+          characterization: {
+            name: '表徵分析',
+            description:
+              'X 射線繞射（XRD）、掃描式電子顯微鏡與能量散佈光譜（SEM-EDS）、傅立葉轉換紅外光譜（FT-IR）與拉曼光譜（Raman）',
+          },
+          electrochemistry: {
+            name: '電化學分析',
+            description:
+              '循環伏安法（CV）、線性掃描伏安法（LSV）、恆電流充放電（GCD）、電化學阻抗頻譜（EIS）',
+          },
+          'instrument-experience': {
+            name: '儀器經驗',
+            description: 'SP-50e',
+          },
+        },
+        skills: {
+          'high-entropy-doping': {
+            name: '高熵材料與摻雜',
+            description: '多元素共同調控以提升材料穩定性與性能',
+          },
+          'agri-waste-green-chemistry': {
+            name: '農廢綠色化學',
+            description: '農業廢棄物升級再利用與綠色轉化',
+          },
+          hydrothermal: {
+            name: '水熱法',
+            description: '以水熱條件合成奈米／層狀材料',
+          },
+          electrodeposition: {
+            name: '電鍍法',
+            description: '以電化學沉積建構功能性薄膜與複材',
+          },
+          coprecipitation: {
+            name: '共沉澱法',
+            description: '以共沉澱控制成分均勻性與前驅物形貌',
+          },
+          'calcination-annealing': {
+            name: '高溫鍛燒退火',
+            description: '利用高溫鍛燒與退火調控晶相與缺陷',
+          },
+          xrd: {
+            name: 'X 射線繞射（XRD）',
+            description: '相鑑定、結晶性與晶格分析',
+          },
+          'sem-eds': {
+            name: '掃描式電子顯微鏡與能量散佈光譜（SEM-EDS）',
+            description: '形貌、粒徑與元素分布分析',
+          },
+          ftir: {
+            name: '傅立葉轉換紅外光譜（FT-IR）',
+            description: '官能基與化學鍵分析',
+          },
+          raman: {
+            name: '拉曼光譜（Raman）',
+            description: '振動模態與結構缺陷分析',
+          },
+          cv: {
+            name: '循環伏安法（CV）',
+            description: '循環伏安分析',
+          },
+          lsv: {
+            name: '線性掃描伏安法（LSV）',
+            description: '線性掃描伏安分析',
+          },
+          gcd: {
+            name: '恆電流充放電（GCD）',
+            description: '恆電流充放電分析',
+          },
+          eis: {
+            name: '電化學阻抗頻譜（EIS）',
+            description: '電化學阻抗分析',
+          },
+          'sp-50e': {
+            name: 'SP-50e',
+            description: 'SP-50e 電化學分析平台',
+          },
+        },
+        roles: {
+          Professor: '教授',
+          'Assistant Professor': '助理教授',
+          Postdoc: '博士後研究員',
+          'PhD Student': '博士生',
+          'Master Student': '碩士生',
+          'Undergraduate Student': '大學生',
+          'Research Assistant': '研究助理',
+          'Visiting Scholar': '訪問學者',
+          Alumni: '校友',
+        },
       },
     },
   },

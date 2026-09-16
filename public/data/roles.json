@@ -1,0 +1,14 @@
+{
+  "roles": ["guest", "vendor", "member", "tester"],
+  "roleHashes": {
+    "630ba09448af522154f38ef7685ef1f44b0f3e9430f80829a03ce24f400f3754": "vendor",
+    "e31ab643c44f7a0ec824b59d1194d60dac334200d845e61d2d289daa0f087ea4": "member",
+    "9bba5c53a0545e0c80184b946153c9f58387e3bd1d4ee35740f29ac2e718b019": "tester"
+  },
+  "rolePermissions": {
+    "guest": ["/", "/pi"],
+    "vendor": ["/", "/pi", "/overview", "/services"],
+    "member": ["/", "/pi", "/overview", "/gaps", "/update", "/services"],
+    "tester": ["/", "/pi", "/overview", "/gaps", "/update", "/services"]
+  }
+}

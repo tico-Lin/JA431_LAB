@@ -30,7 +30,7 @@ interface VendorDraftData {
 }
 
 export default function VendorPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const { data, loading, error } = useServicesData();
   const [form] = Form.useForm();
 
@@ -90,7 +90,13 @@ export default function VendorPage() {
         );
         if (missingDeps.length > 0) {
           const depNames = missingDeps
-            .map((id) => data?.items.find((i) => i.id === id)?.nameZh)
+            .map((id) => {
+              const i = data?.items.find((item) => item.id === id);
+              if (!i) return id;
+              return i18n.language === 'zh-TW'
+                ? i.name
+                : i.localizedNames?.['en'] || i.name;
+            })
             .join(', ');
           message.warning(t('vendor.dependenciesHint', { names: depNames }));
         }
@@ -153,7 +159,11 @@ export default function VendorPage() {
     selectedServices.forEach((sel, i) => {
       const s = data.items.find((item) => item.id === sel.serviceId);
       if (s) {
-        text += `${i + 1}. [${s.id}] ${s.nameZh} x ${sel.sampleCount} ${s.unit} - ${t('vendor.estimated')} TWD ${s.basePrice * sel.sampleCount}\n`;
+        const sName =
+          i18n.language === 'zh-TW'
+            ? s.name
+            : s.localizedNames?.['en'] || s.name;
+        text += `${i + 1}. [${s.id}] ${sName} x ${sel.sampleCount} ${s.unit} - ${t('vendor.estimated')} TWD ${s.basePrice * sel.sampleCount}\n`;
         if (sel.customNotes) {
           text += `   ${t('vendor.customParameters')}: ${sel.customNotes}\n`;
         }
@@ -294,18 +304,28 @@ export default function VendorPage() {
     },
     {
       title: t('vendor.serviceColumn'),
-      dataIndex: 'nameZh',
-      key: 'nameZh',
-      render: (text: string, record: ServiceItem) => (
-        <div>
-          <div className='font-bold text-[var(--color-text-primary)]'>
-            {text}
+      dataIndex: 'name',
+      key: 'name',
+      render: (_: string, record: ServiceItem) => {
+        const isZh = i18n.language === 'zh-TW';
+        const name = isZh
+          ? record.name
+          : record.localizedNames?.['en'] || record.name;
+        const description = isZh
+          ? record.description
+          : record.localizedDescriptions?.['en'] || record.description;
+
+        return (
+          <div>
+            <div className='font-bold text-[var(--color-text-primary)]'>
+              {name}
+            </div>
+            <div className='text-xs text-[var(--color-text-secondary)]'>
+              {description}
+            </div>
           </div>
-          <div className='text-xs text-[var(--color-text-secondary)]'>
-            {record.description}
-          </div>
-        </div>
-      ),
+        );
+      },
     },
     {
       title: t('vendor.priceColumn'),

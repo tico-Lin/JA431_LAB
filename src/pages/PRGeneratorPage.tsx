@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Form, message, Spin, Empty } from 'antd';
+import { Form, message, Spin, Empty, Tabs } from 'antd';
 import { useTranslation } from 'react-i18next';
 import { useSkillsData, getSkillById } from '../hooks/useSkillsData';
 import type { LabMember, MemberSkill } from '../types/types';
@@ -9,6 +9,10 @@ import {
   MemberForm,
   PRPreviewModal,
   SkillCategoryAdmin,
+  HomeConfigAdmin,
+  ServicesAdmin,
+  RolesAdmin,
+  PiConfigAdmin,
 } from '../components/PRGenerator';
 
 // Unicode-safe base64 encoding for GitHub API
@@ -720,52 +724,89 @@ ${JSON.stringify(
     setModalOpen(true);
   };
 
+  const tabItems = [
+    {
+      key: 'home',
+      label: t('admin.tabHomeConfig'),
+      children: <HomeConfigAdmin />,
+    },
+    {
+      key: 'pi',
+      label: t('admin.tabPiConfig'),
+      children: <PiConfigAdmin />,
+    },
+    {
+      key: 'services',
+      label: t('admin.tabServices'),
+      children: <ServicesAdmin />,
+    },
+    {
+      key: 'members',
+      label: t('admin.tabMembers'),
+      children: (
+        <div className='space-y-8'>
+          <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
+            <MemberList
+              members={data.members}
+              selectedMemberId={selectedMember?.id ?? null}
+              onSelectMember={handleEditMember}
+              onNewMember={handleNewMember}
+            />
+
+            <MemberForm
+              form={form}
+              editMode={editMode}
+              selectedMember={selectedMember}
+              skills={skills}
+              allSkills={data.skills}
+              categories={data.categories}
+              roleOptions={roleOptions}
+              hasChanges={hasChanges}
+              onSkillsChange={setSkills}
+              onFormValuesChange={onFormValuesChange}
+              onGeneratePR={generatePRContent}
+              onRemoveMember={generateRemoveMemberPR}
+            />
+          </div>
+        </div>
+      ),
+    },
+    {
+      key: 'skills',
+      label: t('admin.tabSkills'),
+      children: (
+        <SkillCategoryAdmin
+          categories={data.categories}
+          skills={data.skills}
+          members={data.members}
+          onGenerateBatchPR={handleBatchPR}
+        />
+      ),
+    },
+    {
+      key: 'roles',
+      label: t('admin.tabRoles'),
+      children: <RolesAdmin />,
+    },
+  ];
+
   return (
     <div className='space-y-8'>
       {contextHolder}
       {/* Header */}
       <div className='text-center'>
         <h1 className='text-4xl font-bold bg-gradient-to-r from-green-400 via-emerald-400 to-teal-400 bg-clip-text text-transparent mb-4'>
-          {t('pr.title')}
+          {t('admin.title')}
         </h1>
         <p
           className='max-w-2xl mx-auto'
           style={{ color: 'var(--color-text-secondary)' }}
         >
-          {t('pr.subtitle')}
+          {t('admin.subtitle')}
         </p>
       </div>
 
-      <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
-        <MemberList
-          members={data.members}
-          selectedMemberId={selectedMember?.id ?? null}
-          onSelectMember={handleEditMember}
-          onNewMember={handleNewMember}
-        />
-
-        <MemberForm
-          form={form}
-          editMode={editMode}
-          selectedMember={selectedMember}
-          skills={skills}
-          allSkills={data.skills}
-          categories={data.categories}
-          roleOptions={roleOptions}
-          hasChanges={hasChanges}
-          onSkillsChange={setSkills}
-          onFormValuesChange={onFormValuesChange}
-          onGeneratePR={generatePRContent}
-          onRemoveMember={generateRemoveMemberPR}
-        />
-      </div>
-
-      <SkillCategoryAdmin
-        categories={data.categories}
-        skills={data.skills}
-        members={data.members}
-        onGenerateBatchPR={handleBatchPR}
-      />
+      <Tabs defaultActiveKey='home' items={tabItems} />
 
       <PRPreviewModal
         open={modalOpen}

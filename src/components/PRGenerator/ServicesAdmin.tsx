@@ -2,31 +2,33 @@ import React, { useState } from 'react';
 import {
   Card,
   Table,
-  Input,
-  InputNumber,
   Button,
   Typography,
   Modal,
   Form,
-  Select,
   Space,
   message,
   Tooltip,
+  Input,
 } from 'antd';
-import { EditOutlined, PlusOutlined, DeleteOutlined } from '@ant-design/icons';
+import {
+  EditOutlined,
+  PlusOutlined,
+  DeleteOutlined,
+  CloudUploadOutlined,
+  SettingOutlined,
+  SearchOutlined,
+} from '@ant-design/icons';
 import { useServicesData } from '../../hooks/useServicesData';
 import type { ServicesData, ServiceItem } from '../../types/serviceTypes';
 import { useTranslation } from 'react-i18next';
+import { useDataSync } from '../../hooks/useDataSync';
+import { GitHubTokenModal } from './GitHubTokenModal';
+import { DynamicForm, type FieldSchema } from './DynamicForm';
 
 const { Title } = Typography;
 
-interface ServicesAdminProps {
-  onGeneratePR: (content: string, changes: ServicesData) => void;
-}
-
-export const ServicesAdmin: React.FC<ServicesAdminProps> = ({
-  onGeneratePR,
-}) => {
+export const ServicesAdmin: React.FC = () => {
   const { data, loading, error } = useServicesData();
   const { t, i18n } = useTranslation();
   const isZh = i18n.language === 'zh-TW';
@@ -34,6 +36,15 @@ export const ServicesAdmin: React.FC<ServicesAdminProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [editingItem, setEditingItem] = useState<ServiceItem | null>(null);
   const [form] = Form.useForm();
+
+  const [searchText, setSearchText] = useState('');
+
+  const [isTokenModalOpen, setIsTokenModalOpen] = useState(false);
+  const { saveData, isSyncing } = useDataSync({
+    repoOwner: 'tico-Lin',
+    repoName: 'JA431_LAB',
+    onRequireToken: () => setIsTokenModalOpen(true),
+  });
 
   // Initialize local copy when data loads
   React.useEffect(() => {
@@ -47,7 +58,23 @@ export const ServicesAdmin: React.FC<ServicesAdminProps> = ({
 
   const handleEdit = (item: ServiceItem) => {
     setEditingItem(item);
-    form.setFieldsValue(item);
+    const localizedNamesList = item.localizedNames
+      ? Object.entries(item.localizedNames).map(([lang, value]) => ({
+          lang,
+          value,
+        }))
+      : [];
+    const localizedDescriptionsList = item.localizedDescriptions
+      ? Object.entries(item.localizedDescriptions).map(([lang, value]) => ({
+          lang,
+          value,
+        }))
+      : [];
+    form.setFieldsValue({
+      ...item,
+      localizedNamesList,
+      localizedDescriptionsList,
+    });
     setIsEditing(true);
   };
 
@@ -60,6 +87,8 @@ export const ServicesAdmin: React.FC<ServicesAdminProps> = ({
       turnaroundDays: 3,
       requiresSampleType: [],
       dependencies: [],
+      localizedNamesList: [],
+      localizedDescriptionsList: [],
     });
     setIsEditing(true);
   };
@@ -81,13 +110,40 @@ export const ServicesAdmin: React.FC<ServicesAdminProps> = ({
     form.validateFields().then((values) => {
       setLocalData((prev) => {
         if (!prev) return prev;
+
+        const localizedNames: Record<string, string> = {};
+        if (values.localizedNamesList) {
+          values.localizedNamesList.forEach((item: any) => {
+            if (item && item.lang && item.value) {
+              localizedNames[item.lang] = item.value;
+            }
+          });
+        }
+
+        const localizedDescriptions: Record<string, string> = {};
+        if (values.localizedDescriptionsList) {
+          values.localizedDescriptionsList.forEach((item: any) => {
+            if (item && item.lang && item.value) {
+              localizedDescriptions[item.lang] = item.value;
+            }
+          });
+        }
+
+        const updatedItem = {
+          ...values,
+          localizedNames,
+          localizedDescriptions,
+        };
+        delete updatedItem.localizedNamesList;
+        delete updatedItem.localizedDescriptionsList;
+
         const newItems = [...prev.items];
         if (editingItem) {
           const idx = newItems.findIndex((i) => i.id === editingItem.id);
           if (idx !== -1)
-            newItems[idx] = { ...editingItem, ...values } as ServiceItem;
+            newItems[idx] = { ...editingItem, ...updatedItem } as ServiceItem;
         } else {
-          newItems.push(values as ServiceItem);
+          newItems.push(updatedItem as ServiceItem);
         }
         return { ...prev, items: newItems };
       });
@@ -95,40 +151,23 @@ export const ServicesAdmin: React.FC<ServicesAdminProps> = ({
     });
   };
 
-  const handleGeneratePR = () => {
+  const handleSyncToGitHub = async () => {
     if (!localData) return;
 
-    // Check if changed
     if (JSON.stringify(data) === JSON.stringify(localData)) {
       message.info(t('pr.noChangesDetected'));
       return;
     }
 
-    const prContent = `## 更新委託檢測價目與服務 (Update Services Pricing & Items)
-
-### 變更說明
-實驗室管理員透過 RP 區管理面板修改了 \`public/data/servicesData.json\`。
-
-### 修改明細預覽
-請檢視下方 JSON 以確認服務分類、單價或說明之更新。
-\`\`\`json
-${JSON.stringify(localData, null, 2)}
-\`\`\`
-
-### 檢查清單
-- [ ] 確認單價與交期合理。
-- [ ] 確認無拼字錯誤。
-`;
-    onGeneratePR(prContent, localData);
+    await saveData(
+      'public/data/servicesData.json',
+      localData,
+      'Update services data via Admin Panel',
+    );
   };
 
   const columns = [
-    {
-      title: t('pr.idColumn'),
-      dataIndex: 'id',
-      key: 'id',
-      width: 100,
-    },
+    { title: t('pr.idColumn'), dataIndex: 'id', key: 'id', width: 100 },
     {
       title: t('pr.categoriesSection'),
       dataIndex: 'category',
@@ -136,13 +175,17 @@ ${JSON.stringify(localData, null, 2)}
       width: 120,
       render: (val: string) => {
         const cat = localData.categories.find((c) => c.id === val);
-        return cat ? (isZh ? cat.nameZh : cat.nameEn) : val;
+        const name = cat ? (isZh ? cat.nameZh : cat.nameEn) : val;
+        return name;
       },
     },
     {
-      title: isZh ? t('pr.serviceNameZh') : t('pr.serviceNameEn'),
-      dataIndex: isZh ? 'nameZh' : 'nameEn',
+      title: t('admin.servicesAdmin.itemName'),
+      dataIndex: 'name',
       key: 'name',
+      render: (val: string, record: ServiceItem) => {
+        return isZh ? val : record.localizedNames?.['en'] || val;
+      },
     },
     {
       title: t('pr.basePrice'),
@@ -177,36 +220,151 @@ ${JSON.stringify(localData, null, 2)}
     },
   ];
 
+  const filteredItems = localData.items.filter((item) => {
+    const term = searchText.toLowerCase();
+    const subNames = Object.values(item.localizedNames || {})
+      .join(' ')
+      .toLowerCase();
+    return (
+      item.name.toLowerCase().includes(term) ||
+      item.id.toLowerCase().includes(term) ||
+      subNames.includes(term)
+    );
+  });
+
+  const serviceSchema: FieldSchema[] = [
+    {
+      name: 'id',
+      label: t('pr.serviceId'),
+      type: 'string',
+      required: true,
+      disabled: !!editingItem,
+    },
+    {
+      name: 'category',
+      label: t('pr.categoriesSection'),
+      type: 'select',
+      required: true,
+      options: localData.categories.map((c) => ({
+        value: c.id,
+        label: c.nameZh,
+      })),
+    },
+    {
+      name: 'name',
+      label: t('admin.servicesAdmin.mainName'),
+      type: 'string',
+      required: true,
+    },
+    {
+      name: 'localizedNamesList',
+      label: t('admin.servicesAdmin.localizedNames'),
+      type: 'localized-list',
+    },
+    {
+      name: 'basePrice',
+      label: t('pr.basePrice'),
+      type: 'number',
+      required: true,
+    },
+    { name: 'unit', label: t('pr.unit'), type: 'string', required: true },
+    {
+      name: 'turnaroundDays',
+      label: t('pr.turnaroundDays'),
+      type: 'number',
+      required: true,
+    },
+    {
+      name: 'description',
+      label: t('admin.servicesAdmin.mainDesc'),
+      type: 'text',
+      required: true,
+    },
+    {
+      name: 'localizedDescriptionsList',
+      label: t('admin.servicesAdmin.localizedDesc'),
+      type: 'localized-list',
+    },
+    {
+      name: 'requiresSampleType',
+      label: t('pr.requiresSampleType'),
+      type: 'select-multiple',
+      options: [
+        { value: 'powder', label: t('pr.samplePowder') },
+        { value: 'liquid', label: t('pr.sampleLiquid') },
+        { value: 'electrode_sheet', label: t('pr.sampleElectrode') },
+        { value: 'other', label: t('pr.sampleOther') },
+      ],
+    },
+    {
+      name: 'dependencies',
+      label: t('pr.dependencies'),
+      type: 'select-multiple',
+      options: localData.items.map((i) => ({ value: i.id, label: i.name })),
+    },
+    {
+      name: 'minSamples',
+      label: t('pr.minSamples'),
+      type: 'number',
+      required: true,
+    },
+    {
+      name: 'allowCustomParams',
+      label: t('pr.allowCustomParams'),
+      type: 'boolean',
+    },
+  ];
+
   return (
     <Card
-      className='mt-8 border border-[var(--shell-border)]'
-      style={{ background: 'var(--color-surface-1)' }}
+      className='bg-[var(--color-surface-1)] border-[var(--shell-border)]'
       title={
         <div className='flex items-center justify-between'>
-          <Title level={5} className='!m-0 text-[var(--color-text-primary)]'>
-            {t('pr.servicesAdminTitle')}
-          </Title>
           <Space>
+            <Title level={5} className='!m-0 text-[var(--color-text-primary)]'>
+              {t('pr.servicesAdminTitle')}
+            </Title>
+            <Input
+              placeholder={t('admin.servicesAdmin.searchService')}
+              prefix={<SearchOutlined />}
+              onChange={(e) => setSearchText(e.target.value)}
+              className='ml-4 w-48'
+            />
+          </Space>
+          <Space>
+            <Tooltip title={t('admin.servicesAdmin.setToken')}>
+              <Button
+                icon={<SettingOutlined />}
+                onClick={() => setIsTokenModalOpen(true)}
+              />
+            </Tooltip>
             <Button icon={<PlusOutlined />} onClick={handleAdd}>
               {t('pr.addService')}
             </Button>
             <Button
               type='primary'
-              onClick={handleGeneratePR}
+              icon={<CloudUploadOutlined />}
+              onClick={handleSyncToGitHub}
+              loading={isSyncing}
               disabled={JSON.stringify(data) === JSON.stringify(localData)}
             >
-              {t('pr.generatePr')}
+              {t('admin.servicesAdmin.saveGithub')}
             </Button>
           </Space>
         </div>
       }
     >
+      <GitHubTokenModal
+        open={isTokenModalOpen}
+        onClose={() => setIsTokenModalOpen(false)}
+      />
+
       <Table
-        dataSource={localData.items}
+        dataSource={filteredItems}
         columns={columns}
         rowKey='id'
         size='small'
-        pagination={false}
+        pagination={{ pageSize: 10 }}
         className='bg-transparent'
       />
 
@@ -218,129 +376,9 @@ ${JSON.stringify(localData, null, 2)}
         onCancel={() => setIsEditing(false)}
         width={700}
       >
-        <Form form={form} layout='vertical'>
-          <div className='grid grid-cols-2 gap-4'>
-            <Form.Item
-              name='id'
-              label={t('pr.serviceId')}
-              rules={[{ required: true }]}
-            >
-              <Input
-                disabled={!!editingItem}
-                placeholder={t('pr.serviceIdPlaceholder')}
-              />
-            </Form.Item>
-            <Form.Item
-              name='category'
-              label={t('pr.categoriesSection')}
-              rules={[{ required: true }]}
-            >
-              <Select
-                options={localData.categories.map((c) => ({
-                  value: c.id,
-                  label: isZh ? c.nameZh : c.nameEn,
-                }))}
-              />
-            </Form.Item>
-          </div>
-
-          <div className='grid grid-cols-2 gap-4'>
-            <Form.Item
-              name='nameZh'
-              label={t('pr.serviceNameZh')}
-              rules={[{ required: true }]}
-            >
-              <Input />
-            </Form.Item>
-            <Form.Item
-              name='nameEn'
-              label={t('pr.serviceNameEn')}
-              rules={[{ required: true }]}
-            >
-              <Input />
-            </Form.Item>
-          </div>
-
-          <div className='grid grid-cols-3 gap-4'>
-            <Form.Item
-              name='basePrice'
-              label={t('pr.basePrice')}
-              rules={[{ required: true }]}
-            >
-              <InputNumber className='w-full' min={0} />
-            </Form.Item>
-            <Form.Item
-              name='unit'
-              label={t('pr.unit')}
-              rules={[{ required: true }]}
-            >
-              <Input placeholder={t('pr.unitPlaceholder')} />
-            </Form.Item>
-            <Form.Item
-              name='turnaroundDays'
-              label={t('pr.turnaroundDays')}
-              rules={[{ required: true }]}
-            >
-              <InputNumber className='w-full' min={1} />
-            </Form.Item>
-          </div>
-
-          <Form.Item
-            name='description'
-            label={t('pr.description')}
-            rules={[{ required: true }]}
-          >
-            <Input.TextArea />
-          </Form.Item>
-
-          <div className='grid grid-cols-2 gap-4'>
-            <Form.Item
-              name='requiresSampleType'
-              label={t('pr.requiresSampleType')}
-            >
-              <Select
-                mode='multiple'
-                options={[
-                  { value: 'powder', label: t('pr.samplePowder') },
-                  { value: 'liquid', label: t('pr.sampleLiquid') },
-                  { value: 'electrode_sheet', label: t('pr.sampleElectrode') },
-                  { value: 'other', label: t('pr.sampleOther') },
-                ]}
-              />
-            </Form.Item>
-            <Form.Item name='dependencies' label={t('pr.dependencies')}>
-              <Select
-                mode='multiple'
-                options={localData.items.map((i) => ({
-                  value: i.id,
-                  label: isZh ? i.nameZh : i.nameEn,
-                }))}
-              />
-            </Form.Item>
-          </div>
-
-          <div className='grid grid-cols-2 gap-4'>
-            <Form.Item
-              name='minSamples'
-              label={t('pr.minSamples')}
-              rules={[{ required: true }]}
-            >
-              <InputNumber min={1} className='w-full' />
-            </Form.Item>
-            <Form.Item
-              name='allowCustomParams'
-              label={t('pr.allowCustomParams')}
-              valuePropName='checked'
-            >
-              <Select
-                options={[
-                  { value: true, label: t('pr.yes') },
-                  { value: false, label: t('pr.no') },
-                ]}
-              />
-            </Form.Item>
-          </div>
-        </Form>
+        <div className='max-h-[60vh] overflow-y-auto p-1'>
+          <DynamicForm form={form} schema={serviceSchema} />
+        </div>
       </Modal>
     </Card>
   );

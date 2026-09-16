@@ -9,12 +9,13 @@ export type ServiceCategory =
 export interface ServiceItem {
   id: string; // 如: "ec-cv", "spec-raman"
   category: ServiceCategory;
-  nameZh: string; // 如: "循環伏安法測試 (CV)"
-  nameEn: string;
+  name: string; // 預設主要語系名稱 (中文)
+  localizedNames?: Record<string, string>; // 多語系翻譯
   basePrice: number; // 基準單價 (TWD)
   unit: string; // 計價單位 (如: "樣品/點", "小時", "次")
   turnaroundDays: number; // 預估工作天
   description: string;
+  localizedDescriptions?: Record<string, string>; // 多語系說明
   requiresSampleType?: ('powder' | 'liquid' | 'electrode_sheet' | 'other')[]; // 接受樣品形態
   dependencies?: string[]; // 相依項目 ID (例如: 做 EIS 建議先勾選 CV 基準測試)
   minSamples: number; // 最少委託數量

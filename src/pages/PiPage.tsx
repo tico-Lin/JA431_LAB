@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Button,
   Card,
@@ -9,6 +9,7 @@ import {
   Space,
   Tag,
   Typography,
+  Spin,
 } from 'antd';
 import {
   MailOutlined,
@@ -22,11 +23,12 @@ import {
   AppstoreOutlined,
   EnvironmentOutlined,
 } from '@ant-design/icons';
-import { useTranslation } from 'react-i18next';
+import { useLocale } from '../hooks/useLocale';
 
 const { Title, Paragraph, Text } = Typography;
 
 const makeTelHref = (value: string) => `tel:${value.replace(/[^\d+]/g, '')}`;
+
 interface PiSectionItem {
   icon: string;
   title: string;
@@ -55,81 +57,134 @@ const iconMap: Record<string, React.ReactNode> = {
 };
 
 const PiPage: React.FC = () => {
-  const { t } = useTranslation();
-  const researchFocus = t('pi.researchFocusItems', {
-    returnObjects: true,
-  }) as PiSectionItem[];
-  const collaborations = t('pi.collaborationsItems', {
-    returnObjects: true,
-  }) as string[];
-  const links = t('pi.externalLinksItems', {
-    returnObjects: true,
-  }) as PiLinkItem[];
-  const specialties = t('pi.specialtiesItems', {
-    returnObjects: true,
-  }) as string[];
-  const outputCategories = t('pi.outputCategories', {
-    returnObjects: true,
-  }) as Record<string, string>;
-  const outputs = t('pi.outputsItems', {
-    returnObjects: true,
-  }) as Record<string, PiOutputItem[]>;
+  const { resolvedLanguage } = useLocale();
+  const [config, setConfig] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const [outputPages, setOutputPages] = useState<Record<string, number>>({});
-  const outputEntries = Object.entries(outputCategories);
+
+  useEffect(() => {
+    const loadData = async () => {
+      setLoading(true);
+      try {
+        const lang = resolvedLanguage === 'zh-TW' ? 'zh-TW' : 'en';
+        const response = await fetch(
+          `${import.meta.env.BASE_URL}data/piConfig.${lang}.json?t=${Date.now()}`,
+        );
+        if (!response.ok) throw new Error('Network response was not ok');
+        const data = await response.json();
+        setConfig(data);
+      } catch (error) {
+        console.error('Failed to load PI data', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    loadData();
+  }, [resolvedLanguage]);
+
+  if (loading) {
+    return (
+      <div className='flex justify-center p-20'>
+        <Spin size='large' />
+      </div>
+    );
+  }
+
+  if (!config) {
+    return (
+      <div className='text-center p-20 text-red-500'>
+        Failed to load PI profile data.
+      </div>
+    );
+  }
+
+  const {
+    heroTitle,
+    heroSubtitle,
+    heroDescription,
+    profileName,
+    profileBio,
+    profileTag = 'PI Profile',
+    contactRole = 'Director',
+    phone,
+    email,
+    officeHoursLabel = 'Office Hours:',
+    officeHours,
+    profileUrl,
+    researchFocusTitle = 'Research Focus',
+    researchFocusItems = [],
+    academicProfileTitle = 'Academic Profile',
+    education,
+    researchPositioning,
+    specialtiesItems = [],
+    collaborationTitle = 'Collaborations',
+    collaborationsItems = [],
+    outputsTitle = 'Outputs & Publications',
+    outputCategories = {},
+    outputsItems = {},
+    externalLinksTitle = 'External Links',
+    externalLinksItems = [],
+    collaborationButton = 'Contact for Collaboration',
+    viewProfileButton = 'View Full Profile',
+  } = config;
+
+  const outputEntries = Object.entries(
+    outputCategories as Record<string, string>,
+  );
 
   return (
     <div className='space-y-10 md:space-y-14'>
       <section
         className='relative overflow-hidden rounded-3xl border border-white/10 p-8 md:p-12 shadow-2xl'
-        style={{
-          background: 'transparent',
-        }}
+        style={{ background: 'transparent' }}
       >
         <div className='absolute inset-0 opacity-70'></div>
         <div className='relative z-10 max-w-4xl'>
           <Tag color='blue' className='mb-8 !border-0 !px-3 !py-1'>
-            {t('pi.profileTag')}
+            {profileTag}
           </Tag>
           <Title
             level={1}
             className='!mt-1 !mb-3 !text-4xl md:!text-6xl !font-black'
             style={{ color: 'var(--color-text-primary)' }}
           >
-            {t('pi.heroTitle')}
+            {heroTitle}
           </Title>
           <Title
             level={3}
             className='!mb-5 !font-normal'
             style={{ color: 'var(--color-text-secondary)' }}
           >
-            {t('pi.heroSubtitle')}
+            {heroSubtitle}
           </Title>
           <Paragraph
             className='!text-lg !max-w-3xl !mb-6'
             style={{ color: 'var(--color-text-secondary)' }}
           >
-            {t('pi.heroDescription')}
+            {heroDescription}
           </Paragraph>
           <Space wrap size='middle'>
             <Button
               type='primary'
-              href={`mailto:${t('pi.email')}`}
+              href={`mailto:${email}`}
               icon={<MailOutlined />}
             >
-              {t('pi.collaborationButton')}
+              {collaborationButton}
             </Button>
-            <Button
-              ghost
-              href={t('pi.profileUrl')}
-              target='_blank'
-              icon={<GlobalOutlined />}
-              style={{
-                color: 'var(--color-text-primary)',
-                borderColor: 'var(--color-text-primary)',
-              }}
-            >
-              {t('pi.viewProfileButton')}
-            </Button>
+            {profileUrl && (
+              <Button
+                ghost
+                href={profileUrl}
+                target='_blank'
+                icon={<GlobalOutlined />}
+                style={{
+                  color: 'var(--color-text-primary)',
+                  borderColor: 'var(--color-text-primary)',
+                }}
+              >
+                {viewProfileButton}
+              </Button>
+            )}
           </Space>
         </div>
       </section>
@@ -137,44 +192,48 @@ const PiPage: React.FC = () => {
       <Row gutter={[32, 32]}>
         <Col xs={24} lg={8}>
           <Card className='glass-card h-full'>
-            <Text className='block mb-2 text-slate-400'>
-              {t('pi.contactRole')}
+            <Text className='block mb-2 text-[var(--color-text-muted)]'>
+              {contactRole}
             </Text>
             <Title
               level={3}
               className='!mb-2'
               style={{ color: 'var(--color-text-primary)' }}
             >
-              {t('pi.profileName')}
+              {profileName}
             </Title>
             <Paragraph
               className='!mb-4'
               style={{ color: 'var(--color-text-secondary)' }}
             >
-              {t('pi.profileBio')}
+              {profileBio}
             </Paragraph>
             <Divider />
             <Space orientation='vertical' size={12}>
-              <a
-                href={makeTelHref(t('pi.phone'))}
-                className='text-[var(--color-text-secondary)] hover:text-cyan-300 transition-colors'
-              >
-                <PhoneOutlined className='mr-2' />
-                {t('pi.phone')}
-              </a>
-              <a
-                href={`mailto:${t('pi.email')}`}
-                className='text-[var(--color-text-secondary)] hover:text-cyan-300 transition-colors'
-              >
-                <MailOutlined className='mr-2' />
-                {t('pi.email')}
-              </a>
-              <div className='flex gap-1 text-[var(--color-text-secondary)]'>
-                <span className='shrink-0'>{t('pi.officeHoursLabel')}</span>
-                <span className='whitespace-pre-line'>
-                  {t('pi.officeHours')}
-                </span>
-              </div>
+              {phone && (
+                <a
+                  href={makeTelHref(phone)}
+                  className='text-[var(--color-text-secondary)] hover:text-cyan-300 transition-colors'
+                >
+                  <PhoneOutlined className='mr-2' />
+                  {phone}
+                </a>
+              )}
+              {email && (
+                <a
+                  href={`mailto:${email}`}
+                  className='text-[var(--color-text-secondary)] hover:text-cyan-300 transition-colors'
+                >
+                  <MailOutlined className='mr-2' />
+                  {email}
+                </a>
+              )}
+              {officeHours && (
+                <div className='flex gap-1 text-[var(--color-text-secondary)]'>
+                  <span className='shrink-0'>{officeHoursLabel}</span>
+                  <span className='whitespace-pre-line'>{officeHours}</span>
+                </div>
+              )}
             </Space>
           </Card>
         </Col>
@@ -185,10 +244,10 @@ const PiPage: React.FC = () => {
               className='!mb-4'
               style={{ color: 'var(--color-text-primary)' }}
             >
-              {t('pi.researchFocusTitle')}
+              {researchFocusTitle}
             </Title>
             <Row gutter={[16, 16]}>
-              {researchFocus.map((item) => (
+              {(researchFocusItems as PiSectionItem[]).map((item) => (
                 <Col xs={24} md={12} key={item.title}>
                   <Card
                     className='h-full border-white/10'
@@ -212,7 +271,7 @@ const PiPage: React.FC = () => {
                       {item.description}
                     </Paragraph>
                     <Space wrap>
-                      {item.tags.map((tag) => (
+                      {item.tags?.map((tag) => (
                         <Tag className='research-tag' key={tag}>
                           {tag}
                         </Tag>
@@ -237,10 +296,10 @@ const PiPage: React.FC = () => {
                   className='!mb-2'
                   style={{ color: 'var(--color-text-primary)' }}
                 >
-                  {t('pi.academicProfileTitle')}
+                  {academicProfileTitle}
                 </Title>
                 <Text style={{ color: 'var(--color-text-secondary)' }}>
-                  {t('pi.education')}
+                  {education}
                 </Text>
               </div>
             </div>
@@ -250,10 +309,10 @@ const PiPage: React.FC = () => {
               className='!mb-4 !text-base'
               style={{ color: 'var(--color-text-secondary)' }}
             >
-              {t('pi.researchPositioning')}
+              {researchPositioning}
             </Paragraph>
             <div className='flex flex-wrap gap-2'>
-              {specialties.map((specialty) => (
+              {(specialtiesItems as string[]).map((specialty) => (
                 <Tag className='research-tag' key={specialty}>
                   {specialty}
                 </Tag>
@@ -271,10 +330,10 @@ const PiPage: React.FC = () => {
               className='!mb-4'
               style={{ color: 'var(--color-text-primary)' }}
             >
-              {t('pi.collaborationTitle')}
+              {collaborationTitle}
             </Title>
             <ul className='space-y-3 pl-5 text-[var(--color-text-secondary)]'>
-              {collaborations.map((item) => (
+              {(collaborationsItems as string[]).map((item) => (
                 <li key={item} className='marker:text-cyan-300'>
                   {item}
                 </li>
@@ -290,11 +349,12 @@ const PiPage: React.FC = () => {
           className='!mb-4'
           style={{ color: 'var(--color-text-primary)' }}
         >
-          {t('pi.outputsTitle')}
+          {outputsTitle}
         </Title>
         <Row gutter={[24, 24]}>
           {outputEntries.map(([category, label]) => {
-            const categoryOutputs = outputs[category] ?? [];
+            const categoryOutputs =
+              (outputsItems as Record<string, PiOutputItem[]>)[category] ?? [];
             const currentPage = outputPages[category] ?? 1;
             const pageItems = categoryOutputs.slice(
               (currentPage - 1) * 4,
@@ -353,28 +413,30 @@ const PiPage: React.FC = () => {
         </Row>
       </section>
 
-      <Card className='glass-card'>
-        <Title
-          level={3}
-          className='!mb-4'
-          style={{ color: 'var(--color-text-primary)' }}
-        >
-          {t('pi.externalLinksTitle')}
-        </Title>
-        <Row gutter={[16, 16]}>
-          {links.map((item) => (
-            <Col xs={24} md={8} key={item.href}>
-              <a href={item.href} target='_blank' rel='noreferrer'>
-                <div className='rounded-2xl border border-white/10 bg-white/5 p-4 h-full hover:border-cyan-300/50 transition-colors'>
-                  <Text style={{ color: 'var(--color-text-primary)' }}>
-                    {item.title}
-                  </Text>
-                </div>
-              </a>
-            </Col>
-          ))}
-        </Row>
-      </Card>
+      {externalLinksItems && externalLinksItems.length > 0 && (
+        <Card className='glass-card'>
+          <Title
+            level={3}
+            className='!mb-4'
+            style={{ color: 'var(--color-text-primary)' }}
+          >
+            {externalLinksTitle}
+          </Title>
+          <Row gutter={[16, 16]}>
+            {(externalLinksItems as PiLinkItem[]).map((item) => (
+              <Col xs={24} md={8} key={item.href}>
+                <a href={item.href} target='_blank' rel='noreferrer'>
+                  <div className='rounded-2xl border border-white/10 bg-white/5 p-4 h-full hover:border-cyan-300/50 transition-colors'>
+                    <Text style={{ color: 'var(--color-text-primary)' }}>
+                      {item.title}
+                    </Text>
+                  </div>
+                </a>
+              </Col>
+            ))}
+          </Row>
+        </Card>
+      )}
     </div>
   );
 };

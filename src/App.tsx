@@ -388,6 +388,11 @@ const App: React.FC = () => {
           colorBgContainer: 'var(--color-surface-1)',
           colorBgElevated: 'var(--color-bg-card)',
         },
+        Tabs: {
+          itemColor: 'var(--color-text-secondary)',
+          itemSelectedColor: 'var(--color-accent)',
+          itemHoverColor: 'var(--color-text-primary)',
+        },
       },
     };
   }, [isDark]);
