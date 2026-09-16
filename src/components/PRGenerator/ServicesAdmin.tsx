@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import {
   Card,
+  Tabs,
   Table,
   Button,
   Typography,
@@ -36,6 +37,9 @@ export const ServicesAdmin: React.FC = () => {
   const [isEditing, setIsEditing] = useState(false);
   const [editingItem, setEditingItem] = useState<ServiceItem | null>(null);
   const [form] = Form.useForm();
+  const [isCategoryEditing, setIsCategoryEditing] = useState(false);
+  const [editingCategory, setEditingCategory] = useState<any | null>(null);
+  const [categoryForm] = Form.useForm();
 
   const [searchText, setSearchText] = useState('');
 
@@ -56,6 +60,98 @@ export const ServicesAdmin: React.FC = () => {
   if (loading || !localData) return <div>{t('common.loadingData')}</div>;
   if (error) return <div>{t('common.failedToLoad')}</div>;
 
+  const handleCategoryEdit = (cat: any) => {
+    setEditingCategory(cat);
+    categoryForm.setFieldsValue({
+      id: cat.id,
+      name: cat.name,
+      nameEn: cat.localizedNames?.en || '',
+    });
+    setIsCategoryEditing(true);
+  };
+
+  const handleCategoryAdd = () => {
+    setEditingCategory(null);
+    categoryForm.resetFields();
+    setIsCategoryEditing(true);
+  };
+
+  const handleCategoryDelete = (id: string) => {
+    Modal.confirm({
+      title: t('pr.tooltipDeleteCategory'),
+      onOk: () => {
+        setLocalData((prev) =>
+          prev
+            ? {
+                ...prev,
+                categories: prev.categories.filter((c) => c.id !== id),
+              }
+            : null,
+        );
+      },
+    });
+  };
+
+  const handleCategorySave = () => {
+    categoryForm.validateFields().then((values) => {
+      setLocalData((prev) => {
+        if (!prev) return prev;
+
+        const newCat = {
+          id: values.id || values.name.toLowerCase().replace(/\s+/g, '-'),
+          name: values.name,
+          localizedNames: values.nameEn ? { en: values.nameEn } : undefined,
+        };
+
+        const newCategories = [...prev.categories];
+        if (editingCategory) {
+          const idx = newCategories.findIndex(
+            (c) => c.id === editingCategory.id,
+          );
+          if (idx !== -1) newCategories[idx] = newCat;
+        } else {
+          newCategories.push(newCat);
+        }
+        return { ...prev, categories: newCategories };
+      });
+      setIsCategoryEditing(false);
+    });
+  };
+
+  const categoryColumns = [
+    { title: t('pr.idColumn'), dataIndex: 'id', key: 'id' },
+    { title: t('pr.categoryName'), dataIndex: 'name', key: 'name' },
+    {
+      title: 'English Name',
+      key: 'nameEn',
+      render: (_: any, record: any) => record.localizedNames?.en || '-',
+    },
+    {
+      title: t('pr.actionsColumn'),
+      key: 'actions',
+      width: 120,
+      render: (_: any, record: any) => (
+        <Space>
+          <Tooltip title={t('pr.tooltipEditCategory')}>
+            <Button
+              type='text'
+              icon={<EditOutlined />}
+              onClick={() => handleCategoryEdit(record)}
+            />
+          </Tooltip>
+          <Tooltip title={t('pr.tooltipDeleteCategory')}>
+            <Button
+              type='text'
+              danger
+              icon={<DeleteOutlined />}
+              onClick={() => handleCategoryDelete(record.id)}
+            />
+          </Tooltip>
+        </Space>
+      ),
+    },
+  ];
+
   const handleEdit = (item: ServiceItem) => {
     setEditingItem(item);
     const localizedNamesList = item.localizedNames
@@ -70,10 +166,22 @@ export const ServicesAdmin: React.FC = () => {
           value,
         }))
       : [];
+    const customOptions =
+      item.customOptions?.map((opt) => ({
+        ...opt,
+        labelEn: opt.localizedLabels?.en || '',
+        descriptionEn: opt.localizedDescriptions?.en || '',
+        optionsText:
+          opt.options
+            ?.map((o) => `${o.value}:${o.label}:${o.localizedLabels?.en || ''}`)
+            .join('\n') || '',
+      })) || [];
+
     form.setFieldsValue({
       ...item,
       localizedNamesList,
       localizedDescriptionsList,
+      customOptions,
     });
     setIsEditing(true);
   };
@@ -89,6 +197,7 @@ export const ServicesAdmin: React.FC = () => {
       dependencies: [],
       localizedNamesList: [],
       localizedDescriptionsList: [],
+      customOptions: [],
     });
     setIsEditing(true);
   };
@@ -129,10 +238,42 @@ export const ServicesAdmin: React.FC = () => {
           });
         }
 
+        const customOptions = (values.customOptions || []).map((opt: any) => {
+          let options;
+          if (opt.type === 'select' && opt.optionsText) {
+            options = opt.optionsText
+              .split('\n')
+              .filter((l: string) => l.trim())
+              .map((l: string) => {
+                const parts = l.split(':');
+                return {
+                  value: parts[0]?.trim() || '',
+                  label: parts[1]?.trim() || parts[0]?.trim(),
+                  localizedLabels: parts[2]
+                    ? { en: parts[2].trim() }
+                    : undefined,
+                };
+              });
+          }
+          return {
+            id: opt.id,
+            label: opt.label,
+            localizedLabels: opt.labelEn ? { en: opt.labelEn } : undefined,
+            type: opt.type,
+            required: !!opt.required,
+            description: opt.description,
+            localizedDescriptions: opt.descriptionEn
+              ? { en: opt.descriptionEn }
+              : undefined,
+            options,
+          };
+        });
+
         const updatedItem = {
           ...values,
           localizedNames,
           localizedDescriptions,
+          customOptions,
         };
         delete updatedItem.localizedNamesList;
         delete updatedItem.localizedDescriptionsList;
@@ -175,7 +316,11 @@ export const ServicesAdmin: React.FC = () => {
       width: 120,
       render: (val: string) => {
         const cat = localData.categories.find((c) => c.id === val);
-        const name = cat ? (isZh ? cat.nameZh : cat.nameEn) : val;
+        const name = cat
+          ? isZh
+            ? cat.name
+            : cat.localizedNames?.['en'] || cat.name
+          : val;
         return name;
       },
     },
@@ -247,7 +392,7 @@ export const ServicesAdmin: React.FC = () => {
       required: true,
       options: localData.categories.map((c) => ({
         value: c.id,
-        label: c.nameZh,
+        label: isZh ? c.name : c.localizedNames?.['en'] || c.name,
       })),
     },
     {
@@ -313,6 +458,43 @@ export const ServicesAdmin: React.FC = () => {
       label: t('pr.allowCustomParams'),
       type: 'boolean',
     },
+    {
+      name: 'customOptions',
+      label: '客製化選項 (Custom Options)',
+      type: 'object-list',
+      placeholder: '新增選項 (Add Option)',
+      subFields: [
+        {
+          name: 'id',
+          label: 'ID (e.g. solvent)',
+          type: 'string',
+          required: true,
+        },
+        { name: 'label', label: '名稱 (中文)', type: 'string', required: true },
+        { name: 'labelEn', label: '名稱 (English)', type: 'string' },
+        {
+          name: 'type',
+          label: '類型 (Type)',
+          type: 'select',
+          required: true,
+          options: [
+            { value: 'checkbox', label: 'Checkbox' },
+            { value: 'select', label: 'Select' },
+            { value: 'text', label: 'Text' },
+            { value: 'number', label: 'Number' },
+          ],
+        },
+        { name: 'required', label: '必選 (Required)', type: 'boolean' },
+        { name: 'description', label: '說明 (中文)', type: 'text' },
+        { name: 'descriptionEn', label: '說明 (English)', type: 'text' },
+        {
+          name: 'optionsText',
+          label:
+            '下拉選單選項 (Options for Select type, one per line. Format: value:中文標籤:EnglishLabel)',
+          type: 'text',
+        },
+      ],
+    },
   ];
 
   return (
@@ -338,9 +520,6 @@ export const ServicesAdmin: React.FC = () => {
                 onClick={() => setIsTokenModalOpen(true)}
               />
             </Tooltip>
-            <Button icon={<PlusOutlined />} onClick={handleAdd}>
-              {t('pr.addService')}
-            </Button>
             <Button
               type='primary'
               icon={<CloudUploadOutlined />}
@@ -359,13 +538,52 @@ export const ServicesAdmin: React.FC = () => {
         onClose={() => setIsTokenModalOpen(false)}
       />
 
-      <Table
-        dataSource={filteredItems}
-        columns={columns}
-        rowKey='id'
-        size='small'
-        pagination={{ pageSize: 10 }}
-        className='bg-transparent'
+      <Tabs
+        defaultActiveKey='1'
+        items={[
+          {
+            key: '1',
+            label: t('pr.servicesAdminTitle'),
+            children: (
+              <>
+                <div className='flex justify-end mb-4'>
+                  <Button icon={<PlusOutlined />} onClick={handleAdd}>
+                    {t('pr.addService')}
+                  </Button>
+                </div>
+                <Table
+                  dataSource={filteredItems}
+                  columns={columns}
+                  rowKey='id'
+                  size='small'
+                  pagination={{ pageSize: 10 }}
+                  className='bg-transparent'
+                />
+              </>
+            ),
+          },
+          {
+            key: '2',
+            label: t('pr.categoriesSection'),
+            children: (
+              <>
+                <div className='flex justify-end mb-4'>
+                  <Button icon={<PlusOutlined />} onClick={handleCategoryAdd}>
+                    {t('pr.addCategory')}
+                  </Button>
+                </div>
+                <Table
+                  dataSource={localData.categories}
+                  columns={categoryColumns}
+                  rowKey='id'
+                  size='small'
+                  pagination={{ pageSize: 10 }}
+                  className='bg-transparent'
+                />
+              </>
+            ),
+          },
+        ]}
       />
 
       <Modal
@@ -379,6 +597,33 @@ export const ServicesAdmin: React.FC = () => {
         <div className='max-h-[60vh] overflow-y-auto p-1'>
           <DynamicForm form={form} schema={serviceSchema} />
         </div>
+      </Modal>
+
+      <Modal
+        title={editingCategory ? t('pr.editCategory') : t('pr.addNewCategory')}
+        open={isCategoryEditing}
+        forceRender
+        onOk={handleCategorySave}
+        onCancel={() => setIsCategoryEditing(false)}
+      >
+        <Form form={categoryForm} layout='vertical'>
+          <Form.Item name='id' label='ID (Optional, auto-generated if empty)'>
+            <Input
+              disabled={!!editingCategory}
+              placeholder='e.g. electrochemical'
+            />
+          </Form.Item>
+          <Form.Item
+            name='name'
+            label={t('pr.categoryName')}
+            rules={[{ required: true }]}
+          >
+            <Input />
+          </Form.Item>
+          <Form.Item name='nameEn' label='Category Name (English)'>
+            <Input />
+          </Form.Item>
+        </Form>
       </Modal>
     </Card>
   );

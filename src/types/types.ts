@@ -2,7 +2,9 @@
 export interface Subcategory {
   id: string;
   name: string;
+  localizedNames?: Record<string, string>;
   description?: string;
+  localizedDescriptions?: Record<string, string>;
   // Skills can belong to multiple categories - this creates the overlap!
   belongsTo: string[]; // array of category IDs
 }
@@ -10,8 +12,10 @@ export interface Subcategory {
 export interface SkillCategory {
   id: string;
   name: string;
+  localizedNames?: Record<string, string>;
   color: string;
   description?: string;
+  localizedDescriptions?: Record<string, string>;
 }
 
 // Proficiency levels

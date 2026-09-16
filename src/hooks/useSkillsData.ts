@@ -16,42 +16,40 @@ function localizeSkillsData(
   language: 'en' | 'zh-TW',
   t: any,
 ) {
-  const resolveName = (member: LabMember) => {
+  const resolveMemberName = (member: LabMember) => {
     if (language === 'zh-TW') return member.name;
     return member.localizedNames?.en || member.name;
   };
 
-  if (language !== 'zh-TW') {
-    return {
-      ...data,
-      members: data.members.map((member) => ({
-        ...member,
-        name: resolveName(member),
-      })),
-    };
-  }
+  const resolveItemName = (item: any, type: 'categories' | 'skills') => {
+    if (language === 'en') {
+      return item.localizedNames?.en || item.name;
+    }
+    return t(`skillsData.${type}.${item.id}.name`, item.name);
+  };
+
+  const resolveItemDesc = (item: any, type: 'categories' | 'skills') => {
+    if (language === 'en') {
+      return item.localizedDescriptions?.en || item.description;
+    }
+    return t(`skillsData.${type}.${item.id}.description`, item.description);
+  };
 
   return {
     ...data,
     categories: data.categories.map((category) => ({
       ...category,
-      name: t(`skillsData.categories.${category.id}.name`, category.name),
-      description: t(
-        `skillsData.categories.${category.id}.description`,
-        category.description,
-      ),
+      name: resolveItemName(category, 'categories'),
+      description: resolveItemDesc(category, 'categories'),
     })),
     skills: data.skills.map((skill) => ({
       ...skill,
-      name: t(`skillsData.skills.${skill.id}.name`, skill.name),
-      description: t(
-        `skillsData.skills.${skill.id}.description`,
-        skill.description,
-      ),
+      name: resolveItemName(skill, 'skills'),
+      description: resolveItemDesc(skill, 'skills'),
     })),
     members: data.members.map((member) => ({
       ...member,
-      name: resolveName(member),
+      name: resolveMemberName(member),
       role: t(`skillsData.roles.${member.role}`, member.role),
     })),
   };

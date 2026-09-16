@@ -77,6 +77,14 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
             disabled={field.disabled}
           />
         );
+      case 'string-list':
+        return (
+          <Select
+            mode='tags'
+            placeholder={field.placeholder}
+            style={{ width: '100%' }}
+          />
+        );
       case 'localized':
         return (
           <div className='flex flex-col gap-2 border p-3 rounded-md bg-black/5'>
@@ -179,20 +187,7 @@ export const DynamicForm: React.FC<DynamicFormProps> = ({
                         }
                         tooltip={subField.tooltip}
                       >
-                        {subField.type === 'text' ? (
-                          <Input.TextArea
-                            placeholder={subField.placeholder}
-                            rows={3}
-                          />
-                        ) : subField.type === 'string-list' ? (
-                          <Select
-                            mode='tags'
-                            placeholder={subField.placeholder}
-                            style={{ width: '100%' }}
-                          />
-                        ) : (
-                          <Input placeholder={subField.placeholder} />
-                        )}
+                        {renderField(subField)}
                       </Form.Item>
                     ))}
                   </div>

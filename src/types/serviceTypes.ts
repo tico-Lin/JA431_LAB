@@ -1,9 +1,5 @@
 // 檢測項目分類
-export type ServiceCategory =
-  | 'electrochemical'
-  | 'spectroscopy'
-  | 'synthesis_prep'
-  | 'advanced_analysis';
+export type ServiceCategory = string;
 
 // 單一服務項目規格
 export interface ServiceItem {
@@ -20,6 +16,23 @@ export interface ServiceItem {
   dependencies?: string[]; // 相依項目 ID (例如: 做 EIS 建議先勾選 CV 基準測試)
   minSamples: number; // 最少委託數量
   allowCustomParams: boolean; // 是否允許填寫客製化參數 (如電位窗口、掃速)
+  customOptions?: CustomOption[]; // 手動新增的客製化選項
+}
+
+// 客製化選項規格
+export interface CustomOption {
+  id: string; // 選項 ID
+  label: string; // 選項名稱 (中文)
+  localizedLabels?: Record<string, string>; // 多語系選項名稱
+  type: 'checkbox' | 'select' | 'text' | 'number'; // 欄位類型
+  required: boolean; // 是否必填
+  description?: string; // 說明
+  localizedDescriptions?: Record<string, string>; // 多語系說明
+  options?: {
+    value: string;
+    label: string;
+    localizedLabels?: Record<string, string>;
+  }[]; // 供下拉選單 (select) 使用的選項
 }
 
 // 估價單表單狀態
@@ -46,6 +59,10 @@ export interface QuotationFormState {
 }
 
 export interface ServicesData {
-  categories: { id: ServiceCategory; nameZh: string; nameEn: string }[];
+  categories: {
+    id: ServiceCategory;
+    name: string;
+    localizedNames?: Record<string, string>;
+  }[];
   items: ServiceItem[];
 }

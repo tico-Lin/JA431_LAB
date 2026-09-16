@@ -27,6 +27,13 @@
       "localizedNames": {
         "en": "Advanced Analysis"
       }
+    },
+    {
+      "id": "chromatography",
+      "name": "層析與質譜分析",
+      "localizedNames": {
+        "en": "Chromatography & Mass Spectrometry"
+      }
     }
   ],
   "items": [
@@ -82,6 +89,114 @@
         "en": "Analyze the degree of defect in carbon materials and molecular vibration modes."
       },
       "requiresSampleType": ["powder", "electrode_sheet"],
+      "minSamples": 1,
+      "allowCustomParams": false
+    },
+    {
+      "id": "spec-nmr-400",
+      "category": "spectroscopy",
+      "name": "核磁共振分析 (NMR-400)",
+      "localizedNames": {
+        "en": "Nuclear Magnetic Resonance (NMR-400)"
+      },
+      "basePrice": 500,
+      "unit": "樣品",
+      "turnaroundDays": 5,
+      "description": "分析有機分子與材料之分子結構及純度。",
+      "localizedDescriptions": {
+        "en": "Analyze molecular structure and purity of organic molecules and materials."
+      },
+      "requiresSampleType": ["liquid", "powder"],
+      "minSamples": 1,
+      "allowCustomParams": true
+    },
+    {
+      "id": "aa-sem",
+      "category": "advanced_analysis",
+      "name": "掃描式電子顯微鏡 (SEM)",
+      "localizedNames": {
+        "en": "Scanning Electron Microscopy (SEM)"
+      },
+      "basePrice": 1500,
+      "unit": "小時",
+      "turnaroundDays": 7,
+      "description": "觀察樣品表面微觀形貌，可選配EDS進行元素分析。",
+      "localizedDescriptions": {
+        "en": "Observe surface micro-morphology of samples, optional EDS for elemental analysis."
+      },
+      "requiresSampleType": ["powder", "electrode_sheet"],
+      "minSamples": 1,
+      "allowCustomParams": true
+    },
+    {
+      "id": "aa-xrd",
+      "category": "advanced_analysis",
+      "name": "X光繞射光譜分析 (XRD)",
+      "localizedNames": {
+        "en": "X-ray Diffraction (XRD)"
+      },
+      "basePrice": 600,
+      "unit": "樣品",
+      "turnaroundDays": 5,
+      "description": "分析材料結晶相、晶格常數及結晶度。",
+      "localizedDescriptions": {
+        "en": "Analyze crystalline phase, lattice parameters, and crystallinity of materials."
+      },
+      "requiresSampleType": ["powder", "electrode_sheet"],
+      "minSamples": 1,
+      "allowCustomParams": true
+    },
+    {
+      "id": "chrom-gcms",
+      "category": "chromatography",
+      "name": "氣相層析質譜分析 (GC/MS)",
+      "localizedNames": {
+        "en": "Gas Chromatography-Mass Spectrometry (GC/MS)"
+      },
+      "basePrice": 2000,
+      "unit": "樣品",
+      "turnaroundDays": 7,
+      "description": "揮發性及半揮發性有機化合物之定性與定量分析。",
+      "localizedDescriptions": {
+        "en": "Qualitative and quantitative analysis of volatile and semi-volatile organic compounds."
+      },
+      "requiresSampleType": ["liquid"],
+      "minSamples": 1,
+      "allowCustomParams": true
+    },
+    {
+      "id": "chrom-hplc",
+      "category": "chromatography",
+      "name": "高效能液相層析分析 (HPLC)",
+      "localizedNames": {
+        "en": "High-Performance Liquid Chromatography (HPLC)"
+      },
+      "basePrice": 1500,
+      "unit": "樣品",
+      "turnaroundDays": 5,
+      "description": "不易揮發或熱不安定之有機化合物定性與定量分析。",
+      "localizedDescriptions": {
+        "en": "Qualitative and quantitative analysis of non-volatile or thermally unstable organic compounds."
+      },
+      "requiresSampleType": ["liquid"],
+      "minSamples": 1,
+      "allowCustomParams": true
+    },
+    {
+      "id": "spec-ftir",
+      "category": "spectroscopy",
+      "name": "傅利葉轉換紅外線光譜 (FTIR)",
+      "localizedNames": {
+        "en": "Fourier-Transform Infrared Spectroscopy (FTIR)"
+      },
+      "basePrice": 800,
+      "unit": "樣品",
+      "turnaroundDays": 3,
+      "description": "檢測樣品之化學鍵結與官能基特徵。",
+      "localizedDescriptions": {
+        "en": "Detect chemical bonds and functional groups of samples."
+      },
+      "requiresSampleType": ["powder", "liquid", "electrode_sheet"],
       "minSamples": 1,
       "allowCustomParams": false
     }

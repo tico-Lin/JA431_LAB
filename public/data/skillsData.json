@@ -2,136 +2,322 @@
   "categories": [
     {
       "id": "research-focus",
-      "name": "Research Focus",
+      "name": "研究領域",
       "color": "#7c3aed",
-      "description": "High-entropy energy materials and agricultural-waste green chemistry"
+      "description": "高熵能源材料與農業廢棄物綠色化學",
+      "localizedNames": {
+        "en": "Research Focus"
+      },
+      "localizedDescriptions": {
+        "en": "High-entropy energy materials and agricultural-waste green chemistry"
+      }
     },
     {
       "id": "synthesis",
-      "name": "Synthesis Methods",
+      "name": "合成方法",
       "color": "#0ea5e9",
-      "description": "Hydrothermal, electrodeposition, and co-precipitation routes"
+      "description": "水熱法、電化學沉積與共沉澱法",
+      "localizedNames": {
+        "en": "Synthesis Methods"
+      },
+      "localizedDescriptions": {
+        "en": "Hydrothermal, electrodeposition, and co-precipitation routes"
+      }
     },
     {
       "id": "thermal-treatment",
-      "name": "Thermal Treatment",
+      "name": "熱處理",
       "color": "#f59e0b",
-      "description": "Calcination and annealing for phase and surface tuning"
+      "description": "鍛燒與退火以調整相態與表面結構",
+      "localizedNames": {
+        "en": "Thermal Treatment"
+      },
+      "localizedDescriptions": {
+        "en": "Calcination and annealing for phase and surface tuning"
+      }
     },
     {
       "id": "characterization",
-      "name": "Characterization",
+      "name": "材料分析",
       "color": "#10b981",
-      "description": "X-ray Diffraction (XRD), Scanning Electron Microscopy with Energy Dispersive Spectroscopy (SEM-EDS), Fourier-Transform Infrared Spectroscopy (FT-IR), and Raman Spectroscopy"
+      "description": "X光繞射、電子顯微鏡、紅外線及拉曼光譜分析",
+      "localizedNames": {
+        "en": "Characterization"
+      },
+      "localizedDescriptions": {
+        "en": "X-ray Diffraction (XRD), Scanning Electron Microscopy with Energy Dispersive Spectroscopy (SEM-EDS), Fourier-Transform Infrared Spectroscopy (FT-IR), and Raman Spectroscopy"
+      }
     },
     {
       "id": "electrochemistry",
-      "name": "Electrochemistry",
+      "name": "電化學",
       "color": "#ef4444",
-      "description": "Cyclic Voltammetry (CV), Linear Sweep Voltammetry (LSV), Galvanostatic Charge-Discharge (GCD), and Electrochemical Impedance Spectroscopy (EIS)"
+      "description": "循環伏安、線性掃描、充放電與阻抗分析",
+      "localizedNames": {
+        "en": "Electrochemistry"
+      },
+      "localizedDescriptions": {
+        "en": "Cyclic Voltammetry (CV), Linear Sweep Voltammetry (LSV), Galvanostatic Charge-Discharge (GCD), and Electrochemical Impedance Spectroscopy (EIS)"
+      }
     },
     {
       "id": "instrument-experience",
-      "name": "Instrument Experience",
+      "name": "儀器操作經驗",
       "color": "#14b8a6",
-      "description": "SP-50e"
+      "description": "實驗室核心分析儀器",
+      "localizedNames": {
+        "en": "Instrument Experience"
+      },
+      "localizedDescriptions": {
+        "en": "SP-50e"
+      }
+    },
+    {
+      "id": "chromatography",
+      "name": "層析與質譜分析",
+      "localizedNames": {
+        "en": "Chromatography & Mass Spec"
+      },
+      "color": "#ec4899",
+      "description": "氣相與液相層析及質譜技術",
+      "localizedDescriptions": {
+        "en": "Gas/Liquid Chromatography and Mass Spectrometry techniques"
+      }
     }
   ],
   "skills": [
     {
       "id": "high-entropy-doping",
-      "name": "High-Entropy Doping",
-      "description": "Multi-element substitution for functional and energy materials",
+      "name": "高熵材料",
+      "description": "多元素共同調控以提升材料穩定性與性能",
       "belongsTo": [
         "research-focus",
         "synthesis",
         "thermal-treatment",
         "characterization"
-      ]
+      ],
+      "localizedNames": {
+        "en": "High-Entropy"
+      },
+      "localizedDescriptions": {
+        "en": "Multi-element substitution for functional and energy materials"
+      }
     },
     {
       "id": "agri-waste-green-chemistry",
-      "name": "Agri-Waste Green Chemistry",
-      "description": "Upcycling agricultural residues into green functional materials",
-      "belongsTo": ["research-focus", "synthesis", "characterization"]
+      "name": "農廢綠色化學",
+      "description": "將農業廢棄物升級再造為綠色機能材料",
+      "belongsTo": ["research-focus", "synthesis", "characterization"],
+      "localizedNames": {
+        "en": "Agri-Waste Green Chemistry"
+      },
+      "localizedDescriptions": {
+        "en": "Upcycling agricultural residues into green functional materials"
+      }
     },
     {
       "id": "hydrothermal",
-      "name": "Hydrothermal Synthesis",
-      "description": "Solution-based growth of nanostructured materials under sealed conditions",
-      "belongsTo": ["synthesis", "characterization"]
+      "name": "水熱法",
+      "description": "以水熱條件合成奈米／層狀材料",
+      "belongsTo": ["synthesis"],
+      "localizedNames": {
+        "en": "Hydrothermal Synthesis"
+      },
+      "localizedDescriptions": {
+        "en": "Solution-based growth of nanostructured materials under sealed conditions"
+      }
     },
     {
       "id": "electrodeposition",
-      "name": "Electrodeposition",
-      "description": "Electrochemical deposition of films and composite electrodes",
-      "belongsTo": ["synthesis", "electrochemistry"]
+      "name": "電化學沉積",
+      "description": "薄膜與複合電極之電化學沉積技術",
+      "belongsTo": ["synthesis", "electrochemistry"],
+      "localizedNames": {
+        "en": "Electrodeposition"
+      },
+      "localizedDescriptions": {
+        "en": "Electrochemical deposition of films and composite electrodes"
+      }
     },
     {
       "id": "coprecipitation",
-      "name": "Co-precipitation",
-      "description": "Uniform precursor preparation with controlled composition",
-      "belongsTo": ["synthesis", "characterization"]
+      "name": "共沉澱法",
+      "description": "以共沉澱控制成分均勻性與前驅物形貌",
+      "belongsTo": ["synthesis"],
+      "localizedNames": {
+        "en": "Co-precipitation"
+      },
+      "localizedDescriptions": {
+        "en": "Uniform precursor preparation with controlled composition"
+      }
     },
     {
       "id": "calcination-annealing",
-      "name": "Calcination & Annealing",
-      "description": "Thermal treatment to tune phase, defects, and crystallinity",
-      "belongsTo": ["thermal-treatment", "characterization"]
+      "name": "鍛燒與退火",
+      "description": "調整相態、缺陷與結晶度之熱處理",
+      "belongsTo": ["thermal-treatment", "characterization"],
+      "localizedNames": {
+        "en": "Calcination & Annealing"
+      },
+      "localizedDescriptions": {
+        "en": "Thermal treatment to tune phase, defects, and crystallinity"
+      }
     },
     {
       "id": "xrd",
-      "name": "X-ray Diffraction (XRD)",
-      "description": "Phase identification, crystallinity, and lattice analysis",
-      "belongsTo": ["characterization"]
+      "name": "X光繞射 (XRD)",
+      "description": "相鑑定、結晶度及晶格分析",
+      "belongsTo": ["characterization"],
+      "localizedNames": {
+        "en": "X-ray Diffraction (XRD)"
+      },
+      "localizedDescriptions": {
+        "en": "Phase identification, crystallinity, and lattice analysis"
+      }
     },
     {
       "id": "sem-eds",
-      "name": "Scanning Electron Microscopy with Energy Dispersive Spectroscopy (SEM-EDS)",
-      "description": "Morphology, particle distribution, and elemental mapping",
-      "belongsTo": ["characterization"]
+      "name": "掃描式電子顯微鏡與能譜儀 (SEM-EDS)",
+      "description": "形貌、顆粒分佈與元素映射分析",
+      "belongsTo": ["characterization"],
+      "localizedNames": {
+        "en": "Scanning Electron Microscopy with Energy Dispersive Spectroscopy (SEM-EDS)"
+      },
+      "localizedDescriptions": {
+        "en": "Morphology, particle distribution, and elemental mapping"
+      }
     },
     {
       "id": "ftir",
-      "name": "Fourier-Transform Infrared Spectroscopy (FT-IR)",
-      "description": "Functional-group and chemical-bond analysis",
-      "belongsTo": ["characterization", "research-focus"]
+      "name": "傅立葉轉換紅外線光譜 (FT-IR)",
+      "description": "官能基與化學鍵結分析",
+      "belongsTo": ["characterization", "research-focus"],
+      "localizedNames": {
+        "en": "Fourier-Transform Infrared Spectroscopy (FT-IR)"
+      },
+      "localizedDescriptions": {
+        "en": "Functional-group and chemical-bond analysis"
+      }
     },
     {
       "id": "raman",
-      "name": "Raman Spectroscopy",
-      "description": "Vibrational modes and defect-sensitive structural analysis",
-      "belongsTo": ["characterization"]
+      "name": "拉曼光譜 (Raman)",
+      "description": "振動模式與缺陷敏感結構分析",
+      "belongsTo": ["characterization"],
+      "localizedNames": {
+        "en": "Raman Spectroscopy"
+      },
+      "localizedDescriptions": {
+        "en": "Vibrational modes and defect-sensitive structural analysis"
+      }
     },
     {
       "id": "cv",
-      "name": "Cyclic Voltammetry (CV)",
-      "description": "Electrochemical redox behavior and reversibility",
-      "belongsTo": ["electrochemistry"]
+      "name": "循環伏安法 (CV)",
+      "description": "電化學氧化還原行為與可逆性分析",
+      "belongsTo": ["electrochemistry"],
+      "localizedNames": {
+        "en": "Cyclic Voltammetry (CV)"
+      },
+      "localizedDescriptions": {
+        "en": "Electrochemical redox behavior and reversibility"
+      }
     },
     {
       "id": "lsv",
-      "name": "Linear Sweep Voltammetry (LSV)",
-      "description": "Current response under a linear potential sweep",
-      "belongsTo": ["electrochemistry"]
+      "name": "線性掃描伏安法 (LSV)",
+      "description": "線性電位掃描下之電流響應分析",
+      "belongsTo": ["electrochemistry"],
+      "localizedNames": {
+        "en": "Linear Sweep Voltammetry (LSV)"
+      },
+      "localizedDescriptions": {
+        "en": "Current response under a linear potential sweep"
+      }
     },
     {
       "id": "gcd",
-      "name": "Galvanostatic Charge-Discharge (GCD)",
-      "description": "Capacity, Coulombic efficiency, and cycling stability",
-      "belongsTo": ["electrochemistry"]
+      "name": "恆電流充放電 (GCD)",
+      "description": "電容量、庫倫效率與循環穩定性評估",
+      "belongsTo": ["electrochemistry"],
+      "localizedNames": {
+        "en": "Galvanostatic Charge-Discharge (GCD)"
+      },
+      "localizedDescriptions": {
+        "en": "Capacity, Coulombic efficiency, and cycling stability"
+      }
     },
     {
       "id": "eis",
-      "name": "Electrochemical Impedance Spectroscopy (EIS)",
-      "description": "Charge-transfer and interfacial resistance analysis",
-      "belongsTo": ["electrochemistry"]
+      "name": "電化學阻抗光譜 (EIS)",
+      "description": "電荷轉移與介面阻抗分析",
+      "belongsTo": ["electrochemistry"],
+      "localizedNames": {
+        "en": "Electrochemical Impedance Spectroscopy (EIS)"
+      },
+      "localizedDescriptions": {
+        "en": "Charge-transfer and interfacial resistance analysis"
+      }
     },
     {
       "id": "sp-50e",
-      "name": "SP-50e",
-      "description": "Core electrochemical workstation for the lab",
-      "belongsTo": ["instrument-experience"]
+      "name": "SP-50e 電化學工作站",
+      "description": "實驗室核心電化學工作站操作",
+      "belongsTo": ["instrument-experience"],
+      "localizedNames": {
+        "en": "SP-50e"
+      },
+      "localizedDescriptions": {
+        "en": "Core electrochemical workstation for the lab"
+      }
+    },
+    {
+      "id": "nmr",
+      "name": "核磁共振光譜 (NMR)",
+      "localizedNames": {
+        "en": "Nuclear Magnetic Resonance (NMR)"
+      },
+      "description": "分子結構鑑定與純度分析",
+      "localizedDescriptions": {
+        "en": "Molecular structure elucidation and purity analysis"
+      },
+      "belongsTo": ["characterization"]
+    },
+    {
+      "id": "gc-ms",
+      "name": "氣相層析質譜 (GC-MS)",
+      "localizedNames": {
+        "en": "Gas Chromatography-Mass Spec (GC-MS)"
+      },
+      "description": "揮發性有機物定性與定量分析",
+      "localizedDescriptions": {
+        "en": "Qualitative and quantitative analysis of VOCs"
+      },
+      "belongsTo": ["chromatography", "characterization"]
+    },
+    {
+      "id": "hplc",
+      "name": "高效能液相層析 (HPLC)",
+      "localizedNames": {
+        "en": "High-Performance Liquid Chromatography (HPLC)"
+      },
+      "description": "混合物分離與溶液中成分定量",
+      "localizedDescriptions": {
+        "en": "Separation of mixtures and quantification of components in solution"
+      },
+      "belongsTo": ["chromatography", "characterization"]
+    },
+    {
+      "id": "aas",
+      "name": "原子吸收光譜 (AAS)",
+      "localizedNames": {
+        "en": "Atomic Absorption Spectroscopy (AAS)"
+      },
+      "description": "金屬微量元素濃度分析",
+      "localizedDescriptions": {
+        "en": "Trace metal concentration analysis"
+      },
+      "belongsTo": ["characterization"]
     }
   ],
   "members": [

@@ -189,7 +189,9 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
                   setIsAddingSkill(false);
                   skillForm.setFieldsValue({
                     name: record.name,
+                    nameEn: record.localizedNames?.en || '',
                     description: record.description,
+                    descriptionEn: record.localizedDescriptions?.en || '',
                     belongsTo: record.belongsTo,
                   });
                   setSkillModalOpen(true);
@@ -275,7 +277,9 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
                   setEditingCategory(record);
                   categoryForm.setFieldsValue({
                     name: record.name,
+                    nameEn: record.localizedNames?.en || '',
                     description: record.description,
+                    descriptionEn: record.localizedDescriptions?.en || '',
                     color: record.color,
                   });
                   setCategoryModalOpen(true);
@@ -320,12 +324,19 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
           ? values.color
           : values.color?.toHexString?.() || '#000000';
 
+      const { name, description, nameEn, descriptionEn } = values;
+
+      const localizedNames = nameEn ? { en: nameEn } : undefined;
+      const localizedDescriptions = descriptionEn
+        ? { en: descriptionEn }
+        : undefined;
+
       if (editingCategory) {
         const changes: string[] = [];
-        if (editingCategory.name !== values.name) {
-          changes.push(`name: "${editingCategory.name}" → "${values.name}"`);
+        if (editingCategory.name !== name) {
+          changes.push(`name: "${editingCategory.name}" → "${name}"`);
         }
-        if (editingCategory.description !== values.description) {
+        if (editingCategory.description !== description) {
           changes.push('description');
         }
         if (editingCategory.color !== colorValue) {
@@ -337,11 +348,20 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
           type: 'update-category',
           data: {
             ...editingCategory,
-            ...values,
+            name,
+            description,
+            localizedNames: {
+              ...editingCategory.localizedNames,
+              ...localizedNames,
+            },
+            localizedDescriptions: {
+              ...editingCategory.localizedDescriptions,
+              ...localizedDescriptions,
+            },
             color: colorValue,
           },
           description: t('pr.changeUpdateCategory', {
-            name: values.name,
+            name,
             details: changeDesc,
           }),
         });
@@ -349,11 +369,14 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
         addPendingChange({
           type: 'add-category',
           data: {
-            id: values.name.toLowerCase().replace(/\s+/g, '-'),
-            ...values,
+            id: name.toLowerCase().replace(/\s+/g, '-'),
+            name,
+            description,
+            localizedNames,
+            localizedDescriptions,
             color: colorValue,
           },
-          description: t('pr.changeAddCategory', { name: values.name }),
+          description: t('pr.changeAddCategory', { name }),
         });
       }
       setCategoryModalOpen(false);
@@ -364,30 +387,37 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
 
   const handleSkillSubmit = () => {
     skillForm.validateFields().then((values) => {
+      const { name, description, nameEn, descriptionEn, belongsTo } = values;
+
+      const localizedNames = nameEn ? { en: nameEn } : undefined;
+      const localizedDescriptions = descriptionEn
+        ? { en: descriptionEn }
+        : undefined;
+
       if (isAddingSkill) {
-        const skillId = values.name.toLowerCase().replace(/\s+/g, '-');
+        const skillId = name.toLowerCase().replace(/\s+/g, '-');
         addPendingChange({
           type: 'add-skill',
           data: {
             id: skillId,
-            name: values.name,
-            description:
-              values.description ||
-              t('pr.autoDescription', { name: values.name }),
-            belongsTo: values.belongsTo || [],
+            name,
+            localizedNames,
+            description: description || t('pr.autoDescription', { name }),
+            localizedDescriptions,
+            belongsTo: belongsTo || [],
           },
-          description: t('pr.changeAddSkill', { name: values.name }),
+          description: t('pr.changeAddSkill', { name }),
         });
       } else if (editingSkill) {
         const changes: string[] = [];
-        if (editingSkill.name !== values.name) {
-          changes.push(`name: "${editingSkill.name}" → "${values.name}"`);
+        if (editingSkill.name !== name) {
+          changes.push(`name: "${editingSkill.name}" → "${name}"`);
         }
-        if (editingSkill.description !== values.description) {
+        if (editingSkill.description !== description) {
           changes.push('description');
         }
         const oldCategories = editingSkill.belongsTo;
-        const newCategories = values.belongsTo || [];
+        const newCategories = belongsTo || [];
         const added = newCategories.filter(
           (id: string) => !oldCategories.includes(id),
         );
@@ -417,10 +447,20 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
           type: 'update-skill',
           data: {
             ...editingSkill,
-            ...values,
+            name,
+            description,
+            localizedNames: {
+              ...editingSkill.localizedNames,
+              ...localizedNames,
+            },
+            localizedDescriptions: {
+              ...editingSkill.localizedDescriptions,
+              ...localizedDescriptions,
+            },
+            belongsTo: belongsTo || [],
           },
           description: t('pr.changeUpdateSkill', {
-            name: values.name,
+            name,
             details: changeDesc,
           }),
         });
@@ -665,10 +705,19 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
           >
             <Input placeholder={t('pr.categoryNamePlaceholder')} />
           </Form.Item>
+          <Form.Item name='nameEn' label='Category Name (English)'>
+            <Input placeholder='Enter category name in English' />
+          </Form.Item>
           <Form.Item name='description' label={t('pr.categoryDescription')}>
             <Input.TextArea
               placeholder={t('pr.categoryDescriptionPlaceholder')}
             />
+          </Form.Item>
+          <Form.Item
+            name='descriptionEn'
+            label='Category Description (English)'
+          >
+            <Input.TextArea placeholder='Enter category description in English' />
           </Form.Item>
           <Form.Item
             name='color'
@@ -702,8 +751,14 @@ export const SkillCategoryAdmin: React.FC<SkillCategoryAdminProps> = ({
           >
             <Input placeholder={t('pr.skillNamePlaceholder')} />
           </Form.Item>
+          <Form.Item name='nameEn' label='Skill Name (English)'>
+            <Input placeholder='Enter skill name in English' />
+          </Form.Item>
           <Form.Item name='description' label={t('pr.skillDescription')}>
             <Input.TextArea placeholder={t('pr.skillDescriptionPlaceholder')} />
+          </Form.Item>
+          <Form.Item name='descriptionEn' label='Skill Description (English)'>
+            <Input.TextArea placeholder='Enter skill description in English' />
           </Form.Item>
           <Form.Item
             name='belongsTo'
