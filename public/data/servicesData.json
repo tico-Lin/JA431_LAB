@@ -34,6 +34,13 @@
       "localizedNames": {
         "en": "Chromatography & Mass Spectrometry"
       }
+    },
+    {
+      "id": "sample_prep",
+      "name": "樣品前處理與加工",
+      "localizedNames": {
+        "en": "Sample Preparation & Processing"
+      }
     }
   ],
   "items": [
@@ -53,7 +60,8 @@
       },
       "requiresSampleType": ["electrode_sheet"],
       "minSamples": 1,
-      "allowCustomParams": true
+      "allowCustomParams": true,
+      "instrumentModel": "BioLogic SP-50e"
     },
     {
       "id": "ec-eis",
@@ -72,7 +80,8 @@
       "requiresSampleType": ["electrode_sheet"],
       "dependencies": ["ec-cv"],
       "minSamples": 1,
-      "allowCustomParams": true
+      "allowCustomParams": true,
+      "instrumentModel": "BioLogic SP-50e"
     },
     {
       "id": "spec-raman",
@@ -93,24 +102,6 @@
       "allowCustomParams": false
     },
     {
-      "id": "spec-nmr-400",
-      "category": "spectroscopy",
-      "name": "核磁共振分析 (NMR-400)",
-      "localizedNames": {
-        "en": "Nuclear Magnetic Resonance (NMR-400)"
-      },
-      "basePrice": 500,
-      "unit": "樣品",
-      "turnaroundDays": 5,
-      "description": "分析有機分子與材料之分子結構及純度。",
-      "localizedDescriptions": {
-        "en": "Analyze molecular structure and purity of organic molecules and materials."
-      },
-      "requiresSampleType": ["liquid", "powder"],
-      "minSamples": 1,
-      "allowCustomParams": true
-    },
-    {
       "id": "aa-sem",
       "category": "advanced_analysis",
       "name": "掃描式電子顯微鏡 (SEM)",
@@ -126,7 +117,8 @@
       },
       "requiresSampleType": ["powder", "electrode_sheet"],
       "minSamples": 1,
-      "allowCustomParams": true
+      "allowCustomParams": true,
+      "instrumentModel": "Hitachi SU8010"
     },
     {
       "id": "aa-xrd",
@@ -144,43 +136,8 @@
       },
       "requiresSampleType": ["powder", "electrode_sheet"],
       "minSamples": 1,
-      "allowCustomParams": true
-    },
-    {
-      "id": "chrom-gcms",
-      "category": "chromatography",
-      "name": "氣相層析質譜分析 (GC/MS)",
-      "localizedNames": {
-        "en": "Gas Chromatography-Mass Spectrometry (GC/MS)"
-      },
-      "basePrice": 2000,
-      "unit": "樣品",
-      "turnaroundDays": 7,
-      "description": "揮發性及半揮發性有機化合物之定性與定量分析。",
-      "localizedDescriptions": {
-        "en": "Qualitative and quantitative analysis of volatile and semi-volatile organic compounds."
-      },
-      "requiresSampleType": ["liquid"],
-      "minSamples": 1,
-      "allowCustomParams": true
-    },
-    {
-      "id": "chrom-hplc",
-      "category": "chromatography",
-      "name": "高效能液相層析分析 (HPLC)",
-      "localizedNames": {
-        "en": "High-Performance Liquid Chromatography (HPLC)"
-      },
-      "basePrice": 1500,
-      "unit": "樣品",
-      "turnaroundDays": 5,
-      "description": "不易揮發或熱不安定之有機化合物定性與定量分析。",
-      "localizedDescriptions": {
-        "en": "Qualitative and quantitative analysis of non-volatile or thermally unstable organic compounds."
-      },
-      "requiresSampleType": ["liquid"],
-      "minSamples": 1,
-      "allowCustomParams": true
+      "allowCustomParams": true,
+      "instrumentModel": "Rigaku SmartLab"
     },
     {
       "id": "spec-ftir",
@@ -197,6 +154,118 @@
         "en": "Detect chemical bonds and functional groups of samples."
       },
       "requiresSampleType": ["powder", "liquid", "electrode_sheet"],
+      "minSamples": 1,
+      "allowCustomParams": false
+    },
+    {
+      "id": "ec-cv-nstc",
+      "category": "electrochemical",
+      "name": "高階循環伏安法測試 (CV) - 他校貴儀",
+      "localizedNames": {
+        "en": "Advanced Cyclic Voltammetry (CV) - External"
+      },
+      "instrumentModel": "Autolab PGSTAT302N",
+      "basePrice": 1500,
+      "unit": "樣品/條件",
+      "turnaroundDays": 5,
+      "description": "測量電極材料之氧化還原電位與可逆性。使用他校貴儀等級高精度設備。",
+      "localizedDescriptions": {
+        "en": "Measure the redox potential and reversibility of electrode materials using External high-precision equipment."
+      },
+      "requiresSampleType": ["electrode_sheet"],
+      "minSamples": 1,
+      "allowCustomParams": true
+    },
+    {
+      "id": "ec-eis-nstc",
+      "category": "electrochemical",
+      "name": "高階電化學阻抗光譜 (EIS) - 他校貴儀",
+      "localizedNames": {
+        "en": "Advanced Electrochemical Impedance Spectroscopy (EIS) - External"
+      },
+      "instrumentModel": "Autolab PGSTAT302N",
+      "basePrice": 2000,
+      "unit": "樣品/條件",
+      "turnaroundDays": 5,
+      "description": "分析電極與電解液介面之電荷轉移電阻與擴散行為。使用他校貴儀等級高精度設備。",
+      "localizedDescriptions": {
+        "en": "Analyze the charge transfer resistance and diffusion behavior at the electrode-electrolyte interface using External high-precision equipment."
+      },
+      "requiresSampleType": ["electrode_sheet"],
+      "dependencies": ["ec-cv-nstc"],
+      "minSamples": 1,
+      "allowCustomParams": true
+    },
+    {
+      "id": "aa-sem-nstc",
+      "category": "advanced_analysis",
+      "name": "超高解析度場發射掃描式電子顯微鏡 (FE-SEM) - 他校貴儀",
+      "localizedNames": {
+        "en": "Ultra-High Resolution FE-SEM - External"
+      },
+      "instrumentModel": "JEOL JSM-7600F",
+      "basePrice": 3500,
+      "unit": "小時",
+      "turnaroundDays": 7,
+      "description": "觀察樣品表面超高解析度微觀形貌，可選配EDS進行元素分析。",
+      "localizedDescriptions": {
+        "en": "Observe ultra-high resolution surface micro-morphology of samples, optional EDS."
+      },
+      "requiresSampleType": ["powder", "electrode_sheet"],
+      "minSamples": 1,
+      "allowCustomParams": true
+    },
+    {
+      "id": "prep-general",
+      "category": "sample_prep",
+      "name": "一般樣品前處理",
+      "localizedNames": {
+        "en": "General Sample Preparation"
+      },
+      "basePrice": 200,
+      "unit": "樣品",
+      "turnaroundDays": 1,
+      "description": "包含基本的秤重、溶解、稀釋或過濾等。",
+      "localizedDescriptions": {
+        "en": "Includes basic weighing, dissolution, dilution, or filtration."
+      },
+      "requiresSampleType": ["powder", "liquid"],
+      "minSamples": 1,
+      "allowCustomParams": false
+    },
+    {
+      "id": "prep-electrode",
+      "category": "sample_prep",
+      "name": "客製化電極塗佈 (Drop-casting/Coating)",
+      "localizedNames": {
+        "en": "Custom Electrode Coating"
+      },
+      "basePrice": 500,
+      "unit": "片",
+      "turnaroundDays": 2,
+      "description": "將粉末樣品調配漿料並均勻塗佈於玻碳電極或碳布/銅箔上。",
+      "localizedDescriptions": {
+        "en": "Prepare slurry from powder samples and coat uniformly on GC or carbon cloth/Cu foil."
+      },
+      "requiresSampleType": ["powder"],
+      "minSamples": 1,
+      "allowCustomParams": true
+    },
+    {
+      "id": "prep-sem-gold",
+      "category": "sample_prep",
+      "name": "SEM 樣品鍍金/鍍白金",
+      "localizedNames": {
+        "en": "SEM Sample Sputtering (Au/Pt)"
+      },
+      "basePrice": 300,
+      "unit": "次",
+      "turnaroundDays": 1,
+      "description": "為非導電樣品進行表面濺鍍金或白金，以增加導電性，避免電荷累積。",
+      "localizedDescriptions": {
+        "en": "Sputter Au or Pt on non-conductive samples to increase conductivity for SEM."
+      },
+      "requiresSampleType": ["powder", "electrode_sheet"],
       "minSamples": 1,
       "allowCustomParams": false
     }

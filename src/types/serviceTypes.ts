@@ -15,6 +15,7 @@ export interface ServiceItem {
   requiresSampleType?: ('powder' | 'liquid' | 'electrode_sheet' | 'other')[]; // 接受樣品形態
   dependencies?: string[]; // 相依項目 ID (例如: 做 EIS 建議先勾選 CV 基準測試)
   minSamples: number; // 最少委託數量
+  instrumentModel?: string; // 儀器型號
   allowCustomParams: boolean; // 是否允許填寫客製化參數 (如電位窗口、掃速)
   customOptions?: CustomOption[]; // 手動新增的客製化選項
 }

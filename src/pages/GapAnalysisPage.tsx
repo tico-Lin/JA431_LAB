@@ -17,7 +17,11 @@ import {
 } from '@ant-design/icons';
 import { useSkillsData, calculateSkillGaps } from '../hooks/useSkillsData';
 import type { SkillGap } from '../types/types';
-import GapDistributionChart from '../components/GapDistributionChart';
+import { Suspense, lazy } from 'react';
+
+const GapDistributionChart = lazy(
+  () => import('../components/GapDistributionChart'),
+);
 import { useTranslation } from 'react-i18next';
 
 export const GapAnalysisPage: React.FC = () => {
@@ -294,11 +298,15 @@ export const GapAnalysisPage: React.FC = () => {
         >
           {t('gaps.distSubtitle')}
         </p>
-        <GapDistributionChart
-          gaps={gaps}
-          categories={data.categories}
-          members={data.members}
-        />
+        <Suspense
+          fallback={<div className='p-10 text-center'>Loading chart...</div>}
+        >
+          <GapDistributionChart
+            gaps={gaps}
+            categories={data.categories}
+            members={data.members}
+          />
+        </Suspense>
       </Card>
 
       {/* Cross-Domain Skills */}

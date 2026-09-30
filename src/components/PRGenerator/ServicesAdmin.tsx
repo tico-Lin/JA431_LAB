@@ -333,6 +333,13 @@ export const ServicesAdmin: React.FC = () => {
       },
     },
     {
+      title: '儀器型號',
+      dataIndex: 'instrumentModel',
+      key: 'instrumentModel',
+      width: 150,
+      render: (val: string) => val || '-',
+    },
+    {
       title: t('pr.basePrice'),
       dataIndex: 'basePrice',
       key: 'basePrice',
@@ -405,6 +412,11 @@ export const ServicesAdmin: React.FC = () => {
       name: 'localizedNamesList',
       label: t('admin.servicesAdmin.localizedNames'),
       type: 'localized-list',
+    },
+    {
+      name: 'instrumentModel',
+      label: '儀器型號 (Instrument Model)',
+      type: 'string',
     },
     {
       name: 'basePrice',

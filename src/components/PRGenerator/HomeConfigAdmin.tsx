@@ -14,6 +14,7 @@ import { CloudUploadOutlined, SettingOutlined } from '@ant-design/icons';
 import { DynamicForm, type FieldSchema } from './DynamicForm';
 import { useDataSync } from '../../hooks/useDataSync';
 import { GitHubTokenModal } from './GitHubTokenModal';
+import { z } from 'zod';
 
 const { Title, Text } = Typography;
 
@@ -176,6 +177,28 @@ export const HomeConfigAdmin: React.FC = () => {
         researchDirections: researchValues.researchDirections,
       };
 
+      // Zod 嚴格 Payload 驗證
+      const configSchema = z
+        .object({
+          hero: z
+            .object({
+              title: z.string().min(1),
+              subtitle: z.string().optional(),
+              description: z.string().optional(),
+            })
+            .passthrough(),
+          lab: z
+            .object({
+              name: z.string().min(1),
+              fullName: z.string().optional(),
+              director: z.any().optional(),
+            })
+            .passthrough(),
+        })
+        .passthrough();
+
+      configSchema.parse(newConfig); // 如果驗證失敗會拋出錯誤被 catch 捕獲
+
       const fileName = `public/data/homeConfig.${language}.json`;
       const success = await saveData(
         fileName,
@@ -183,8 +206,14 @@ export const HomeConfigAdmin: React.FC = () => {
         `Update ${language} home config via Admin Panel`,
       );
       if (success) setData(newConfig);
-    } catch (err) {
-      message.error('請檢查表單中是否有未填寫的必填欄位。');
+    } catch (err: any) {
+      if (err instanceof z.ZodError) {
+        message.error(
+          `資料格式驗證失敗: ${(err as any).errors.map((e: any) => e.message).join(', ')}`,
+        );
+      } else {
+        message.error('請檢查表單中是否有未填寫的必填欄位或輸入錯誤。');
+      }
     }
   };
 

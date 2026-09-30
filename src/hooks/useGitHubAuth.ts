@@ -1,19 +1,21 @@
-import { useState } from 'react';
+import { useSyncExternalStore } from 'react';
 
-const TOKEN_KEY = 'github_pat_token';
+let memoryToken: string | null = null;
+const listeners = new Set<() => void>();
+
+const subscribe = (listener: () => void) => {
+  listeners.add(listener);
+  return () => listeners.delete(listener);
+};
+
+const getSnapshot = () => memoryToken;
 
 export const useGitHubAuth = () => {
-  const [token, setTokenState] = useState<string | null>(() => {
-    return localStorage.getItem(TOKEN_KEY);
-  });
+  const token = useSyncExternalStore(subscribe, getSnapshot);
 
   const setToken = (newToken: string | null) => {
-    if (newToken) {
-      localStorage.setItem(TOKEN_KEY, newToken);
-    } else {
-      localStorage.removeItem(TOKEN_KEY);
-    }
-    setTokenState(newToken);
+    memoryToken = newToken;
+    listeners.forEach((l) => l());
   };
 
   return { token, setToken };
