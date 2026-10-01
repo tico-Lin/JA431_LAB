@@ -419,6 +419,26 @@ export const ServicesAdmin: React.FC = () => {
       type: 'string',
     },
     {
+      name: 'institution',
+      label: '單位 (Institution)',
+      type: 'string',
+    },
+    {
+      name: 'location',
+      label: '放置地點 (Location)',
+      type: 'string',
+    },
+    {
+      name: 'instrumentCode',
+      label: '儀器代碼 (Instrument Code)',
+      type: 'string',
+    },
+    {
+      name: 'serviceType',
+      label: '服務類型 (Service Type, e.g. 委託操作)',
+      type: 'string',
+    },
+    {
       name: 'basePrice',
       label: t('pr.basePrice'),
       type: 'number',

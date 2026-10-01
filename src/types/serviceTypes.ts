@@ -16,6 +16,10 @@ export interface ServiceItem {
   dependencies?: string[]; // 相依項目 ID (例如: 做 EIS 建議先勾選 CV 基準測試)
   minSamples: number; // 最少委託數量
   instrumentModel?: string; // 儀器型號
+  institution?: string; // 單位 (例如: 國立清華大學貴儀中心)
+  location?: string; // 放置地點 (例如: 材料科技館133室)
+  instrumentCode?: string; // 儀器代碼 (例如: ESCA000300)
+  serviceType?: string; // 服務類型 (例如: 委託操作、自行操作)
   allowCustomParams: boolean; // 是否允許填寫客製化參數 (如電位窗口、掃速)
   customOptions?: CustomOption[]; // 手動新增的客製化選項
 }

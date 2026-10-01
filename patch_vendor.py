@@ -3,73 +3,62 @@ import re
 with open('src/pages/VendorPage.tsx', 'r', encoding='utf-8') as f:
     content = f.read()
 
-tabs_logic = """
-  const tabItems = useMemo(() => {
-    if (!data) return [];
-    const allItems = data.items;
-    
-    // 他校貴儀代測
-    const nstcItems = allItems.filter(item => item.id.includes('-nstc'));
-    
-    // 表徵分析 (排除 nstc)
-    const charItems = allItems.filter(item => 
-      !item.id.includes('-nstc') && 
-      (item.category === 'spectroscopy' || item.category === 'advanced_analysis' || item.category === 'chromatography' || item.id === 'prep-sem-gold' || item.id === 'prep-general')
-    );
-    
-    // 電化學分析 (排除 nstc)
-    const ecItems = allItems.filter(item => 
-      !item.id.includes('-nstc') && 
-      (item.category === 'electrochemical' || item.category === 'synthesis_prep' || item.id === 'prep-electrode' || item.id === 'prep-general')
-    );
+# Add icons to import
+icons_import_old = "import { MailOutlined, ImportOutlined } from '@ant-design/icons';"
+icons_import_new = "import { MailOutlined, ImportOutlined, BankOutlined, EnvironmentOutlined, BarcodeOutlined, ToolOutlined } from '@ant-design/icons';"
+content = content.replace(icons_import_old, icons_import_new)
 
-    const renderTable = (dataSource: ServiceItem[]) => (
-      <Table
-        dataSource={dataSource}
-        columns={columns}
-        rowKey='id'
-        pagination={false}
-        size='middle'
-        className='bg-transparent'
-        rowClassName={(record) =>
-          selectedServices.some((s) => s.serviceId === record.id)
-            ? 'bg-[var(--color-accent)]/10'
-            : ''
-        }
-      />
-    );
+# Also ensure Tag, Space are in antd imports
+if "Tag," not in content and "Space," not in content:
+    antd_import_old = "Modal,\n  Tabs,\n} from 'antd';"
+    antd_import_new = "Modal,\n  Tabs,\n  Tag,\n  Space,\n} from 'antd';"
+    content = content.replace(antd_import_old, antd_import_new)
 
-    return [
-      { key: 'all', label: '全部', children: renderTable(allItems) },
-      { key: 'char', label: '表徵分析', children: renderTable(charItems) },
-      { key: 'ec', label: '電化學分析', children: renderTable(ecItems) },
-      { key: 'nstc', label: '他校貴儀代測', children: renderTable(nstcItems) },
-    ];
-  }, [data, columns, selectedServices]);
+# Modify the render function of the name column
+render_old = """        return (
+          <div>
+            <div className='font-bold text-[var(--color-text-primary)]'>
+              {name}
+            </div>
+            <div className='text-xs text-[var(--color-text-secondary)]'>
+              {description}
+            </div>
+          </div>
+        );"""
 
-  return ("""
+render_new = """        return (
+          <div className='flex flex-col gap-2 my-1'>
+            <div className='font-bold text-[var(--color-text-primary)] text-base'>
+              {name}
+            </div>
+            
+            {/* 詳細的儀器資訊區塊 */}
+            {(record.institution || record.location || record.instrumentCode || record.serviceType) && (
+              <div className='flex flex-wrap gap-2 text-xs'>
+                {record.institution && (
+                  <Tag icon={<BankOutlined />} color="blue" bordered={false}>{record.institution}</Tag>
+                )}
+                {record.instrumentCode && (
+                  <Tag icon={<BarcodeOutlined />} color="cyan" bordered={false}>{record.instrumentCode}</Tag>
+                )}
+                {record.serviceType && (
+                  <Tag icon={<ToolOutlined />} color="purple" bordered={false}>{record.serviceType}</Tag>
+                )}
+                {record.location && (
+                  <Tag icon={<EnvironmentOutlined />} color="orange" bordered={false}>{record.location}</Tag>
+                )}
+              </div>
+            )}
+            
+            <div className='text-sm text-[var(--color-text-secondary)] mt-1 border-l-2 border-[var(--color-border)] pl-3 py-0.5 bg-black/5 rounded-r'>
+              {description}
+            </div>
+          </div>
+        );"""
 
-content = content.replace("  return (\n    <div className='space-y-8 animate-fade-in'>", tabs_logic + "\n    <div className='space-y-8 animate-fade-in'>")
-
-table_old = """            <Table
-              dataSource={data.items}
-              columns={columns}
-              rowKey='id'
-              pagination={false}
-              size='middle'
-              className='bg-transparent'
-              rowClassName={(record) =>
-                selectedServices.some((s) => s.serviceId === record.id)
-                  ? 'bg-[var(--color-accent)]/10'
-                  : ''
-              }
-            />"""
-
-table_new = """            <Tabs items={tabItems} defaultActiveKey="all" className="p-4" />"""
-
-content = content.replace(table_old, table_new)
+content = content.replace(render_old, render_new)
 
 with open('src/pages/VendorPage.tsx', 'w', encoding='utf-8') as f:
     f.write(content)
 
-print("Patched VendorPage.tsx successfully.")
+print("Patched VendorPage.tsx to add beautiful tags for NSTC items")

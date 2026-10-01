@@ -12,8 +12,18 @@ import {
   message,
   Modal,
   Tabs,
+  Tag,
+  Checkbox,
+  Alert,
 } from 'antd';
-import { MailOutlined, ImportOutlined } from '@ant-design/icons';
+import {
+  MailOutlined,
+  ImportOutlined,
+  BankOutlined,
+  EnvironmentOutlined,
+  BarcodeOutlined,
+  ToolOutlined,
+} from '@ant-design/icons';
 import { useServicesData } from '../hooks/useServicesData';
 import type { ServiceItem } from '../types/serviceTypes';
 import { useFormDraft } from '../hooks/useFormDraft';
@@ -317,11 +327,45 @@ export default function VendorPage() {
           : record.localizedDescriptions?.['en'] || record.description;
 
         return (
-          <div>
-            <div className='font-bold text-[var(--color-text-primary)]'>
+          <div className='flex flex-col gap-2 my-1'>
+            <div className='font-bold text-[var(--color-text-primary)] text-base'>
               {name}
             </div>
-            <div className='text-xs text-[var(--color-text-secondary)]'>
+
+            {/* 詳細的儀器資訊區塊 */}
+            {(record.institution ||
+              record.location ||
+              record.instrumentCode ||
+              record.serviceType) && (
+              <div className='flex flex-wrap gap-2 text-xs'>
+                {record.institution && (
+                  <Tag icon={<BankOutlined />} color='blue' bordered={false}>
+                    {record.institution}
+                  </Tag>
+                )}
+                {record.instrumentCode && (
+                  <Tag icon={<BarcodeOutlined />} color='cyan' bordered={false}>
+                    {record.instrumentCode}
+                  </Tag>
+                )}
+                {record.serviceType && (
+                  <Tag icon={<ToolOutlined />} color='purple' bordered={false}>
+                    {record.serviceType}
+                  </Tag>
+                )}
+                {record.location && (
+                  <Tag
+                    icon={<EnvironmentOutlined />}
+                    color='orange'
+                    bordered={false}
+                  >
+                    {record.location}
+                  </Tag>
+                )}
+              </div>
+            )}
+
+            <div className='text-sm text-[var(--color-text-secondary)] mt-1 border-l-2 border-[var(--color-border)] pl-3 py-0.5 bg-black/5 rounded-r whitespace-pre-line'>
               {description}
             </div>
           </div>
@@ -436,7 +480,11 @@ export default function VendorPage() {
       { key: 'all', label: '全部', children: renderTable(allItems) },
       { key: 'char', label: '表徵分析', children: renderTable(charItems) },
       { key: 'ec', label: '電化學分析', children: renderTable(ecItems) },
-      { key: 'nstc', label: '他校貴儀代測', children: renderTable(nstcItems) },
+      {
+        key: 'nstc',
+        label: '進階表徵與技術顧問服務',
+        children: renderTable(nstcItems),
+      },
     ];
   }, [data, columns, selectedServices]);
 
@@ -467,6 +515,30 @@ export default function VendorPage() {
           {t('vendor.importQuotation')}
         </Button>
       </div>
+
+      {/* 產學合作漏斗引導 Banner */}
+      <Alert
+        message={<span className='font-bold'>委託檢測與產學合作方案</span>}
+        description={
+          <div className='flex flex-col gap-1 mt-1 text-sm'>
+            <p>
+              <strong>第一階 (單次測試)</strong>：提供標準化材料表徵 (內部設備)
+              與進階數據解析顧問 (外部貴儀)。
+            </p>
+            <p>
+              <strong>第二階 (短期專案)</strong>
+              ：針對複雜研發瓶頸，可轉為短期技術服務合約，取得完整結案報告。
+            </p>
+            <p>
+              <strong>第三階 (長期產學)</strong>
+              ：單次委託金額若達一定門檻，可抵扣或轉置為年度產學合作計畫，享有更深入的技術指導、專屬實驗設計及智財權共享方案。
+            </p>
+          </div>
+        }
+        type='info'
+        showIcon
+        className='border-[var(--color-primary)]/30 bg-[var(--color-primary)]/5'
+      />
 
       <div className='grid grid-cols-1 lg:grid-cols-3 gap-6'>
         <div className='lg:col-span-2 space-y-6'>
@@ -567,6 +639,17 @@ export default function VendorPage() {
               <Form.Item name='notes' label={t('vendor.notes')}>
                 <Input.TextArea placeholder={t('vendor.notesPlaceholder')} />
               </Form.Item>
+
+              <Form.Item
+                name={['client', 'isShortTermProject']}
+                valuePropName='checked'
+                className='mb-0 bg-blue-50/50 p-3 rounded border border-blue-100 mt-4'
+              >
+                <Checkbox className='text-sm'>
+                  <span className='font-bold text-blue-800'>進階需求評估</span>
+                  ：本委託涉及複雜研發瓶頸，希望進一步評估轉為「短期技術服務合約」以取得完整結案報告。
+                </Checkbox>
+              </Form.Item>
             </Form>
           </Card>
 
@@ -579,6 +662,13 @@ export default function VendorPage() {
                 <div className='text-3xl font-bold text-[var(--color-accent)] mt-1'>
                   TWD {totalAmount.toLocaleString()}
                 </div>
+                {totalAmount >= 10000 && (
+                  <div className='mt-3 text-xs text-orange-700 bg-orange-50 p-2 border border-orange-200 rounded'>
+                    💡 委託金額已達專案評估門檻，建議勾選左側表單之「
+                    <b>進階需求評估</b>
+                    」，以享有專屬樣品優先排程與技術研討會議。
+                  </div>
+                )}
               </div>
               <Button
                 type='primary'

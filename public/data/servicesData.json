@@ -54,14 +54,16 @@
       "basePrice": 800,
       "unit": "樣品/條件",
       "turnaroundDays": 3,
-      "description": "測量電極材料之氧化還原電位與可逆性。",
+      "description": "測量電極材料之氧化還原電位與可逆性。\n\n【交付成果】原始數據 (Raw Data) + 基本標定圖檔 (Origin/CSV/PNG)。",
       "localizedDescriptions": {
         "en": "Measure the redox potential and reversibility of electrode materials."
       },
       "requiresSampleType": ["electrode_sheet"],
       "minSamples": 1,
       "allowCustomParams": true,
-      "instrumentModel": "BioLogic SP-50e"
+      "instrumentModel": "BioLogic SP-50e",
+      "institution": "本實驗室 / 系所自有設備",
+      "serviceType": "內部業界標準測試"
     },
     {
       "id": "ec-eis",
@@ -73,7 +75,7 @@
       "basePrice": 1000,
       "unit": "樣品/條件",
       "turnaroundDays": 3,
-      "description": "分析電極與電解液介面之電荷轉移電阻與擴散行為。",
+      "description": "分析電極與電解液介面之電荷轉移電阻與擴散行為。\n\n【交付成果】原始數據 (Raw Data) + 基本標定圖檔 (Origin/CSV/PNG)。",
       "localizedDescriptions": {
         "en": "Analyze the charge transfer resistance and diffusion behavior at the electrode-electrolyte interface."
       },
@@ -81,7 +83,9 @@
       "dependencies": ["ec-cv"],
       "minSamples": 1,
       "allowCustomParams": true,
-      "instrumentModel": "BioLogic SP-50e"
+      "instrumentModel": "BioLogic SP-50e",
+      "institution": "本實驗室 / 系所自有設備",
+      "serviceType": "內部業界標準測試"
     },
     {
       "id": "spec-raman",
@@ -93,13 +97,15 @@
       "basePrice": 1200,
       "unit": "樣品/點",
       "turnaroundDays": 5,
-      "description": "分析碳材料缺陷程度及分子振動模式。",
+      "description": "分析碳材料缺陷程度及分子振動模式。\n\n【交付成果】原始數據 (Raw Data) + 基本標定圖檔 (Origin/CSV/PNG)。",
       "localizedDescriptions": {
         "en": "Analyze the degree of defect in carbon materials and molecular vibration modes."
       },
       "requiresSampleType": ["powder", "electrode_sheet"],
       "minSamples": 1,
-      "allowCustomParams": false
+      "allowCustomParams": false,
+      "institution": "本實驗室 / 系所自有設備",
+      "serviceType": "內部業界標準測試"
     },
     {
       "id": "aa-sem",
@@ -111,14 +117,16 @@
       "basePrice": 1500,
       "unit": "小時",
       "turnaroundDays": 7,
-      "description": "觀察樣品表面微觀形貌，可選配EDS進行元素分析。",
+      "description": "觀察樣品表面微觀形貌，可選配EDS進行元素分析。\n\n【交付成果】原始數據 (Raw Data) + 基本標定圖檔 (Origin/CSV/PNG)。",
       "localizedDescriptions": {
         "en": "Observe surface micro-morphology of samples, optional EDS for elemental analysis."
       },
       "requiresSampleType": ["powder", "electrode_sheet"],
       "minSamples": 1,
       "allowCustomParams": true,
-      "instrumentModel": "Hitachi SU8010"
+      "instrumentModel": "Hitachi SU8010",
+      "institution": "本實驗室 / 系所自有設備",
+      "serviceType": "內部業界標準測試"
     },
     {
       "id": "aa-xrd",
@@ -130,14 +138,16 @@
       "basePrice": 600,
       "unit": "樣品",
       "turnaroundDays": 5,
-      "description": "分析材料結晶相、晶格常數及結晶度。",
+      "description": "分析材料結晶相、晶格常數及結晶度。\n\n【交付成果】原始數據 (Raw Data) + 基本標定圖檔 (Origin/CSV/PNG)。",
       "localizedDescriptions": {
         "en": "Analyze crystalline phase, lattice parameters, and crystallinity of materials."
       },
       "requiresSampleType": ["powder", "electrode_sheet"],
       "minSamples": 1,
       "allowCustomParams": true,
-      "instrumentModel": "Rigaku SmartLab"
+      "instrumentModel": "Rigaku SmartLab",
+      "institution": "本實驗室 / 系所自有設備",
+      "serviceType": "內部業界標準測試"
     },
     {
       "id": "spec-ftir",
@@ -149,71 +159,15 @@
       "basePrice": 800,
       "unit": "樣品",
       "turnaroundDays": 3,
-      "description": "檢測樣品之化學鍵結與官能基特徵。",
+      "description": "檢測樣品之化學鍵結與官能基特徵。\n\n【交付成果】原始數據 (Raw Data) + 基本標定圖檔 (Origin/CSV/PNG)。",
       "localizedDescriptions": {
         "en": "Detect chemical bonds and functional groups of samples."
       },
       "requiresSampleType": ["powder", "liquid", "electrode_sheet"],
       "minSamples": 1,
-      "allowCustomParams": false
-    },
-    {
-      "id": "ec-cv-nstc",
-      "category": "electrochemical",
-      "name": "高階循環伏安法測試 (CV) - 他校貴儀",
-      "localizedNames": {
-        "en": "Advanced Cyclic Voltammetry (CV) - External"
-      },
-      "instrumentModel": "Autolab PGSTAT302N",
-      "basePrice": 1500,
-      "unit": "樣品/條件",
-      "turnaroundDays": 5,
-      "description": "測量電極材料之氧化還原電位與可逆性。使用他校貴儀等級高精度設備。",
-      "localizedDescriptions": {
-        "en": "Measure the redox potential and reversibility of electrode materials using External high-precision equipment."
-      },
-      "requiresSampleType": ["electrode_sheet"],
-      "minSamples": 1,
-      "allowCustomParams": true
-    },
-    {
-      "id": "ec-eis-nstc",
-      "category": "electrochemical",
-      "name": "高階電化學阻抗光譜 (EIS) - 他校貴儀",
-      "localizedNames": {
-        "en": "Advanced Electrochemical Impedance Spectroscopy (EIS) - External"
-      },
-      "instrumentModel": "Autolab PGSTAT302N",
-      "basePrice": 2000,
-      "unit": "樣品/條件",
-      "turnaroundDays": 5,
-      "description": "分析電極與電解液介面之電荷轉移電阻與擴散行為。使用他校貴儀等級高精度設備。",
-      "localizedDescriptions": {
-        "en": "Analyze the charge transfer resistance and diffusion behavior at the electrode-electrolyte interface using External high-precision equipment."
-      },
-      "requiresSampleType": ["electrode_sheet"],
-      "dependencies": ["ec-cv-nstc"],
-      "minSamples": 1,
-      "allowCustomParams": true
-    },
-    {
-      "id": "aa-sem-nstc",
-      "category": "advanced_analysis",
-      "name": "超高解析度場發射掃描式電子顯微鏡 (FE-SEM) - 他校貴儀",
-      "localizedNames": {
-        "en": "Ultra-High Resolution FE-SEM - External"
-      },
-      "instrumentModel": "JEOL JSM-7600F",
-      "basePrice": 3500,
-      "unit": "小時",
-      "turnaroundDays": 7,
-      "description": "觀察樣品表面超高解析度微觀形貌，可選配EDS進行元素分析。",
-      "localizedDescriptions": {
-        "en": "Observe ultra-high resolution surface micro-morphology of samples, optional EDS."
-      },
-      "requiresSampleType": ["powder", "electrode_sheet"],
-      "minSamples": 1,
-      "allowCustomParams": true
+      "allowCustomParams": false,
+      "institution": "本實驗室 / 系所自有設備",
+      "serviceType": "內部業界標準測試"
     },
     {
       "id": "prep-general",
@@ -268,6 +222,90 @@
       "requiresSampleType": ["powder", "electrode_sheet"],
       "minSamples": 1,
       "allowCustomParams": false
+    },
+    {
+      "id": "nstc-esca",
+      "category": "advanced_analysis",
+      "name": "高階表面化學態深度解析與峰值擬合",
+      "localizedNames": {
+        "en": "Advanced XPS Surface Analysis & Peak Fitting"
+      },
+      "instrumentModel": "高階單色化 X 射線光電子能譜 (Monochromatic XPS)",
+      "institution": "國家級共用核心設施",
+      "serviceType": "客製化前處理與數據解析報告",
+      "basePrice": 2000,
+      "unit": "樣品 (解析與前處理費)",
+      "turnaroundDays": 14,
+      "description": "分析材料表面的元素組成與化學鍵結狀態，可進行表面化學態分析與深度剖析。\n【交付成果】含各元素化學態能級歸屬 (Binding Energy) 與定量分析之「技術分析總結報告書 (PDF)」。\n\n【服務內容涵蓋 Scope of Work】\n1. 樣品進樣前化學相容性與表面前處理評估\n2. 實驗參數優化設定建議與貴儀行政代辦協助 (可協助企業完成註冊與預約)\n3. 數據回傳後之高階去卷積 (Deconvolution) 擬合與圖譜解析\n\n* 附註：外部核心設施之上機規費由客戶依官方業界費率自行結算或實報實銷，本報價僅含技術顧問、樣品製備與解析報告費。",
+      "localizedDescriptions": {
+        "en": "Analyze the elemental composition and chemical bonding state of material surfaces.\n\n⚠️ [Fee Separation] This quote covers professional data interpretation and sample prep consulting. Testing will be conducted at a national-level facility. Instrument usage fees will be billed separately based on the facility's official industry rates."
+      },
+      "requiresSampleType": ["powder", "electrode_sheet"],
+      "minSamples": 1,
+      "allowCustomParams": true
+    },
+    {
+      "id": "nstc-sem",
+      "category": "advanced_analysis",
+      "name": "奈米級表面微觀結構解析與成相顧問",
+      "localizedNames": {
+        "en": "Advanced FE-SEM Structural Analysis Consulting"
+      },
+      "instrumentModel": "超高解析度場發射掃描式電子顯微鏡 (UHR FE-SEM)",
+      "institution": "國家級共用核心設施",
+      "serviceType": "客製化前處理與數據解析報告",
+      "basePrice": 1500,
+      "unit": "樣品 (解析與前處理費)",
+      "turnaroundDays": 7,
+      "description": "高解析度表面微觀形貌觀察，提供奈米材料、半導體元件等表面結構之專業解析。\n【交付成果】含奈米微觀形貌特徵與粒徑分佈量測之「技術分析總結報告書 (PDF)」。\n\n【服務內容涵蓋 Scope of Work】\n1. 樣品進樣前化學相容性與表面前處理評估\n2. 實驗參數優化設定建議與貴儀行政代辦協助 (可協助企業完成註冊與預約)\n3. 數據回傳後之高階去卷積 (Deconvolution) 擬合與圖譜解析\n\n* 附註：外部核心設施之上機規費由客戶依官方業界費率自行結算或實報實銷，本報價僅含技術顧問、樣品製備與解析報告費。",
+      "localizedDescriptions": {
+        "en": "High-resolution observation of surface micro-morphology, suitable for nanomaterials and semiconductors.\n\n⚠️ [Fee Separation] This quote covers professional data interpretation and sample prep consulting. Testing will be conducted at a national-level facility. Instrument usage fees will be billed separately based on the facility's official industry rates."
+      },
+      "requiresSampleType": ["powder", "electrode_sheet"],
+      "minSamples": 1,
+      "allowCustomParams": true
+    },
+    {
+      "id": "nstc-tem",
+      "category": "advanced_analysis",
+      "name": "原子級晶格解析與微區元素定性顧問",
+      "localizedNames": {
+        "en": "Advanced FE-TEM & EDS Analysis Consulting"
+      },
+      "instrumentModel": "場發射穿透式電子顯微鏡 (FE-TEM + EDS)",
+      "institution": "國家級共用核心設施",
+      "serviceType": "客製化前處理與數據解析報告",
+      "basePrice": 3000,
+      "unit": "樣品 (解析與前處理費)",
+      "turnaroundDays": 14,
+      "description": "原子級晶格解析、電子繞射分析(SAED)，與奈米級微區元素定性/定量分析顧問。\n【交付成果】含原子級晶格與繞射晶相判定 與定量分析之「技術分析總結報告書 (PDF)」。\n\n【服務內容涵蓋 Scope of Work】\n1. 樣品進樣前化學相容性與表面前處理評估\n2. 實驗參數優化設定建議與貴儀行政代辦協助 (可協助企業完成註冊與預約)\n3. 數據回傳後之高階去卷積 (Deconvolution) 擬合與圖譜解析\n\n* 附註：外部核心設施之上機規費由客戶依官方業界費率自行結算或實報實銷，本報價僅含技術顧問、樣品製備與解析報告費。",
+      "localizedDescriptions": {
+        "en": "Atomic resolution lattice imaging, SAED, and nanoscale elemental analysis (EDS).\n\n⚠️ [Fee Separation] This quote covers professional data interpretation and sample prep consulting. Testing will be conducted at a national-level facility. Instrument usage fees will be billed separately based on the facility's official industry rates."
+      },
+      "requiresSampleType": ["powder", "liquid"],
+      "minSamples": 1,
+      "allowCustomParams": true
+    },
+    {
+      "id": "nstc-xrd",
+      "category": "advanced_analysis",
+      "name": "進階晶體結構精算與薄膜繞射解析",
+      "localizedNames": {
+        "en": "Advanced XRD Crystallographic Analysis Consulting"
+      },
+      "instrumentModel": "高解析 X 光繞射儀 (HR-XRD)",
+      "institution": "國家級共用核心設施",
+      "serviceType": "客製化前處理與數據解析報告",
+      "basePrice": 800,
+      "unit": "樣品 (解析與前處理費)",
+      "turnaroundDays": 7,
+      "description": "材料結晶相鑑定、晶粒大小計算、晶格常數精算、薄膜掠角繞射(GIXRD)等進階解析。\n【交付成果】含精修晶格參數與結晶相鑑定之「技術分析總結報告書 (PDF)」。\n\n【服務內容涵蓋 Scope of Work】\n1. 樣品進樣前化學相容性與表面前處理評估\n2. 實驗參數優化設定建議與貴儀行政代辦協助 (可協助企業完成註冊與預約)\n3. 數據回傳後之高階去卷積 (Deconvolution) 擬合與圖譜解析\n\n* 附註：外部核心設施之上機規費由客戶依官方業界費率自行結算或實報實銷，本報價僅含技術顧問、樣品製備與解析報告費。",
+      "localizedDescriptions": {
+        "en": "Crystal phase identification, grain size calculation, grazing incidence XRD for thin films.\n\n⚠️ [Fee Separation] This quote covers professional data interpretation and sample prep consulting. Testing will be conducted at a national-level facility. Instrument usage fees will be billed separately based on the facility's official industry rates."
+      },
+      "requiresSampleType": ["powder", "electrode_sheet"],
+      "minSamples": 1,
+      "allowCustomParams": true
     }
   ]
 }

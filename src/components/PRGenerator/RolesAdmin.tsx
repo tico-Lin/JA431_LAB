@@ -12,6 +12,7 @@ import {
 import { CloudUploadOutlined, SettingOutlined } from '@ant-design/icons';
 import { useDataSync } from '../../hooks/useDataSync';
 import { GitHubTokenModal } from './GitHubTokenModal';
+import rolesUrl from '../../data/roles.json?url';
 import { useTranslation } from 'react-i18next';
 
 const { Title, Text } = Typography;
@@ -42,9 +43,7 @@ export const RolesAdmin: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(
-          `${import.meta.env.BASE_URL}data/roles.json`,
-        );
+        const response = await fetch(rolesUrl);
         const json = await response.json();
         setData(json);
         form.setFieldsValue(json.rolePermissions);
@@ -67,7 +66,7 @@ export const RolesAdmin: React.FC = () => {
       };
 
       await saveData(
-        'public/data/roles.json',
+        'src/data/roles.json',
         newConfig,
         'Update Roles Permissions via Admin Panel',
       );

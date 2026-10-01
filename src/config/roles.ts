@@ -1,4 +1,4 @@
-import rolesData from '../../public/data/roles.json';
+import rolesData from '../data/roles.json';
 
 export type Role = string;
 
